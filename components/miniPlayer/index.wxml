@@ -1,0 +1,22 @@
+<view class="playing-status {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}};">
+  
+  <progress class="progress" backgroundColor="rgba(255,255,255, 0.1)" stroke-width="4" wx:if="{{percentBar}}">
+    <!-- <text class="playstate" style="left:{{percent}}%"></text> -->
+    <text class="dpstate" style="width:{{percent}}%;background-color:{{mianColor}}"></text>
+    <slider class="slider" bindchange="museek" color="#d33a31" left-icon="cancel" value="{{percent}}"/>
+  </progress>
+  
+  <view class="btns">
+    <view bindtouchstart="btnstart" bindtouchend="btend" data-index="{{index}}" class="view" wx:key="index" wx:for="{{miniBtns.length ? miniBtns : defaultBtns}}">
+      <view wx:if="{{hoverflag && current === index}}" class="modal"></view>
+      <image class="image" bindtap="player" data-name="{{item.name}}" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
+      <image class="image" bindtap="player" data-name="{{item.name}}" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
+      <image class="image" bindtap="player" data-name="{{item.name}}" wx:else src="{{item.img}}" />
+    </view>
+    <view class="view" catchtap="playInfo">                                                                           
+      <image class="pic" src="{{songInfo.coverImgUrl}}" />
+      <text class="text" wx:if="{{songInfo.title}}">{{songInfo.title}}</text>
+    </view>
+  </view>
+  <view catchtap="playInfo" style="flex: 1;height: 100%"></view>
+</view>

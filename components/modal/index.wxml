@@ -1,0 +1,10 @@
+<view wx:if="{{showModal}}" class="model" bindtap="close"></view>
+<view wx:if="{{showModal}}" class="showInfo">
+  <view class="close" bindtap="close">
+    <image src="../../images/modal_close.png" />
+  </view>
+  <view class="info">
+    {{content}}
+  </view>
+  <button bindtap="linkMine">开通</button>
+</view>

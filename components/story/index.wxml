@@ -1,0 +1,21 @@
+<view class="{{className}}albumCard" style="width: {{picWidth}}">
+  <image class="image" src="{{datasource.src}}"></image>
+  <view class="linerbg">
+    
+  </view>
+  <view class="conut" wx:if="{{datasource.count}}">
+    <image class="countpic" src="{{countpic}}"></image>
+    <text class="countxt">{{datasource.count}}</text>
+  </view>
+  <view wx:if="{{src.length > 0}}"
+      class="like"
+      style="background-image:url({{src}})"
+      catchtap="likeOne"
+      data-typeid="{{datasource.id}}"
+      data-contentType="{{datasource.contentType}}">
+  </view>
+  <view class="albumTit">
+    <text class="vip" wx:if="{{datasource.isVip}}" style="background-color:{{mainColor}}">VIP</text>
+    <text>{{ datasource.title }}</text>
+  </view>
+</view>

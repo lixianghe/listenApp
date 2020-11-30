@@ -1,0 +1,128 @@
+.h .searchContent {
+  overflow: auto;
+  box-sizing: border-box;
+  height: 82vh;
+  padding: 2.5vh 9vh;
+  white-space: nowrap;
+}
+.h .quickEntry{
+  /* flex: 0 0 41.3vh; */
+  width: 43.65vh;
+  padding: 0 6.12vh 0 7.35vh;
+  vertical-align: top;
+  display: inline-block;
+  height: 68.6vh;
+  overflow: hidden;
+} 
+.h .quickEntrybox {
+  text-align: center;
+  background-color: #272727;
+  background-size: 100%;
+  border-radius: 2vh;
+  margin-bottom: 5.5vh;
+} 
+.h .quickEntryicon {
+  width: 14.76vh;
+  height: 14.76vh;
+  margin-top: 11%;
+  vertical-align: bottom;
+}
+.h .mianContent {
+  display: inline-block;
+  vertical-align: top;
+}
+.h .mianContent .search {
+  width: 320rpx;
+  height: 28.2rpx;
+  background: rgba(255,255,255, 0.08);
+  display: flex;
+  align-items: center;
+  border-radius: 28.2rpx;
+  overflow: hidden;
+  position: fixed;
+  left: 23rpx;
+  top: 11rpx;
+  /* padding-left: 3vh; */
+}
+.h .mianContent .search image {
+  width: 25.63rpx;
+  height: 25.63rpx;
+  margin: 0 5,12rpx;
+}
+.h .mianContent .search input {
+  height: 28.2rpx;
+  width: 302.5rpx;
+  color: #bbbbbb;
+  font-size: 12.56rpx;
+}
+.h .cancel {
+  width: 51.26rpx;
+  height: 25.124rpx;
+  line-height: 25.124rpx;
+  border-radius: 25.124rpx;
+  background: #ffac2d;
+  color:#060401;
+  font-size: 11.8rpx;
+  position: fixed;
+  left: 357rpx;
+  top: 12.6rpx;
+}
+.h .albumCard {
+  width: 36vh;
+  display: inline-block;
+  margin-right: 7.6vh;
+  margin-top: 28vh;
+  height: 68.6vh;
+  overflow: hidden;
+}
+.h .imgB {
+  width: 36vh;
+  height: 36vh;
+  border-radius: 2vh;
+}
+.label-view {
+  display: flex;
+  color: #fff;
+  font-size: 5.5vh;
+  margin-bottom: 4.89vh;
+  position: fixed;
+  left: 9vh;
+  top: 19vh;
+}
+.label-view .title {
+  padding: 2vh 1vh;
+  margin-right: 5vh;
+  padding: 1.81vh 5.35vh 1.5vh 5.35vh;
+  background-color: #282828;
+  border-radius: 5.5vh;
+}
+.label-view .active-tap {
+  color: #fa6500;
+}
+
+/* 卡片的样式 */
+.halbumCard {
+  /* flex: 0 0 46.6vh; */
+  width: 33.81vh;
+  display: inline-block;
+  margin-right: 7.6vh;
+  margin-top: 32vh;
+  height: 68.6vh;
+  overflow: hidden;
+  position: relative;
+}
+.halbumCard .image {
+  width: 33.81vh;
+  height: 33.81vh;
+  border-radius: 2vh;
+  vertical-align: bottom;
+}
+.halbumCard .albumTit {
+  margin-top: 2vh;
+  color: #ffffff;
+  font-size: 5.2vh;
+  box-sizing: content-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

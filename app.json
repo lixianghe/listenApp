@@ -1,0 +1,63 @@
+{
+  "pages": [
+    
+    "pages/index/index", 
+    "pages/personalCenter/personalCenter",
+    "pages/like/like",
+    "pages/abumInfo/abumInfo",
+    "pages/playInfo/playInfo",
+    "pages/latelyListen/latelyListen",
+    "pages/search/search",
+    "pages/member/pay",
+    "pages/member/member",
+    "pages/myBuy/myBuy"
+    
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#202020",
+    "navigationBarTitleText": "小程序模板",
+    "navigationBarTextStyle": "white",
+    "mossPkgName": "kaishustory"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "tabBar": {
+    "color": "#bebebe",
+    "selectedColor": "#ffac2d",
+    "backgroundColor": "#202020",
+    "list": [
+    {
+      "index": 0, 
+      "pagePath": "pages/index/index",
+      "iconPath": "images/index.png",
+      "selectedIconPath": "images/index-select.png",
+      "text": "推荐"
+    },
+    {
+      "index": 1, 
+      "pagePath": "pages/search/search",
+      "iconPath": "images/search.png",
+      "selectedIconPath": "images/searched.png",
+      "text": "搜索"
+    },
+    {
+      "index": 2, 
+      "pagePath": "pages/personalCenter/personalCenter",
+      "iconPath": "images/admin.png",
+      "selectedIconPath": "images/admin-select.png",
+      "text": "我的"
+    }
+  ]
+  },
+  "usingComponents": {
+    "mini-player": "/components/miniPlayer/index",
+    "selectWorks": "/components/selectWorks/index",
+    "bgConfirm": "/components/bgConfirm/index"
+  },
+  "requiredBackgroundModes": ["audio"],
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,81 @@
+.selectWorks {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.contentWorks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 83.1vh;
+  width: 142.5vh;
+  padding: 7.8vh 9.8vh;
+  padding-right: 5.5vh;
+  background-color: #222222;
+  box-sizing: content-box;
+  transform: translateX(-160vh);
+  z-index: 1000;
+}
+.worksList {
+  height: 60vh;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: baseline;
+  overflow: auto;
+  padding: 1.5vh;
+  margin-left: -1.5vh;
+  margin-top: -1.5vh;
+}
+.closeWords {
+  position: absolute;
+  top: 5.7vh;
+  right: 9.7vh;
+  width: 19.7vh;
+  height: 10.5vh;
+}
+.orders {
+  height: 6.2vh;
+  width: 33vh;
+  flex: 0 0 100%;
+  font-size: 6.2vh;
+  line-height: 6.2vh;
+  color: #ffffff;
+  margin-bottom: 10.7vh;
+}
+.orderIcon {
+  width: 8vh;
+  height: 8vh;
+  vertical-align: top;
+  margin-top: -0.8vh;
+  margin-left: -1.8vh;
+}
+.worksItem {
+  font-size: 4.9vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4.3vh;
+  border-radius: 1.8vh;
+  color: #ffffff;
+  margin-bottom: 5.5vh;
+  box-sizing: content-box;
+  /* background-color: #313131; */
+} 
+.selectedWork {
+  border: 0.35vh solid #ff6700;
+  background-color: rgba(255,103,0,0.3);
+  flex: 0 0 42.3vh;
+  height: 14vh;
+}
+.normalWork {
+  border: none;
+  background-color: rgba(255,255,255,0.1);
+  flex: 0 0 43vh;
+  height: 14.7vh;
+}

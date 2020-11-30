@@ -1,0 +1,38 @@
+<view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
+  <scroll-view class="latelyListen" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData">
+    <view class="mianContent">
+      <view class="label-view">
+        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" wx:key="index" style="background-color: {{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}}"
+          data-index="{{index}}" bindtap="selectTap">
+          <text>{{item.name}}</text>
+        </view>
+      </view>
+      <!-- 页面盒子 -->
+      <view class="storyBox">
+        <story wx:if="{{info.length>0 && req}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
+        data-id="{{item.id}}" data-title="{{item.title}}" data-src="{{item.src}}" data-contentype="{{item.contentType}}" bindtap="linkAbumInfo"
+        datasource="{{item}}" className="{{screen}}"></story>
+      </view>
+    </view>
+    <!-- 加载中盒子 -->
+    <view class="albumCard" wx:if="{{!req}}" wx:for="{{5}}" wx:key="index">
+      <view class="imgB bone"></view>
+      <view class="albumTitB">
+        <view class="tb bone"></view>
+      </view>
+    </view>
+  </scroll-view>
+  <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
+</view>
+
+
+<view wx:if="{{showModal}}" class="model" bindtap="close"></view>
+<view wx:if="{{showModal}}" class="showInfo">
+  <view class="close" bindtap="close">
+    <image src="../../images/modal_close.png" />
+  </view>
+  <view class="info">
+    暂时没有内容，去听听看吧
+  </view>
+  <button bindtap="close">确定</button>
+</view>

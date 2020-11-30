@@ -1,0 +1,121 @@
+.page {
+  width: 100%;
+  height: 100%;
+  background:#151515;
+  padding: 6vh 7.38vh;
+  box-sizing: border-box;
+  display: flex;
+}
+.vipCard {
+  width: 63vh;
+  height: 71.53vh;
+  border-radius: 3vh;
+  background: #222222;
+  margin-right: 6.15vh;
+  padding: 0 5vh;
+  text-align: center;
+  position: relative;
+}
+.vipCard .cardTitle {
+  color: #fff;
+  font-size: 6.15vh;
+  margin-top: 8.3vh;
+}
+.vipCard .cardPrice {
+  color: #ffac2d;
+  font-size: 8.6vh;
+  margin-top: 2.7vh;
+}
+.vipCard .cardPrice text {
+  font-size: 5.5vh;
+}
+.vipCard .subTitle {
+  width: 100%;
+  height: 16.9vh;
+  line-height: 7vh;
+  border-radius: 3vh;
+  background: #1e1e1e;
+  /* border: .6vh solid #ffac2d; */
+  font-size: 4.5vh;
+  color: #a8aaaf;
+  padding: 2vh 4vh;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-top: 3vh;
+}
+.vipCard button {
+  background: #ffac2d;
+  border-radius: 2vh;
+  height: 11.66vh;
+  line-height: 11.66vh;
+  font-size: 6.15vh;
+  color: #fff;
+  position: absolute;
+  bottom: 4.6vh;
+  width: 52vh;
+}
+.vipCard .tagDesc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 24.038vh;
+  height: 7.69vh;
+  padding: 0 3.045vh;
+  background: linear-gradient(127deg,#ff7e0f 0%,#dc284f 100%);
+  border-radius: 2.564vh 0.481vh 2.564vh 0.481vh;
+  font-size: 4.3vh;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.showInfo {
+  position: fixed;
+  width: 72vh;
+  height: 65vh;
+  border-radius: 3vh;
+  background: #444452;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  padding: 3vh;
+  z-index: 11;
+}
+.showInfo .close {
+  float: right;
+}
+.showInfo .close image {
+  width: 10vh;
+  height: 10vh;
+}
+.showInfo .info {
+  font-size: 4.8vh;
+  margin-top: 18vh;
+  width: 100%;
+  padding: 0 2vh;
+  text-align: center;
+  line-height: 7vh;
+}
+.showInfo button {
+  position: absolute;
+  bottom: 8vh;
+  background: #ffac2d;
+  font-size: 5vh;
+  color: #fff;
+  width: 60vh;
+  border-radius: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.model {
+  position: fixed;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+}

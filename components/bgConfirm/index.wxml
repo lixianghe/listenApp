@@ -1,0 +1,21 @@
+<view class="bgConfirm" wx:if="{{isBgContent}}">
+  <!-- 扫码登录 -->
+  <view class="bgContent" wx:if="{{contentName === 'login'}}">
+    <image src="/images/close-words.png" class="closeBgConfirm" bindtap="closeBgConfirm"></image>
+    <image src="/images/ewm.png" class="ewm"></image>
+    <view class="contRig">
+      <view class="bgTit">扫码登录腾讯随行</view>
+      <view class="bgTxt">1. 微信扫描左侧二维码</view>
+      <view class="bgTxt">2. 关注公众号授权登录</view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="bgContent" wx:if="{{contentName === 'out'}}" style="display: block">
+    <view class="outTit">{{ msg }}</view>
+    <view class="bottomBtn">
+      <button class="button loginOut" bindtap="loginOut">{{ confirm }}</button>
+      <button class="button cancle" wx:if="{{cancel.length>0}}" bindtap="closeBgConfirm">{{ cancel }}</button>
+    </view>
+  </view>
+</view>

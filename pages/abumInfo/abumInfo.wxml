@@ -1,0 +1,100 @@
+<wxs module="m1">
+  var filterNum = function (num) {
+    var n = num / 10000
+    if (n > 1) {
+      return n.toFixed(1) + 'w'
+    } else {
+      return n
+    }
+  }
+
+  module.exports.filterNum = filterNum;
+</wxs>
+
+<view wx:if="{{canplay.length}}" class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
+  <view style="padding: {{leftPadding}}" class="left">
+    <view class="btns" style="width: {{btnsWidth}};background-color: {{backgroundColor}}">
+      <button hover-class="playAllHover" class="playAll" bindtap="playAll" style="background-color: {{mainColor}}">
+        <image src="{{playAllPic}}" />
+        <text>播放全部</text>
+      </button>
+      <button class="select" style="background: rgba(255,255,255, 0.1)" bindtap="changeProp" wx:if="{{selectWordBtn && routeType === 'album'}}">
+        
+        <text>共{{total}}首</text>
+        <image src="/images/selectWorks.png" />
+      </button>
+    </view>
+
+    <scroll-view
+      class="scrollView"
+      scroll-top="{{scrollTop}}"
+      scroll-y style="width: 100%; height: 62vh"
+      bindscroll="listScroll"
+      bindscrolltoupper="listTop"
+      bindscrolltolower="listBehind"
+    >
+    <!-- <view class="songList"> -->
+    <view class="songList" animation="{{loadAnimate}}" bindtouchstart="touchStart" bindtouchend="touchEnd" bindtouchmove="touchMove">
+      <view wx-if="{{showLoadTop}}" class="loading">加载中...</view>
+      <view bindtap="goPlayInfo" style="color: {{item.id === currentId ? mainColor : '#fff'}}" data-song='{{item}}' data-no='{{index}}' wx:key="index" wx:for="{{canplay}}">
+        <image class="playGif" wx:if="{{item.id === currentId && palying}}" src="/images/playing.gif" />
+        
+        <text wx:else>{{(pageNo-1) * pageSize + index + 1}}</text>
+        <text>{{item.title}}</text>
+        <!-- <text class="playCount">{{m1.filterNum(item.playCount)}}</text> -->
+        <text class="audition" style="color:{{mainColor}};border: 1px solid {{mainColor}}" wx:if="{{item.feeType === '01'}}">试听</text>
+        <text>{{item.dt}}</text>
+      </view>
+      <view wx-if="{{showLoadEnd}}" class="loading">加载中...</view>
+    </view>
+    </scroll-view>
+
+    
+
+  </view>
+  <view class="right" style="width:{{rightWidth}}">
+    <view class="image" style="width: {{imageWidth}};height: {{imageWidth}};background: url({{src}}) no-repeat top left / 100% 100%">
+      <view 
+        class="like"
+        wx:if="{{routeType === 'album'}}"
+        style="background: rgba(0, 0, 0, 0.6) url({{existed ? likeIcon1 : likeIcon2}}) no-repeat center center / 17vh 13vh;"
+        bindtap="likeAbum">
+        <!-- <image src="../../images/like_none.png" /> -->
+      </view>
+      <view class="like" wx:else >
+
+      </view>
+    </view>
+  </view>
+</view>
+
+  <!-- 骨架屏 -->
+<view class="page skeleton {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:else>
+  <view style="padding: {{leftPadding}}" class="left">
+    <view class="btns" style="width: {{btnsWidth}};background-color: {{backgroundColor}};">
+      <button hover-class="playAllHover" class="playAll" bindtap="playAll" style="background-color: {{mainColor}}">
+        <image src="/images/playAll.png" />
+        <text>播放全部</text>
+      </button>
+      <button class="select" style="background: rgba(255,255,255, 0.1)" bindtap="changeProp" wx:if="{{selectWordBtn && routeType === 'album'}}">
+        
+        <text>共 首</text>
+        <image src="/images/selectWorks.png" />
+      </button>
+    </view>
+    <view class="songList">
+      <view wx:key="index" wx:for="{{4}}">
+        <text class="A"></text>
+        <text class="B"></text>
+      </view>
+      
+    </view>
+  </view>
+  <view class="right" style="width:{{rightWidth}}">
+    <view class="image" style="width: {{imageWidth}};height: {{imageWidth}}"></view>
+  </view>
+</view>
+
+<selectWorks id="selectWorks" bindchangeWords="changeWords" selected="{{selected}}" pageSize="{{pageSize}}"> </selectWorks>
+<mini-player id="miniPlayer" songInfo="{{songInfo}}" bindcurrent="changeCurrent" bindsetPlaying="setPlaying"></mini-player>
+<bgConfirm id="bgConfirm" msg="{{msg}}" confirm="确定" cancel=""></bgConfirm>

@@ -1,0 +1,6 @@
+@import "./myBuy-horizontal.wxss";
+@import "./myBuy-vertical.wxss";
+page {
+  margin: 0;
+  padding: 0;
+}

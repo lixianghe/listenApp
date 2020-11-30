@@ -1,0 +1,26 @@
+<!--pages/mine/pay.wxml-->
+<view class="container {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" style="background-color:{{backgroundColor}}">
+  <view class="content-container">
+    <view class="pay-panel" wx:if="{{payStatus == 'pre'}}">
+      <image class="ercode" src="{{codeUrl}}"></image>
+      <view class="price">
+        <text>待付款</text>
+        <text class="price-val">￥{{totalPrice}}</text>
+      </view>
+      <view class="price-tip">使用微信扫一扫付款</view>
+      <view class="price-tip">付款成功即可畅享凯叔海量精品内容</view>
+    </view>
+    <view class="success-panel" wx:if="{{payStatus == 'success'}}">
+      <image class="pay-icon" src="/images/pic_succeed.png"></image>
+      <view class="pay-status">支付成功</view>
+      <view class="pay-back" bindtap="backTap">返回</view>
+    </view>
+    <view class="fail-panel" wx:if="{{payStatus == 'fail'}}">
+      <image class="pay-icon" src="/images/pic_failure.png"></image>
+      <view class="pay-status">支付失败</view>
+      <view class="pay-fail-hint">请再次重试</view>
+      <view class="pay-back pay-back-fail" bindtap="backTap">返回</view>
+    </view>
+  </view>
+</view>
+<log></log>

@@ -1,0 +1,125 @@
+/* pages/mine/pay.wxss */
+
+.container {
+  padding: 3.205vh;
+}
+
+.content-container {
+  height: 100%;
+  border-radius: 2.564vh;
+  overflow: hidden;
+}
+
+.ercode {
+  display: block;
+  width: 51.282vh;
+  height: 51.282vh;
+  margin: 6.410vh auto 4.808vh;
+}
+
+.price {
+  text-align: center;
+  color: #fff;
+  font-size: 6.410vh;
+  height: 6.410vh;
+  margin-bottom: 5.929vh;
+  font-weight: bold;
+}
+
+.price-val {
+  color: #fd8b22;
+}
+
+.price-tip {
+  text-align: center;
+  font-size: 5.128vh;
+  line-height: 8.173vh;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pay-icon {
+  display: block;
+  margin: 17.628vh auto 4.808vh;
+  width: 19.231vh;
+  height: 19.231vh;
+}
+
+.pay-status {
+  text-align: center;
+  font-size: 6.410vh;
+  height: 6.410vh;
+  color: #fff;
+}
+
+.pay-fail-hint {
+  margin-top: 4.808vh;
+  text-align: center;
+  font-size: 4.487vh;
+  height: 4.487vh;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pay-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 17.308vh auto 0;
+  font-size: 6.410vh;
+  width: 73.718vh;
+  height: 16.026vh;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3.205vh;
+}
+
+.pay-back-fail {
+  margin: 8.013vh auto 0;
+}
+
+/* 白天模式 */
+.light .content-container{
+  background:#fff;
+}
+.light .price {
+  color: #4a4a4a;
+}
+
+.light .price-tip {
+  color: #9b9b9b;
+}
+
+.light .pay-status {
+  color: #4a4a4a;
+}
+
+.light .pay-back {
+  color: #4a4a4a;
+  background: #f1f2f5;
+}
+
+.light .pay-fail-hint {
+  color: #9b9b9b;
+}
+
+/* 黑夜模式 */
+
+.dark .price {
+  color: #fff;
+}
+
+.dark .price-tip {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dark .pay-status {
+  color: #fff;
+}
+
+.dark .pay-back {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .pay-fail-hint {
+  color: rgba(255, 255, 255, 0.6);
+}

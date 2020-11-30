@@ -1,0 +1,132 @@
+<wxs module="m1">
+  var showSinger = function (singer) {
+    if (singer) return ' - ' + singer
+  }
+  var filterTime = function (dt) {
+    var n = num / 10000
+    if (n > 1) {
+      return n.toFixed(1) + 'w'
+    } else {
+      return n
+    }
+  }
+
+  module.exports.showSinger = showSinger;
+  module.exports.filterTime = filterTime;
+</wxs>
+
+<!-- 1920*720分辨率 -->
+<view class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:if="{{bigScreen}}">
+  <view class="playLeft">
+    <view class="title" wx:if="{{songInfo.title}}">
+      <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
+      <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text>
+    </view>
+    <view class="noReady" wx:else>
+      <text class="title-name"></text>
+      <text class="title-abumInfo"></text>
+    </view>
+    <view class="player">
+      <text class="time" wx:if="{{percentBar}}">{{playtime}}</text>
+      <progress  class="progress" color="#dadada" stroke-width="8" backgroundColor="#434343" wx:if="{{percentBar}}">
+        <text id="playstate" style="left:{{percent}}%;background-color:{{mainColor}}"></text>
+        <text id="dpstate" style="width:{{percent}}%;background-color:{{mainColor}}"></text>
+        <slider class="slider" block-size="16" block-color="#888" bindchanging="dragPercent" bindchange="setPercent" color="#d33a31"  left-icon="cancel" value="{{percent}}"/>
+      </progress>
+      <text class="duration" wx:if="{{percentBar}}">{{songInfo.dt}}</text>
+      <view class="btns">
+        <view wx:for="{{playInfoBtns.length ? playInfoBtns : defaultBtns}}" wx:key="index" bindtouchstart="btnstart" bindtouchend="btend" data-index="{{index}}">
+          <view wx:if="{{btnCurrent === index}}" class="modal"></view>
+          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
+          <image data-name="{{item.name}}" class="nextBtn" bindtap="btnsPlay" wx:elif="{{item.name === 'next'}}" src="{{item.img}}" />
+          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
+          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'loopType'}}" src="{{item.img[loopType]}}" />
+          <image data-name="{{item.name}}" style="display: {{(!abumInfoName && item.name === 'more') ? 'none' : 'inline-block'}}" bindtap="btnsPlay" wx:else src="{{item.img}}" />
+        </view>
+    </view>
+    </view>
+  </view>
+  <view class="playRight">
+    <image class="rightImg" bindload="imgOnLoad" style="display:{{showImg ? 'block' : 'none'}}" src="{{songInfo.coverImgUrl}}" />
+    <view class="image" wx:if="{{!showImg}}"></view>
+  </view>
+</view>
+<!-- 高于1/2的分辨率 -->
+<view class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:else>
+  <view class="playLeft songDc">
+    <view class="songDcTitle">
+      <image bindload="imgOnLoad" style="display:{{showImg ? 'block' : 'none'}}" src="{{songInfo.coverImgUrl}}" />
+
+      <view class="image" wx:if="{{!showImg}}"></view>
+
+
+      <view class="title" wx:if="{{songInfo.title}}">
+        <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
+        <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text>
+      </view>
+
+      
+      <view class="noReady" wx:else>
+        <text class="title-name"></text>
+        <text class="title-abumInfo"></text>
+      </view>
+
+    </view>
+    <view class="player">
+      <text class="time" wx:if="{{percentBar}}">{{playtime}}</text>
+      <progress  class="progress" color="#dadada" stroke-width="8" backgroundColor="#434343" wx:if="{{percentBar}}">
+        <text id="playstate" style="left:{{percent}}%;background-color:{{mainColor}}"></text>
+        <text id="dpstate" style="width:{{percent}}%;background-color:{{mainColor}}"></text>
+        <slider class="slider" block-size="16" block-color="#888" bindchanging="dragPercent" bindchange="setPercent" color="#d33a31"  left-icon="cancel" value="{{percent}}"/>
+      </progress>
+      <text class="duration" wx:if="{{percentBar}}">{{songInfo.dt}}</text>
+      <view class="btns">
+        <view wx:for="{{playInfoBtns.length ? playInfoBtns : defaultBtns}}" wx:key="index" bindtouchstart="btnstart" bindtouchend="btend" data-index="{{index}}">
+          <view wx:if="{{btnCurrent === index}}" class="modal"></view>
+          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
+          <image data-name="{{item.name}}" class="nextBtn" bindtap="btnsPlay" wx:elif="{{item.name === 'next'}}" src="{{item.img}}" />
+          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
+          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'loopType'}}" src="{{item.img[loopType]}}" />
+          <image data-name="{{item.name}}" style="display: {{(!abumInfoName && item.name === 'more') ? 'none' : 'inline-block'}}" bindtap="btnsPlay" wx:else src="{{item.img}}" />
+        </view>
+    </view>
+    </view>
+  </view>
+</view>
+
+<!-- 弹出播放列表 -->
+<view class="playList {{noTransform}}" animation="{{animation}}">
+  <view class="title">
+    <text>播放列表({{canplay.length}})</text>
+    <button bindtap="closeList">
+      <image src="/images/closeList.png" />
+    </button>
+  </view>
+
+  <scroll-view
+      class="scrollView"
+      scroll-top="{{scrolltop}}"
+      scroll-y style="width: 100%; height: 80vh;margin-top:18.5vh;margin-left: -5vh;width: 163vh"
+      bindscroll="listScroll"
+      bindscrolltoupper="listTop"
+      bindscrolltolower="listBehind"
+    >
+  <view class="songList">
+      <view class="view" style="color: {{item.id === currentId ? mainColor : '#fff'}}"  wx:key="index" wx:for="{{canplay}}">
+        <view  bindtap="playSong" data-no='{{index}}' data-song="{{item}}" style="width: 100%;height: 6.6vh;line-height: 6.6vh">
+          <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
+          <text wx:else>{{index + 1}}</text>
+          <text>{{item.title}}</text>
+          <text class="audition" style="color:{{mainColor}};border: 1px solid {{mainColor}}" wx:if="{{item.feeType === '01'}}">试听</text>
+          <text>{{item.dt}}</text>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+  </view>
+
+<view wx:if="{{showList}}" bindtap="closeList" class="mask"></view>
+
+<!-- 弹框组件 -->
+<modal showModal="{{showModal}}" content="{{content}}" />

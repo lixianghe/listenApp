@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "专辑详情",
+  "enablePullDownRefresh": true,
+  "component": true,
+  "disableScroll": true,
+  "usingComponents": {
+
+  }
+}

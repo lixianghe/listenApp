@@ -1,0 +1,33 @@
+<wxs module="m1">
+  var filterNo = function (start, end, pageSize) {
+    var num = start > end ? start : end
+    return Math.ceil(num / pageSize) -1
+  }
+
+  module.exports.filterNo = filterNo;
+</wxs>
+
+<view class="selectWorks" bindtap="closeWords" wx:if="{{isSelectWorks}}">
+  
+</view>
+
+<view class="contentWorks" animation="{{animation}}">
+    
+    <view class="orders" bindtap="changeOrder">
+      {{order ? '正序' : '倒序'}}排列
+      <image class="orderIcon" src="/images/{{order ? 'icon_down' : 'icon_up'}}.png"></image>
+    </view>
+    <image class="closeWords" src="/images/close-words.png" bindtap="closeWords"></image>
+    <view class="worksList">
+      <view 
+        class="worksItem {{ selected === m1.filterNo(item.start, item.end, pageSize) ? 'selectedWork': 'normalWork' }}" 
+        wx:for="{{data}}" 
+        wx:key="index" 
+        data-index="{{index}}"
+        bindtap="selectThis"  
+      >
+      <!-- {{m1.filterNo(item.start, item.end, pageSize)}} - {{selected}} -->
+        {{item.start}} ~ {{item.end}}
+      </view>
+    </view>
+</view>

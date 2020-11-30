@@ -1,0 +1,123 @@
+.h .latelyListen {
+  overflow: auto;
+  padding-left: 7.3vh;
+  box-sizing: border-box;
+  height: 82vh;
+  padding: 5.5vh 7.35vh;
+  white-space: nowrap;
+}
+.h .quickEntry{
+  /* flex: 0 0 41.3vh; */
+  width: 43.65vh;
+  padding: 0 6.12vh 0 7.35vh;
+  vertical-align: top;
+  display: inline-block;
+  height: 68.6vh;
+  overflow: hidden;
+} 
+.h .quickEntrybox {
+  text-align: center;
+  background-color: #272727;
+  background-size: 100%;
+  border-radius: 2vh;
+  margin-bottom: 5.5vh;
+} 
+.h .quickEntryicon {
+  width: 14.76vh;
+  height: 14.76vh;
+  margin-top: 11%;
+  vertical-align: bottom;
+}
+.h .mianContent {
+  display: inline-block;
+  vertical-align: top;
+}
+.h .albumCard {
+  width: 41.81vh;
+  display: inline-block;
+  margin-right: 7.6vh;
+  height: 68.6vh;
+  overflow: hidden;
+}
+.h .imgB {
+  width: 41.81vh;
+  height: 41.81vh;
+  border-radius: 2vh;
+  margin-top: 15.7vh;
+}
+.label-view {
+  display: flex;
+  color: #fff;
+  font-size: 5.5vh;
+  margin-bottom: 4.89vh;
+  position: fixed;
+}
+.label-view .title {
+  padding: 2vh 1vh;
+  margin-right: 5vh;
+  padding: 1.81vh 5.35vh 1.5vh 5.35vh;
+  background-color: rgba(255,255,255, 0.1);
+  color: #bebebe;
+  border-radius: 5.5vh;
+  font-size: 4.89vh;
+  width: 24.58vh;
+  height: 11.04vh;
+  text-align: center;
+}
+.label-view .active-tap {
+  color: #000;
+}
+.storyBox {
+  margin-top: 1vh;
+}
+
+/* 弹框 */
+.model {
+  position: fixed;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.showInfo {
+  position: fixed;
+  width: 80vh;
+  height: 65vh;
+  border-radius: 3vh;
+  background: #444452;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  padding: 3vh;
+  z-index: 11;
+}
+.showInfo .close {
+  float: right;
+}
+.showInfo .close image {
+  width: 10vh;
+  height: 10vh;
+  float: left;
+}
+.showInfo .info {
+  font-size: 4vh;
+  margin-top: 14vh;
+  width: 100%;
+  padding: 0 2vh;
+  text-align: center;
+  line-height: 7vh;
+}
+.showInfo button {
+  position: absolute;
+  bottom: 8vh;
+  background: #fd8b22;
+  font-size: 5vh;
+  color: #fff;
+  width: 60vh;
+  border-radius: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+}

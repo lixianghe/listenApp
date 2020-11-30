@@ -1,0 +1,37 @@
+<view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
+  <view class="personalCenter">
+    <!-- 登录部分 -->
+    <view class="mine">
+      <view class="adminCenter" wx:if="{{isLogin}}">
+        <image class="image" src="{{userInfo.avatar}}"></image>
+        <view class="adminCenterName">
+          <text>{{userInfo.nickname}}</text>
+          <image class="isVip" src="{{vipPic}}"
+            wx:if="{{userInfo.vipStatus==1 || userInfo.vipStatus==2 || userInfo.vipStatus==4}}"></image>
+        </view>
+        <view wx:if="{{userInfo.vipStatus==0 || userInfo.vipStatus==(-1)}}" class="viptime unvip">开通会员，畅听全部故事</view>
+        <view wx:if="{{userInfo.vipStatus==1}}" class="viptime">会员至 <text>{{userInfo.vipTime}}</text></view>
+        <view wx:if="{{userInfo.vipStatus==2 || userInfo.vipStatus==4}}" class="viptime">
+          会员已过期<text>{{-userInfo.vipTime}}</text>天</view>
+        <view wx:if="{{userInfo.vipStatus==3}}" class="viptime"><text bindtap="showFreezeTap">会员已冻结</text></view>
+        <view class="adminBtnIn" bindtap="logoutTap" data-state="out">退出登录</view>
+      </view>
+      <!-- <view class="tsBtn" bindtap="clearStorage"></view> -->
+      <view class="adminCenter" wx:if="{{!isLogin}}">
+        <view class="adminCenterZwdl">暂未登录</view>
+        <view class="adminCenterDetail">请登录后查看详情</view>
+        <view class="adminBtnOut" bindtap="loginIn" data-state="login" style="background-color: {{mainColor}}"
+          wx:if="{{showWxLogin}}">立即登录</view>
+        <button class="adminBtnOut" open-type="getPhoneNumber" style="background-color: {{mainColor}}"
+          bindgetphonenumber='getPhoneNumber' bindtap="nothing" wx:if="{{!showWxLogin}}">授权手机号登录</button>
+      </view>
+    </view>
+
+    <!-- 其他入口部分 -->
+    <view class="cardListen" wx:for="{{data}}" wx:key="index" bindtap="{{item.type}}">
+      <image src="{{ item.icon }}"></image>
+      <view class="cardTit">{{ item.title }}</view>
+    </view>
+  </view>
+  <mini-player songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
+</view>

@@ -1,0 +1,6 @@
+@import "./search-horizontal.wxss";
+@import "./search-vertical.wxss";
+page {
+  margin: 0;
+  padding: 0;
+}

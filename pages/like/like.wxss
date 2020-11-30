@@ -1,0 +1,6 @@
+@import "./like-horizontal.wxss";
+@import "./like-vertical.wxss";
+page {
+  margin: 0;
+  padding: 0;
+}

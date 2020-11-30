@@ -1,0 +1,99 @@
+.h .personalCenter {
+  display: flex;
+  overflow: auto;
+  height: 83vh;
+  box-sizing: content-box;
+  align-items: center;
+}
+.mine {
+  flex: 0 0 72vh;
+  height: 79vh;
+  display: inline-block;
+}
+.adminCenter {
+  /* flex: 0 0 72vh; */
+  overflow: hidden;
+  text-align: center;
+}
+.adminCenter .image {
+  width: 23.7vh;
+  height: 23.7vh;
+  margin-top: 11.1vh;
+  border-radius: 12.5vh;
+  border: 0.9vh solid #494949;
+  vertical-align: top;
+}
+.adminCenterName {
+  margin-top: 3.8vh;
+  color: #fff;
+  font-size: 6.2vh;
+}
+.adminCenterZwdl {
+  font-size: 6.2vh;
+  color: #e8e8e8;
+  margin-top: 19.8vh;
+}
+.adminCenterDetail {
+  font-size: 4.9vh;
+  color: #e8e8e8;
+  margin-top: 3.8vh;
+}
+.adminBtnOut {
+  margin-top: 11.9vh;
+  font-size: 4.9vh;
+  /* background-color: #fa6501; */
+  width: 37.8vh;
+  height: 12.3vh;
+  line-height: 12.3vh;
+  color: #000;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  border-radius: 6.2vh;
+  /* padding: 3rpx 4rpx; */
+}
+.adminBtnIn {
+  margin-top: 4vh;
+  font-size: 4.9vh;
+  width: 28.9vh;
+  height: 11.1vh;
+  line-height: 11.1vh;
+  background-color: rgba(255,255,255, 0.08);
+  color: #e8e8e8;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5.5vh;
+  /* padding: 3rpx 4rpx; */
+}
+.viptime {
+  color: #a8a8a8;
+  font-size: 3.97vh;
+  margin-top: 2vh;
+}
+.isVip {
+  width: 5.5vh;
+  height: 4.58vh;
+  margin-left: 2vh;
+  vertical-align: middle;
+}
+
+.h .cardListen{
+  flex: 0 0 61.5vh;
+  margin-right: 6.12vh;
+  height: 61.5vh;
+  border-radius: 1.8vh;
+  background-color: rgba(255,255,255, 0.08);
+  overflow: hidden;
+  background-size: 100%;
+  text-align: center;
+}
+.h .cardListen>image {
+  width: 24.6vh;
+  height: 24.6vh;
+  margin-top: 13.2vh;
+  vertical-align: top;
+}
+.h .cardTit {
+  margin-top: 8vh;
+  font-size: 5.3vh;
+  color: #ffffff ;
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "我喜欢的",
+  "usingComponents": {
+    "noData": "/components/noData/index",
+    "story": "/components/story/index"
+  }
+}

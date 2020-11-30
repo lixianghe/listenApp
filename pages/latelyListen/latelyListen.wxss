@@ -1,0 +1,6 @@
+@import "./latelyListen-horizontal.wxss";
+@import "./latelyListen-vertical.wxss";
+page {
+  margin: 0;
+  padding: 0;
+}
