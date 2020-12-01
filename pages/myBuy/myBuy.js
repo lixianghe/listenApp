@@ -2,6 +2,8 @@ const app = getApp()
 Page({
   mixins: [require('../../developerHandle/myBuy')],
   data: {
+    colorStyle: app.sysInfo.colorStyle,
+    backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
     noContent: '/images/nullContent.png',
     info: '',
