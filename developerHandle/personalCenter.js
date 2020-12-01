@@ -73,7 +73,6 @@ module.exports = {
 
     wx.login({
       success: (loginRes) => {
-        console.log('扫码成功', 63)
         this.setData({
           showWxLogin: false
         })
