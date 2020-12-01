@@ -1,26 +1,31 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
-  <scroll-view class="latelyListen" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData">
+  <scroll-view class="latelyListen" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"
+    bindscrolltolower="getLayoutData">
     <view class="mianContent">
       <view class="label-view" wx:if="{{labels.show}}">
-        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels.data}}" wx:key="index" style="background-color: {{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}}"
-          data-index="{{index}}" data-name="{{item.name}}"  bindtap="selectTap">
+        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels.data}}" wx:key="index"
+          style="background-color: {{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}}"
+          data-index="{{index}}" data-name="{{item.name}}" bindtap="selectTap">
           <text>{{item.name}}</text>
         </view>
       </view>
       <!-- 页面盒子 -->
       <view class="storyBox">
         <story wx:if="{{info.length>0 && req}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
-        data-id="{{item.id}}" data-title="{{item.title}}" data-src="{{item.src}}" data-contentype="{{item.contentType}}" bindtap="linkAbumInfo"
-        datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}"></story>
+          data-id="{{item.id}}" data-title="{{item.title}}" data-src="{{item.src}}"
+          data-contentype="{{item.contentType}}" bindtap="linkAbumInfo" datasource="{{item}}" countpic="{{countPic}}"
+          className="{{screen}}"></story>
+
+        <!-- 加载中盒子 -->
+        <view class="albumCard" wx:if="{{!req}}" wx:for="{{5}}" wx:key="index">
+          <view class="imgB bone"></view>
+          <view class="albumTitB">
+            <view class="tb bone"></view>
+          </view>
+        </view>
       </view>
     </view>
-    <!-- 加载中盒子 -->
-    <view class="albumCard" wx:if="{{!req}}" wx:for="{{5}}" wx:key="index">
-      <view class="imgB bone"></view>
-      <view class="albumTitB">
-        <view class="tb bone"></view>
-      </view>
-    </view>
+
   </scroll-view>
   <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
 </view>

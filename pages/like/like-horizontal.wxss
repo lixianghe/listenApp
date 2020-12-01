@@ -36,7 +36,6 @@
   width: 41.81vh;
   display: inline-block;
   margin-right: 7.6vh;
-  margin-top: 15.7vh;
   height: 68.6vh;
   overflow: hidden;
 }
@@ -44,6 +43,7 @@
   width: 41.8vh;
   height: 41.8vh;
   border-radius: 2vh;
+  margin-top: 0vh;
 }
 .label-view {
   display: flex;

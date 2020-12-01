@@ -43,7 +43,7 @@
   width: 41.81vh;
   height: 41.81vh;
   border-radius: 2vh;
-  margin-top: 15.7vh;
+  margin-top: 0vh;
 }
 .label-view {
   display: flex;
