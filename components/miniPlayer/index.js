@@ -1,7 +1,7 @@
 const app = getApp()
 import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
-import { isFavorite, like } from '../../developerHandle/playInfo'
+// import { isFavorite, like } from '../../developerHandle/playInfo'
 
 var timer = null
 
@@ -49,13 +49,13 @@ Component({
         name: 'next',
         img: '/images/next.png'
       },
-      {
-        name: 'like',                                             // 收藏
-        img: {
-          noLike: '/images/like_none.png' ,                    // 未收藏的图标
-          liked: '/images/like.png'                          // 已收藏的图标
-        }
-      }
+      // {
+      //   name: 'like',                                         
+      //   img: {
+      //     noLike: '/images/like_none.png' ,                   
+      //     liked: '/images/like.png'                          
+      //   }
+      // }
     ],
     // 开发者不传的话默认的按钮
     defaultBtns: [
@@ -159,8 +159,8 @@ Component({
     },
     // 收藏和取消
     like() {
-      let that = this
-      like(that)
+      // let that = this
+      // like(that)
     },
     watchPlay() {
       app.globalData.songInfo = wx.getStorageSync('songInfo')
@@ -187,8 +187,8 @@ Component({
       const playing = wx.getStorageSync('playing')
       if (playing) app.playing()
       // 是否被收藏
-      let songInfo = wx.getStorageSync('songInfo')
-      isFavorite({mediaId: songInfo.id}, that)
+      // let songInfo = wx.getStorageSync('songInfo')
+      // isFavorite({mediaId: songInfo.id}, that)
     },
     setOnHide() {
       clearInterval(timer)
