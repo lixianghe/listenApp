@@ -25,14 +25,21 @@ module.exports = {
   data: {
     info: [],
     showModal: false,
-    labels: [
-      {value: 'album', name: '专辑'},
-      {value: 'media', name: '故事'}
-    ],
-    loadReady: false  // 数据请求完毕为true
+    labels: {
+      show: true,
+      data: [{
+        name: '专辑',
+        value: 'album'
+      },
+      {
+        name: '故事',
+        value: 'media'
+      }],
+    },
+    req: false  // 数据请求完毕为true
   },
   onLoad(options) {   
-    this._getList(this.data.labels[0].value)
+    this._getList('专辑')
   },
   onReady() {
 
@@ -59,50 +66,60 @@ module.exports = {
   },
   selectTap(e) {
     const index = e.currentTarget.dataset.index
+    const name = e.currentTarget.dataset.name
     this.setData({
-      currentTap: index
+      currentTap: index,
+      retcode: 0
     })
-    this._getList(this.data.labels[index].value)
+    wx.showLoading({
+      title: '加载中',
+    })
+    this._getList(name)
   },
-  _getList(type) {
-    let params = {
-      pageNum: 1
-    }
-    bought(params).then(res => {
-      let layoutData = []
-      if(type === 'album') {
-        res.list.forEach(item => {
-          layoutData.push({
-            id: item.album.albumId,
-            title: item.album.albumName,
-            src: item.album.coverUrl, 
-            contentType: 'album',
-            isVip: item.feeType == '01' && (item.product || item.product && [2, 3].indexOf(item.product.vipLabelType) < 0)
-          })
+  _getList(name) {
+    setTimeout(() => {
+      let info = []
+      wx.hideLoading()
+      let data = [{
+          id: 958,
+          title: "内容标题1",
+          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",
+          contentType: "album",
+          count: 17,
+          isVip: true
+        },
+        {
+          id: 959,
+          title: "内容标题2",
+          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/f20dda35-d945-4ce0-99fb-e59db62ac7c9_info_w=450&h=450.jpg",
+          contentType: "album",
+          count: 13,
+          isVip: true
+        },
+        {
+          id: 962,
+          title: "内容标题1",
+          src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
+          contentType: "media",
+          count: 0,
+          isVip: false
+        }
+      ]
+      info = data.map(item => {
+        item.title = `${name}-${item.title}`
+        return item
       })
-      } else if (type === 'media') {
-        res.list.forEach(item => {
-          layoutData.push({
-            id: item.media.mediaId,
-            title: item.media.mediaName,
-            src: item.media.coverUrl, 
-            contentType: 'media',
-            isVip: item.feeType == '01' && (item.product || item.product && [2, 3].indexOf(item.product.vipLabelType) < 0)
-          })
-        })
-      }
       this.setData({
-        info: layoutData,
-        loadReady: true
+        req: true,
+        info: info
       })
-      if(layoutData.length === 0) {
+      if (info.length === 0) {
         this.setData({
           showModal: true
         })
       }
-    }).catch(err => {
-      console.log(JSON.stringify(err))
-    })
+    }, 500)
+
   },
   close() {
     this.setData({showModal: false})

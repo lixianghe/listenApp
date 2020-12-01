@@ -2,10 +2,18 @@
  * @name: like
  * 开发者编写的最近收听like,配置（labels）的类型，通过切换（selectTap）获取不同类型列表
  * 这里开发者必须提供的字段数据(数据格式见听服务小场景模板开发说明文档)：
- * labels: [
- *   {value: 'album', label: '专辑'},
- *   {value: 'media', label: '故事'}
- * ]
+ * labels: {
+ *     show: true,
+ *     data: [{
+ *       name: '专辑',
+ *       value: 'album'
+ *     },
+ *     {
+ *       name: '故事',
+ *       value: 'media'
+ *     }],
+ *   },
+ *  可选内容，当show为false时不显示分类列表
  * 2、_getList函数，这里我们给开发者提供labels对应点击的的值，其余参数开发者自行添加；
  *    _getList函数获取的list最终转换为模板需要的字段，并setData给info。
  * 3、由于模板内的字段名称可能和后台提供不一样，在获取list后重新给模板内的字段赋值：如下以本页列表数据为例
@@ -29,16 +37,23 @@ module.exports = {
     showModal: false,
     req: false,
     likePic: ['/images/info_like.png', '/images/info_like_no.png'],
-    labels: [
-      {value: 'album', name: '专辑'},
-      {value: 'media', name: '故事'}
-    ],
+    labels: {
+      show: true,
+      data: [{
+        name: '专辑',
+        value: 'album'
+      },
+      {
+        name: '故事',
+        value: 'media'
+      }],
+    },
   },
   onShow() {
     console.log('Log from mixin!')
   },
   onLoad(options) {
-    this._getList(this.data.labels[0].value)
+    this._getList('专辑')
   },
   onReady() {
 
@@ -65,6 +80,7 @@ module.exports = {
   },
   selectTap(e) {
     const index = e.currentTarget.dataset.index
+    const name = e.currentTarget.dataset.name
     this.setData({
       currentTap: index,
       retcode: 0
@@ -72,90 +88,56 @@ module.exports = {
     wx.showLoading({
       title: '加载中',
     })
-    this._getList(this.data.labels[index].value)
+    this._getList(name)
   },
-  _getList(value) {
-    console.log(value)
-    if (value == 'album'){
-      this.getAlbum()
-    } else if (value == 'media'){
-      this.getMedia()
-    }
-  },
-  getAlbum() {
-    let params = {
-      pageNum: 1,
-      pageSize: 20
-    }
-    albumFavorite(params).then(res => {
-      let layoutData = []
-      res.albumList.forEach(item => {
-          layoutData.push({
-            id: item.albumId,
-            title: item.albumName,
-            src: item.coverUrl, 
-            contentType: 'album',
-            // isVip: true
-            isVip: item.feeType == '01' && (item.product || item.product && [2, 3].indexOf(item.product.vipLabelType) < 0)
-          })
+  _getList(name) {
+    setTimeout(() => {
+      let info = []
+      wx.hideLoading()
+      let data = [{
+          id: 958,
+          title: "内容标题1",
+          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",
+          contentType: "album",
+          count: 17,
+          isVip: true
+        },
+        {
+          id: 959,
+          title: "内容标题2",
+          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/f20dda35-d945-4ce0-99fb-e59db62ac7c9_info_w=450&h=450.jpg",
+          contentType: "album",
+          count: 13,
+          isVip: true
+        },
+        {
+          id: 962,
+          title: "内容标题1",
+          src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
+          contentType: "media",
+          count: 0,
+          isVip: false
+        }
+      ]
+      info = data.map(item => {
+        item.title = `${name}-${item.title}`
+        return item
       })
       this.setData({
-        info: layoutData,
-        // info: [{id: 'qd223',title: '哈哈',src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",contentType: 'album',isVip:true}],
-        req: true
+        req: true,
+        info: info
       })
-      if(layoutData.length === 0) {
+      if (info.length === 0) {
         this.setData({
           showModal: true
         })
       }
-      wx.hideLoading()
-    }).catch(err => {
-      wx.hideLoading()
-      console.log(JSON.stringify(err)+'73行')
-    })
-  },
-  getMedia() {
-    let params = {
-      pageNum: 1,
-      pageSize: 20
-    }
-    mediaFavorite(params).then(res => {
-      let layoutData = []
-      res.list.forEach(item => {
-          console.log(`${item}89行`)
-          // console.log(item.feeType == '01' && (item.product || item.product && [2, 3].indexOf(item.product.vipLabelType) < 0)+'57行')
-          layoutData.push({
-            id: item.mediaId,
-            title: item.mediaName,
-            src: item.coverUrl, 
-            contentType: 'media'
-            // isVip: true
-          })
+    }, 500)
 
-      })
-      console.log(`${layoutData}67行`)
-      this.setData({
-        info: layoutData,
-        // info: [{id: 'qd223',title: '哈哈',src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",contentType: 'album',isVip:true}],
-        req: true
-      })
-      if(layoutData.length === 0) {
-        this.setData({
-          showModal: true
-        })
-      }
-      wx.hideLoading()
-    }).catch(err => {
-      wx.hideLoading()
-      console.log(JSON.stringify(err)+'73行')
-    })
   },
+ 
   close() {
     this.setData({showModal: false})
   },
-  // 懒加载
-  getLayoutData() {
 
-  },
 }

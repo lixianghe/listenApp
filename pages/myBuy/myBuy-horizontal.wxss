@@ -49,8 +49,8 @@
   display: flex;
   color: #fff;
   font-size: 5.5vh;
-  margin-bottom: 4.89vh;
-  position: fixed;
+  /* margin-bottom: 4.89vh; */
+  /* position: fixed; */
 }
 .label-view .title {
   padding: 2vh 1vh;
@@ -116,4 +116,8 @@
   border-radius: 3vh;
   left: 50%;
   transform: translateX(-50%);
+}
+.storyBox {
+  margin-top: 5.89vh;
+  margin-left: 0.12vh;
 }

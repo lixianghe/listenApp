@@ -1,9 +1,9 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
   <scroll-view class="like" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData">
     <view class="mianContent">
-      <view class="label-view">
-        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" wx:key="index" style="background-color: {{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}}"
-          data-index="{{index}}" bindtap="selectTap">
+      <view class="label-view" wx:if="{{labels.show}}">
+        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels.data}}" wx:key="index" style="background-color: {{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}}"
+          data-index="{{index}}" data-name="{{item.name}}" bindtap="selectTap">
           <text>{{item.name}}</text>
         </view>
       </view>

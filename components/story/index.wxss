@@ -3,7 +3,7 @@
   width: 41.81vh;
   display: inline-block;
   margin-right: 7.6vh;
-  margin-top: 15.7vh;
+  /* margin-top: 15.7vh; */
   height: 68.6vh;
   overflow: hidden;
   position: relative;

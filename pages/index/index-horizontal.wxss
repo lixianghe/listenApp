@@ -26,7 +26,6 @@
   display: inline-block;
   height: 68.6vh;
   overflow: hidden;
-  margin-right: 6.12vh;
   border-right: 0.58vh solid rgba(255,255,255, 0.04);
 } 
 .h .quickEntrybox {
@@ -41,6 +40,13 @@
   height: 14.76vh;
   margin-top: 11%;
   vertical-align: bottom;
+}
+.h .quickEntrybox1 {
+  height: 51.73vh;
+  margin-top: 6vh;
+}
+.h .quickEntrybox1 .quickEntryicon {
+  margin-top: 41%;
 }
 .h .mianContent {
   display: inline-block;
@@ -97,4 +103,12 @@
 }
 .absolutes {
   position: absolute;
+}
+.storyBox {
+  margin-top: 5.89vh;
+  margin-left: 6.12vh;
+}
+.label-box {
+  height: 9.81vh;
+  margin-left: 6.12vh;
 }
