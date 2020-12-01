@@ -17,7 +17,6 @@ Component({
     selected: 0,
     isSelectWorks: false,
     sum: 0,
-    len: 15,
     order: true
   },
   methods: {
@@ -26,7 +25,7 @@ Component({
         selected: e.currentTarget.dataset.index
       })
       let pageNo = this.data.order ? e.currentTarget.dataset.index + 1 : (this.data.data.length - e.currentTarget.dataset.index)
-      this.triggerEvent('changeWords', {pageNum: pageNo, pageSize: this.data.len})
+      this.triggerEvent('changeWords', {pageNum: pageNo, pageSize: this.data.pageSize})
       this.closeWords()
     },
     closeWords (e) {
@@ -49,17 +48,17 @@ Component({
     loadWorksUp () {
       let arr = []
       for (let i = 1; i <= this.data.sum; i++) {
-        if (i === this.data.sum && i % this.data.len !== 0) {
-          let start = arr[arr.length - 1].end + 1
+        if (i === this.data.sum && i % this.data.pageSize !== 0) {
+          let start =  arr.length ? arr[arr.length - 1].end + 1 : 1
           arr.push({
             start: start,
             end: i
           })
         }
 
-        if (i % this.data.len === 0) {
+        if (i % this.data.pageSize === 0) {
           arr.push({
-            start: i - this.data.len + 1,
+            start: i - this.data.pageSize + 1,
             end: i
           })
         }
@@ -68,13 +67,13 @@ Component({
     },
     loadWorksDown() {
       let arr = []
-      let endRes = this.data.sum % this.data.len
+      let endRes = this.data.sum % this.data.pageSize
       for (let i = this.data.sum; i >= 1; i--) {
         let temp = this.data.sum - i
-        if (temp % this.data.len === 0 && i > endRes) {
+        if (temp % this.data.pageSize === 0 && i > endRes) {
           arr.push({
             start: i,
-            end:  i - this.data.len + 1
+            end:  i - this.data.pageSize + 1
           })
         }
         if (i < endRes) {
@@ -96,8 +95,7 @@ Component({
     changeOrder() { // 改变排序方式
       let currentOrder = !this.data.order
       this.setData({
-        order: currentOrder,
-        // selected: null
+        order: currentOrder
       })
       this.loadWorks()
     }

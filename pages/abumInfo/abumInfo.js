@@ -2,7 +2,6 @@ const app = getApp()
 import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
 import { getMedia } from '../../developerHandle/playInfo'
-import { albumFavoriteAdd, albumFavoriteCancel } from '../../utils/httpOpt/api'
 
 // 记录上拉拉刷新了多少次
 let scrollTopNo = 0
