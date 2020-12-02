@@ -28,8 +28,6 @@
  * 收藏和取消收藏图片
  */
 const app = getApp()
-const { showData } = require('../utils/httpOpt/localData')
-import { albumFavorite, mediaFavorite } from '../utils/httpOpt/api'
 
 module.exports = {
   data: {
@@ -135,7 +133,12 @@ module.exports = {
     }, 500)
 
   },
- 
+  // 添加/取消收藏函数
+  like (e) {
+    console.log(e.detail.contentType)     //类型
+    console.log(e.detail.flag)    		// 状态（添加/取消）
+    console.log(e.detail.typeid)    		// 内容id
+  },
   close() {
     this.setData({showModal: false})
   },

@@ -2,14 +2,7 @@
  * @name: personalCenter
  * 开发者编写的最近收听latelyListen,配置（labels）的类型，通过切换（selectTap）获取不同类型列表
  * 这里开发者必须提供的字段数据(数据格式见听服务小场景模板开发说明文档)：
- * 1、userInfo <Object>：
- *    -avatar：用户头像
-      -nickname: 用户名称,
- * data <Array[Object]>：
- *    -type: 入口点击事件函数名称
- *    -title: 入口标题,
- *    -icon: 入口图标, 
- *  userInfo: {
+ * 1、userInfo: {
  *     avatar: '',
  *     nickname: '',
  *  }

@@ -42,7 +42,7 @@ module.exports = {
       {
         name: '故事',
         value: 'media'
-      }],
+      }]
     },
     // 开发者注入模板页面数据
     info: []

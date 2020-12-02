@@ -99,8 +99,7 @@ module.exports = {
     const index = e.currentTarget.dataset.index
     const name = e.currentTarget.dataset.name
     this.setData({
-      currentTap: index,
-      retcode: 0
+      currentTap: index
     })
     wx.showLoading({
       title: '加载中',
