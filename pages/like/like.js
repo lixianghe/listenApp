@@ -24,7 +24,6 @@ Page({
   },
   likeAbum(flag, id) {
     if (flag) {
-      console.log('albumFavoriteAdd')
       albumFavoriteCancel({albumId: id}).then(res => {
         wx.showToast({ icon: 'none', title: '取消收藏成功' })
         this.setData({
@@ -51,7 +50,6 @@ Page({
         })
       })
     } else {
-      console.log('mediaFavoriteAdd')
       mediaFavoriteAdd({mediaId: id}).then(res => {
         wx.showToast({ icon: 'none', title: '收藏成功' })
         that.setData({

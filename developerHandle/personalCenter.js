@@ -50,14 +50,12 @@ module.exports = {
     }]
   },
   onShow() {
-    console.log('Log from mixin!')
+
   },
   onLoad(options) {
-    console.log(this.data.showWxLogin+'showWxLogin=========56行')
     app.checkStatus()
     wx.checkSession({
       success:(res)=> {
-        console.log('res', res);
         //session_key 未过期，并且在本生命周期一直有效
         if (!this.data.isLogin) {
           this.loginIn()
@@ -85,22 +83,16 @@ module.exports = {
     }
     wx.login({
       success: (loginRes) => {
-        console.log('扫码成功', 63)
-        console.log(loginRes, 64)
         this.authRequest = true
 
         auth({
           code: loginRes.code
         }).then(res => {
-          console.log('登录成功', 65)
-          console.log(res, 69);
-          console.log('请求成功', 70)
           app.authInfo = res;
           wx.setStorageSync('deviceId', res.deviceId)
           this.setData({
             showWxLogin: false
           })
-          console.log(app.authInfo, 82);
           if (!event && app.authInfo.mobileFlag && this.data.isLogin) {
             this.loginWx()
           }
@@ -108,15 +100,14 @@ module.exports = {
 
           this.authRequest = false
         }).catch(err => {
-          console.log(err, 95)
+
         })
       },
       fail: (err) => {
-        console.log('扫码失败', JSON.stringify(err))
         this.authRequest = false
       },
       complete: (res) => {
-        console.log('扫码complete', JSON.stringify(res))
+
       }
     })
   },
@@ -124,7 +115,6 @@ module.exports = {
    * 微信登录
    */
   loginWx() {
-    console.log('微信登录');
     let postData = {
       openId: app.authInfo.openId,
       authCode: app.authInfo.authCode
@@ -134,7 +124,6 @@ module.exports = {
         this.logout = false;
         return;
       }
-      console.log(JSON.stringify(res)+'用户信息  114行')
       app.userInfo = res
       wx.setStorageSync('token', res.token)
       app.tokenStatus = 0
@@ -144,14 +133,12 @@ module.exports = {
       wx.hideLoading()
     }).catch(err => {
       this.setForbidStatus(true, err)
-      console.log(err, 95)
     })
   },
   /**
    * 绑定手机号
    */
   getPhoneNumber(e) {
-    console.log('手机号加密信息：', app.authInfo, JSON.stringify(e))
     let {
       iv,
       encryptedData
@@ -175,10 +162,7 @@ module.exports = {
       mobileIv: iv,
       authCode: app.authInfo.authCode
     }
-    console.log('postData' + postData + '120行')
-    console.log('手机号登录信息：', JSON.stringify(postData))
     login(postData).then(res => {
-      console.log('成功成功成功成功', JSON.stringify(res))
       app.userInfo = res
       app.tokenStatus = 0
       wx.setStorageSync('userInfo', app.userInfo)
@@ -188,19 +172,15 @@ module.exports = {
       wx.hideLoading()
     }).catch(err => {
       this.setForbidStatus(true, err)
-      console.log(err, 95)
     })
 
   },
   getUserInfo(showGzh){
-    console.log('获取用户信息');
     userInfo({}).then(res => {
       if(this.logout){
         this.logout = false;
         return;
       }
-      // console.log(resUser)
-      console.log('resUser', res)
       let { headImgUrl, nickname, appUserId, status } = res;
       let forbid = false;
       let showModalForbid = false;
@@ -233,14 +213,12 @@ module.exports = {
         icon: 'none',
         title: err || '网络异常'
       })
-      console.log(err, 181)
     })
 
 
     vipInfo({}).then(res => {
       let vipPic = ''
       let { expireTime, vipStatus } = res
-      console.log(JSON.stringify(vipStatus),JSON.stringify(expireTime)+'224行--mine')
       if (expireTime){
         let expireDate = new Date(expireTime)
         let year = expireDate.getFullYear()
@@ -285,7 +263,6 @@ module.exports = {
         vipPic: vipPic
       })
     }).catch(err => {
-      console.log(JSON.stringify(err)+'261行--mine')
     })
   },
   logoutTap(){

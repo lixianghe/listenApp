@@ -11,6 +11,5 @@ Component({
   
   },
   attached(options) {
-    console.log(this.data.noContent)
   }
 })

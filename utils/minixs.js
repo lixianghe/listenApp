@@ -30,9 +30,7 @@ function merge (mixins, options) {
       } else if (originMethods.includes(key)) {
         // 内置方法属性混入，优先执行混入的部分
         const originFunc = options[key]
-        // console.log(options[key], key)
         options[key] = function (...args) {
-          console.log(...args)
           value.call(this, ...args)
           return originFunc && originFunc.call(this, ...args)
         }
