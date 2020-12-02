@@ -22,7 +22,6 @@ Page({
   },
   getList() {
     vipList().then(res => {
-      console.log('res', res.vipPackage)
       let list = res.vipPackage
       this.setData({vipList: list})
     })

@@ -33,7 +33,9 @@ Page({
   // 函数节流防止请求过多
   search: tool.throttle(function (e) {
     this.setData({keyWord: e[0].detail.value})
-    this.getData(this.data.currentTap)
+    setTimeout(() => {
+      this.getData(this.data.currentTap)
+    })
   }, 200),
   cancel() {
     this.setData({
@@ -55,8 +57,6 @@ Page({
     const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
     const routeType = e.currentTarget.dataset.contentype
-
-    console.log(app.globalData.latelyListenId, routeType)
     let url
     if (routeType === 'album') {
       url = `../abumInfo/abumInfo?id=${id}&title=${title}`

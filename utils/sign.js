@@ -29,7 +29,6 @@ function sign(jsonObj) {
       continue;
   }
   str += ("" + app_secret);
-  console.log(str)
 
   return MD5.hexMD5(str);
 }

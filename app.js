@@ -88,7 +88,6 @@ App({
     wx.onBackgroundAudioStop(function () {
       const pages = getCurrentPages()
       const currentPage = pages[pages.length - 1]
-      console.log('playnext', currentPage)
       that.cutplay(currentPage, 1, true)
     });
     //监听音乐暂停，保存播放进度广播暂停状态
@@ -132,9 +131,9 @@ App({
   vision: '1.0.0',
   cutplay: async function (that, type, cutFlag) {
     // 判断循环模式
-    let allList = wx.getStorageSync('allList')
+    let allList = wx.getStorageSync('nativeList')
     // 根据循环模式设置数组
-    let loopType = wx.getStorageSync('loopType')
+    let loopType = wx.getStorageSync('loopType') || 'listLoop'
     // 如果缓存没有abumInfoName，说明是从首页单曲进入，list为单首
     let abumInfoName = wx.getStorageSync('abumInfoName')
     // 歌曲列表
@@ -202,10 +201,8 @@ App({
     const songInfo = this.globalData.songInfo
     // 如果是车载情况
     if (this.globalData.useCarPlay) {
-      console.log('车载情况')
       this.carHandle(seek)
     } else {
-      console.log('非车载情况')
       this.wxPlayHandle(songInfo, seek, cb)
     }
 
@@ -213,7 +210,6 @@ App({
   // 车载情况下的播放
   carHandle(seek) {
     let media = this.globalData.songInfo || wx.getStorageSync('songInfo')
-    console.log('media', media)
     this.audioManager.src = media.src
     this.audioManager.title = media.title
     this.audioManager.coverImgUrl = media.coverImgUrl
@@ -231,7 +227,6 @@ App({
       title: songInfo.title,
       success: function (res) {
         if (seek != undefined && typeof (seek) === 'number') {
-          console.log('seek', seek)
           wx.seekBackgroundAudio({
             position: seek
           })
@@ -240,7 +235,6 @@ App({
         cb && cb();
       },
       fail: function () {
-        console.log(888)
       }
     })
   },
@@ -264,7 +258,6 @@ App({
     let userInfo = wx.getStorageSync('userInfo');
     let authInfo = wx.getStorageSync('authInfo');
     if (authInfo){
-      console.log(authInfo)
       this.authInfo = authInfo;
     }
     if (userInfo){
@@ -299,7 +292,6 @@ App({
     }
     checkStatus({}).then(res => {
       // 若code为0且changeFlag为true，更新token和refreshToken
-      console.log('checkStatus---302行', JSON.stringify(res))
       if (res.changeFlag){
         this.userInfo.token = res.token
         this.userInfo.refreshToken = res.refreshToken
@@ -310,8 +302,7 @@ App({
       this.tokenStatus = 0
       wx.setStorageSync('userInfo', this.userInfo)
     }).catch(err => {
-      console.log('checkStatus失败')
-      console.log(err)
+
     })
   },
   uuid() {
@@ -353,12 +344,10 @@ App({
           this.sysInfo.colorStyle = res.colorStyle
           this.sysInfo.backgroundColor = res.backgroundColor
           this.globalData.themeLoaded = true
-          console.log(JSON.stringify(res)+'获取配色成功387行')
           // this.initTabbar()
         },
         fail: (res) => {
           this.log('配色加载失败')
-          console.log('配色加载失败')
           this.sysInfo.backgroundColor = this.sysInfo.defaultBgColor
           this.globalData.themeLoaded = true
           // this.initTabbar()

@@ -63,6 +63,7 @@ Page({
     this.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
+    let abumInfoName = wx.getStorageSync('abumInfoName')
     const songInfo = app.globalData.songInfo
     this.setData({
       songInfo: songInfo,
@@ -73,6 +74,8 @@ Page({
     })
     // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
     wx.setStorageSync('abumInfoName', options.abumInfoName)
+    const nativeList = wx.getStorageSync('nativeList') || []
+    if (!nativeList.length || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
     if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
   },
   onShow: function () {
@@ -140,15 +143,14 @@ Page({
     let loopList;
     // 列表循环
     if (type === 'listLoop') {
-      loopList = list     
+      let nativeList = wx.getStorageSync('nativeList') || []
+      loopList = nativeList        
     } else if (type === 'singleLoop') {
       // 单曲循环
       loopList = [list[app.globalData.songInfo.episode]]
-      wx.showToast({ title: this.data.typeName['singleLoop'], icon: 'none' })
     } else {
       // 随机播放
       loopList = this.randomList(list)
-      wx.showToast({ title: this.data.typeName['shufflePlayback'], icon: 'none' })
     }
     return loopList
   },

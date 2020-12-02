@@ -25,7 +25,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log('当前购买id：',options.id)
     this.setData({
       productId: options.id
     })
@@ -50,7 +49,6 @@ Page({
 
   async createOrder(){
     let res = await signature()
-    console.log('signature', res)
     let postData = {
       productType: 1,
       productId: this.data.productId,
@@ -62,7 +60,6 @@ Page({
     }
     this.setData({signature: res.signature})
     buy(postData).then(res => {
-      console.log('createOrder',res)
       let { totalPrice, payResult } = res
       this.setData({
         totalPrice,

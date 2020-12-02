@@ -144,6 +144,8 @@ Page({
   
   // 播放全部
   async playAll() {
+    let allList = wx.getStorageSync('allList') || []
+    wx.setStorageSync('nativeList', allList)
     const msg = '网络异常，无法播放！'
     app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
     app.globalData.songInfo = app.globalData.canplay[0]
@@ -204,14 +206,12 @@ Page({
   }, 50),
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
-    console.log('滚到顶部')
+
   }, 2000),
   // 滚到底部
   listBehind: tool.throttle(async function (res) {
-    console.log('滑倒底部')
     // 滑倒最底下
     let lastIndex = (this.data.pageNo   - 1) * this.data.pageSize + this.data.canplay.length      // 目前最后一个的索引值
-    console.log('lastIndex', lastIndex)
     if (lastIndex >= this.data.total) {
       this.setData({ showLoadEnd: false })
       return false
@@ -279,7 +279,6 @@ Page({
   },
   // 触摸结束
   touchEnd: tool.throttle(function(e) {
-    console.log('结束=================')
     if (this.data.pageNo <= 1 || !this.showRefresh) {
       return false
     }

@@ -15,7 +15,7 @@
       item.coverImgUrl = item.coverUrl                          // 歌曲的封面
     })
  */
-import { search } from "../utils/httpOpt/api";
+// import { search } from "../utils/httpOpt/api";
 const { showData } = require("../utils/httpOpt/localData");
 
 module.exports = {
@@ -28,8 +28,8 @@ module.exports = {
   },
   onShow() {},
   async onLoad(options) {},
-  // 凯叔搜索api数据
-  _getList(params) {
+  // 模拟搜索
+  async _getList(params) {
     /**
      * 这里我们给开发者提供keywords和labels对应点击的的值，其余参数开发者自行添加
      */
@@ -39,33 +39,19 @@ module.exports = {
       contentType: params.label,
       keyWord: params.keyWord
     }
-    search(opt).then((res) => {
-      let layoutData = [];
-      console.log(res);
-      res.list.forEach((item) => {
-        if (params.label === "album") {
-          layoutData.push({
-            id: item.album.albumId,
-            title: item.album.albumName,
-            src: item.album.coverUrl,
-            contentType: item.contentType,
-          });
-        } else {
-          layoutData.push({
-            id: item.media.mediaId,
-            title: item.media.mediaName,
-            src: item.media.coverUrl,
-            contentType: item.contentType,
-          });
-        }
-      });
-      console.log("layoutData", layoutData);
-      this.setData({
-        info: layoutData,
-      });
+    // 模拟返回数据
+    let data = await this.searchData(opt)
+    data.map(item => {
+      item.id = item.id
+      item.title = item.title
+      item.coverImgUrl = item.coverImgUrl
     })
-    .catch((err) => {
-      console.log(JSON.stringify(err) + "73行");
-    });
+    this.setData({
+      info: data,
+    })
   },
+  searchData(opt){
+    let data = showData.abumInfo.data
+    return data
+  }
 };

@@ -57,13 +57,11 @@ function playAlrc(that, app, percent) {
 
 function toggleplay(that) {
   if (that.data.playing) {
-    console.log("暂停播放");
     that.setData({ 
       playing: false 
     });
     that.stopmusic();
   } else {
-    console.log("继续播放")
     that.setData({
       playing: true
     });

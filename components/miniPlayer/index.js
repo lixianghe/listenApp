@@ -76,11 +76,6 @@ Component({
     existed: false
   },
   audioManager: null,
-  observers: {
-    'playing': function() {
-      console.log('playing')
-    }
-  },
   attached: function () {
     
   },

@@ -23,12 +23,12 @@
         wx:key="index"
         data-id="{{item.id}}"
         data-title="{{item.title}}"
-        data-src="{{item.src}}"
+        data-src="{{item.coverImgUrl}}"
         data-contentype="{{item.contentType}}"
         bindtap="linkAbumInfo"
         class="{{screen}}albumCard"
         style="width: {{33.7 * times}}px; height: {{68.6 * times}}px; margin-top: {{31.5 * times}}px">
-        <image class="image" src="{{item.src}}" 
+        <image class="image" src="{{item.coverImgUrl}}" 
         style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
         <view class="albumTit" style=" margin-top: {{2 * times}}px; font-size: {{5.2 * times}}px;">
           <text>{{ item.title }}</text>

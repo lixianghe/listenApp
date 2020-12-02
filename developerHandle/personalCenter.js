@@ -51,7 +51,7 @@ module.exports = {
     }]
   },
   onShow() {
-    console.log('Log from mixin!')
+
   },
   onLoad(options) {
   },
@@ -74,7 +74,7 @@ module.exports = {
         console.log('扫码失败', JSON.stringify(err))
       },
       complete: (res) => {
-        console.log('扫码complete', JSON.stringify(res))
+
       }
     })
   },

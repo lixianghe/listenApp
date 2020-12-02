@@ -52,7 +52,6 @@ module.exports = {
     wx.setStorageSync('img', src)
     const routeType = e.currentTarget.dataset.contentype
 
-    console.log(app.globalData.latelyListenId, routeType)
     let url
     if (routeType === 'album') {
       url = `../abumInfo/abumInfo?id=${id}&title=${title}`
