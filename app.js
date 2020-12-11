@@ -130,6 +130,7 @@ App({
   },
   vision: '1.0.0',
   cutplay: async function (that, type, cutFlag) {
+    that.setData({percent: 0})
     // 判断循环模式
     let allList = wx.getStorageSync('nativeList')
     // 根据循环模式设置数组
@@ -156,7 +157,6 @@ App({
     }
     await getMedia(params, that)
     loopType === 'singleLoop' ? this.playing(0) : this.playing()
-    wx.setStorageSync("songInfo",song.id)
   },
   // 根据循环模式设置播放列表
   setList(loopType, list, cutFlag = false){
@@ -200,19 +200,18 @@ App({
   playing: function (seek, cb) {
     const songInfo = this.globalData.songInfo
     // 如果是车载情况
-    if (this.globalData.useCarPlay) {
-      this.carHandle(seek)
+    if (!this.globalData.useCarPlay) {
+      this.carHandle(songInfo, seek)
     } else {
       this.wxPlayHandle(songInfo, seek, cb)
     }
 
   },
   // 车载情况下的播放
-  carHandle(seek) {
-    let media = this.globalData.songInfo || wx.getStorageSync('songInfo')
-    this.audioManager.src = media.src
-    this.audioManager.title = media.title
-    this.audioManager.coverImgUrl = media.coverImgUrl
+  carHandle(songInfo, seek) {
+    this.audioManager.src = songInfo.src
+    this.audioManager.title = songInfo.title
+    this.audioManager.coverImgUrl = songInfo.coverImgUrl
     if (seek != undefined && typeof (seek) === 'number') {
       wx.seekBackgroundAudio({
         position: seek

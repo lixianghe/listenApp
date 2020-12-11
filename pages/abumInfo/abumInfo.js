@@ -73,6 +73,7 @@ Page({
     setTimeout(() => {
       this.getTenHeight()
     }, 500)
+    scrollTopNo = 0
   },
   onShow() {
     const currentId = wx.getStorageSync('songInfo').id
@@ -162,15 +163,10 @@ Page({
     let that = this
     if (getMedia) await getMedia(params, that)
     this.getNetWork(msg, app.playing)
-    
-    wx.setStorage({
-      key: 'songInfo',
-      data: this.data.canplay[0],
-    })
   },
   setPlaying(e) {
     this.setData({
-      palying: e.detail,
+      playing: e.detail,
     })
   },
   // 获取网络信息，给出相应操作

@@ -39,6 +39,9 @@ Page({
     likeType: 'noLike',
     total: 0,
     scrolltop: 0,
+    isDrag: '',
+    barWidth: 0,
+    currentTime: 0,
     mainColor: btnConfig.colorOptions.mainColor,
     percentBar: btnConfig.percentBar,
     showImg: false,
@@ -74,8 +77,7 @@ Page({
     })
     // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
     wx.setStorageSync('abumInfoName', options.abumInfoName)
-    const nativeList = wx.getStorageSync('nativeList') || []
-    if (!nativeList.length || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+    if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
     if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
   },
   onShow: function () {
@@ -85,7 +87,7 @@ Page({
     timer = setInterval(function () {
       tool.playAlrc(that, app);
     }, 1000);
-    
+    that.queryProcessBarWidth()
   },
   onUnload: function () {
     clearInterval(timer);
@@ -166,13 +168,7 @@ Page({
   // 暂停/播放
   toggle() {
     const that = this
-    clearInterval(timer)
-    // if (!this.data.playing) {
-      timer = setInterval(function () {
-        tool.playAlrc(that, app);
-      }, 1000);
-    // }
-    tool.toggleplay(this, app)
+    tool.toggleplay(that, app)
   },
   // 播放列表
   more() {
@@ -223,39 +219,56 @@ Page({
     app.playing()
     wx.setStorage({
       key: "songInfo",
-      data: songInfo
+      data: app.globalData.songInfo
     })
   },
-  // 点击改变进度, 拖拽结束
-  setPercent(e) {
-    console.log('拖拽结束')
-    // if (this.data.playing) wx.showLoading({ title: '加载中...', mask: true })
-    clearInterval(timer)
-    wx.pauseBackgroundAudio();
-    const that = this
-    // 传入当前毫秒值
-    const time = e.detail.value / 100 * tool.formatToSend(app.globalData.songInfo.dt)
-    app.globalData.currentPosition = time
-    console.log(that.data.playing, app.globalData.songInfo.dt)
-    if (app.globalData.songInfo.dt) {
-      if (that.data.playing) {
-        app.playing(time)
-        timer = setInterval(function () {
-          tool.playAlrc(that, app);
-        }, 1000);
-      }
-      that.setData({
-        percent: e.detail.value
-      })
-    }
+  // 开始拖拽
+  dragStartHandle(event) {
+    console.log('isDrag', this.data.isDrag)
+    this.setData({
+      isDrag: 'is-drag',
+      _offsetLeft: event.changedTouches[0].pageX,
+      _posLeft: event.currentTarget.offsetLeft
+    })
   },
-  // 拖拽改变进度
-  dragPercent(e) {
-    const that = this
-    clearInterval(timer)
-    tool.playAlrc(that, app, e.detail.value);
-    that.setData({
-      percent: e.detail.value
+  // 拖拽中
+  touchmove(event) {
+    let offsetLeft = event.changedTouches[0].pageX
+    let process = (offsetLeft - this.data._offsetLeft + this.data._posLeft) / this.data.barWidth
+    if (process < 0) {
+        process = 0
+    } else if (process > 1) {
+        process = 1
+    }
+    let percent = (process * 100).toFixed(3)
+    let currentTime = process * tool.formatToSend(app.globalData.songInfo.dt)
+    let playtime = currentTime ? tool.formatduration(currentTime * 1000) : '00:00'
+    this.setData({
+      percent,
+      currentTime,
+      playtime
+    })
+  },
+  // 拖拽结束
+  dragEndHandle(event) {
+    wx.seekBackgroundAudio({
+      position: this.data.currentTime
+    })
+    setTimeout(() => {
+      this.setData({isDrag: ''})
+    }, 500)
+  },
+  // 查询processBar宽度
+  queryProcessBarWidth() {
+    var query = this.createSelectorQuery();
+    query.selectAll('.process-bar').boundingClientRect();
+    query.exec(res => {
+      try {
+        this.setData({
+          barWidth: res[0][0].width
+        })
+      } catch (err) {
+      }
     })
   },
   // ******按钮点击态处理********/

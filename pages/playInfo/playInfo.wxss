@@ -54,6 +54,8 @@
 }
 .page .playLeft .player .progress {
   position: relative;
+  height: 1.24vh;
+  background: #434343;
 }
 .wx-progress-bar {
   border-radius: 8px;
