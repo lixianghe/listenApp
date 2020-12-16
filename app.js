@@ -6,13 +6,13 @@ require('./utils/minixs')
 
 App({
   globalData: {
-    appName: 'kaishustory',
+    appName: 'ximalayaxin',
     // 屏幕类型
     screen: '',
     mainColor: btnConfig.colorOptions.mainColor,
     // 登录相关
     openid: '',
-    appId: '60008',
+    appId: '60023',
     userId: '-1',
     haveLogin: false,
     token: '',

@@ -1,3 +1,10 @@
+const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
+// 开放平台
+const APP_KEY = 'a42f6121d901e1748eb14e5c0f1ad62a'
+const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
+const baseUrl = 'https://api.ximalaya.com'
+//设置设备diviceId
+const deviceId = util.getDeviceId()
 function formatNumber(n) {
   n = n.toString()
   return n[1] ? n : '0' + n
@@ -137,6 +144,91 @@ function debounce(fn, interval = 300) {
   };
 }
 
+function generateUUID() {
+  let d = new Date().getTime();
+  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    let r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+  });
+  return uuid;
+}
+
+ function getDeviceId() {
+  //设置设备diviceId
+  let diviceId = wx.getStorageSync('DEVICE_ID')
+  if (!diviceId) {
+    diviceId = generateUUID()
+    wx.setStorageSync('DEVICE_ID', diviceId)
+  }
+  return diviceId
+}
+function getAccessToken(){
+  const restParams = {
+    client_id: APP_KEY,
+    device_id: deviceId,
+    nonce: generateRandom(),
+    grant_type: 'client_credentials',
+    timestamp: +new Date()
+  };
+  const sig = calcuSig(restParams, APP_SECRET);
+  const data = {...restParams, sig}
+  let header = {
+    'content-type': 'x-www-form-urlencoded',
+    // 'content-type': 'application/json',
+    'app_key':APP_KEY,
+    'device_id': deviceId,
+    'pack_id':'com.app.wechat',
+    'access_token': 'wxapp-car',
+    'sig': 'tencent-open',
+    
+  }
+  wx.request({
+    url:baseUrl + '/oauth2/secure_access_token',
+    'content-type': 'application/x-www-form-urlencoded',
+    data:data,
+    method:"POST",
+    header:header,
+    success: function(res) {
+     
+      console.log("access_token----success--", res)
+      
+     
+    },
+    fail: function(err) {
+    
+      console.log("---fail--",err)
+     
+    },
+  });
+
+
+
+
+
+}
+
+// 计算sig
+ function calcuSig(params, key) {
+  const arr = [];
+  Object.entries(params).sort().map(item => arr.push(`${item[0]}=${item[1]}`));
+  const base64 = Base64.stringify(CryptoJS.enc.Utf8.parse(arr.join('&')));
+  const hmac = HmacSHA1(base64, key);
+  return md5(hmac).toString();
+}
+
+// 生成随机字符串，默认32位
+ function generateRandom(n = 32) {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyz'
+  let res = ''
+  for (let i = 0; i < n; i += 1) {
+    const id = Math.ceil(Math.random() * 35)
+    res += chars[id]
+  }
+  return res
+}
+
+
 
 module.exports = {
   formatToSend: formatToSend,
@@ -146,5 +238,7 @@ module.exports = {
   initAudioManager: initAudioManager,
   EventListener: EventListener,
   throttle: throttle,
-  debounce: debounce
+  debounce: debounce,
+  getDeviceId:getDeviceId,
+  getAccessToken:getAccessToken
 }

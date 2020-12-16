@@ -1,0 +1,11 @@
+@import "./category-horizontal.wxss";
+@import "./category-vertical.wxss";
+page {
+  margin: 0;
+  padding: 0;
+}
+/* page view, 
+page button, 
+page image {
+  box-sizing: content-box
+} */

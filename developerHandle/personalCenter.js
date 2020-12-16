@@ -51,6 +51,7 @@ module.exports = {
     }]
   },
   onShow() {
+    console.log('onshow-----------')
 
   },
   onLoad(options) {
@@ -78,7 +79,7 @@ module.exports = {
       }
     })
   },
-  getUserInfo() {
+  getPhoneNumber(e) {
     const that = this
     wx.getUserInfo({
       success: res => {

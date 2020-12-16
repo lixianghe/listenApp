@@ -10,7 +10,8 @@
     "pages/search/search",
     "pages/member/pay",
     "pages/member/member",
-    "pages/myBuy/myBuy"
+    "pages/myBuy/myBuy",
+    "pages/category/category"
     
   ],
   "window": {
@@ -29,6 +30,10 @@
     "color": "#bebebe",
     "selectedColor": "#ffac2d",
     "backgroundColor": "#202020",
+    "borderStyle": "black",
+    "position": "top",
+    "mossPkgName": "ximalayaxin",
+    "pageOrientation": "auto",
     "list": [
     {
       "index": 0, 
@@ -39,13 +44,20 @@
     },
     {
       "index": 1, 
+      "pagePath": "pages/category/category",
+      "iconPath": "images/search.png",
+      "selectedIconPath": "images/searched.png",
+      "text": "分类"
+    },
+    {
+      "index": 2, 
       "pagePath": "pages/search/search",
       "iconPath": "images/search.png",
       "selectedIconPath": "images/searched.png",
       "text": "搜索"
     },
     {
-      "index": 2, 
+      "index": 3, 
       "pagePath": "pages/personalCenter/personalCenter",
       "iconPath": "images/admin.png",
       "selectedIconPath": "images/admin-select.png",

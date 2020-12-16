@@ -1,0 +1,114 @@
+.h .index {
+  overflow: auto;
+  padding-left: 7.3vh;
+  box-sizing: border-box;
+  height: 82vh;
+  padding: 5.5vh 0;
+  white-space: nowrap;
+}
+
+.h .latelyListen>image {
+  width: 19.8vh;
+  height: 19.8vh;
+  margin-top: 17.8vh;
+}
+.h .latelyLtnTit {
+  margin-top: 0.89vh;
+  font-size: 4.58vh;
+  color: #fff;
+  line-height: 5.3vh;
+}
+.h .quickEntry{
+  /* flex: 0 0 41.3vh; */
+  width: 43.65vh;
+  padding: 0 6.12vh 0 7.35vh;
+  vertical-align: top;
+  display: inline-block;
+  height: 68.6vh;
+  overflow: hidden;
+  border-right: 0.58vh solid rgba(255,255,255, 0.04);
+} 
+.h .quickEntrybox {
+  text-align: center;
+  background-color: rgba(255,255,255, 0.06);
+  background-size: 100%;
+  border-radius: 2vh;
+  margin-bottom: 6.3vh;
+} 
+.h .quickEntryicon {
+  width: 14.76vh;
+  height: 14.76vh;
+  margin-top: 11%;
+  vertical-align: bottom;
+}
+.h .quickEntrybox1 {
+  height: 51.73vh;
+  margin-top: 6vh;
+}
+.h .quickEntrybox1 .quickEntryicon {
+  margin-top: 41%;
+}
+.h .mianContent {
+  display: inline-block;
+  vertical-align: top;
+}
+.h .albumCard {
+  width: 41.81vh;
+  display: inline-block;
+  margin-right: 7.6vh;
+  height: 68.6vh;
+  overflow: hidden;
+  margin-top: 14.7vh;
+}
+.h .imgB {
+  width: 41.81vh;
+  height: 41.81vh;
+  border-radius: 2vh;
+}
+.albumTitB {
+  /* margin-top: 6vh; */
+  height: 14vh;
+}
+.albumTitB .tb {
+  height: 5vh;
+  margin: 4vh 0;
+}
+.label-view {
+  display: flex;
+  color: #fff;
+  font-size: 5.5vh;
+  margin-bottom: 4.89vh;
+}
+.label-view .title {
+  padding: 0 5.35vh;
+  height: 9.81vh;
+  line-height: 9.81vh;
+  margin-right: 5vh;
+  background-color: rgba(255,255,255, 0.1);
+  color: "#bebebe";
+  border-radius: 5.5vh;
+}
+.label-view .titleBg {
+  padding: 2vh 1vh;
+  margin-right: 5vh;
+  height: 10vh;
+  width: 24vh;
+  background-color: rgba(255,255,255, 0.1);
+  border-radius: 5.5vh;
+}
+
+.fixeds {
+  position: fixed;
+  left: 7.6vh;
+}
+.absolutes {
+  position: absolute;
+}
+.storyBox {
+  margin-top: 5.89vh;
+  margin-left: 6.12vh;
+}
+.label-box {
+  height: 9.81vh;
+  margin-left: 6.12vh;
+}

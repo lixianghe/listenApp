@@ -1,14 +1,15 @@
 import { request, apiFormat } from './https'
 // API域名
 const domain = {
-  'test':'https://tapi.kaishustory.com', // 测试环境
-  'gamma':'https://gapi.kaishustory.com', // 测试环境
-  'prod': 'https://api.kaishustory.com' // 生产环境
+  
+  'prod':'https://www.ximalaya.com', // 生产环境
+  // 'gamma':'https://gapi.kaishustory.com', // 测试环境
+  // 'prod': 'https://api.kaishustory.com' // 生产环境
 }
 const appId = {
-  'test': 268174,
-  'gamma': 786474,
-  'prod': 786474
+  'test': 60023,
+  'gamma': 60023,
+  'prod': 60023
 }
 // 页面初始化
 const initApi = '/open/user/initialize'                                    // post

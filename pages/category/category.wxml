@@ -1,0 +1,47 @@
+<view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
+  <scroll-view class="index" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData" bindscroll="scrollhandle">
+    <!-- 快捷入口 -->
+    <view class="quickEntry" wx:if="{{lalyLtn.show}}">
+      <view class="quickEntrybox" style="height: 30.73vh"  wx:if="{{lalyLtn.data.length > 1}}" wx:for="{{lalyLtn.data}}" wx:key="index"  bindtap="tolatelyListen" data-page="{{item.name}}" data-index="{{index}}">
+        <image class="quickEntryicon" src="{{ item.icon }}"></image>
+        <view class="latelyLtnTit">{{ item.title }}</view>
+      </view>
+      <view class="quickEntrybox quickEntrybox1" wx:if="{{lalyLtn.data.length === 1}}" wx:for="{{lalyLtn.data}}" wx:key="index"  bindtap="tolatelyListen" data-page="{{item.name}}" data-index="{{index}}">
+        <image class="quickEntryicon" src="{{ item.icon }}"></image>
+        <view class="latelyLtnTit">{{ item.title }}</view>
+      </view>
+    </view>
+
+    <view class="mianContent">
+      <view class="label-box" wx:if="{{labels.show}}">
+        <view class="label-view {{ isFixed ? 'fixeds' : 'absolutes' }}" wx:if="{{reqS}}">
+          <view class="title" wx:for="{{labels.data}}" wx:key="index" style="color: {{index === currentTap ? mainColor : '#bebebe'}}" 
+            data-index="{{index}}"  data-groupid="{{item.id}}" data-name="{{item.name}}" bindtap="selectTap">
+            <text>{{item.name}}</text>
+          </view>
+        </view>
+        <view class="label-view {{ isFixed ? 'fixeds' : 'absolutes' }}" wx:if="{{!reqS}}">
+          <view class="titleBg" wx:for="{{5}}" wx:key="index"  >
+          </view>
+        </view>
+      </view>
+      <!-- 页面盒子 -->
+      <view class="storyBox">
+        <story wx:if="{{info.length>0 && reqL}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
+        data-id="{{item.id}}" data-title="{{item.title}}" data-src="{{item.src}}" data-contentype="{{item.contentType}}" bindtap="linkAbumInfo"
+        datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}"></story>
+      </view>
+      
+    </view>
+    <!-- 加载中盒子 -->
+    <view class="albumCard" wx:if="{{!reqL}}" wx:for="{{3}}" wx:key="index">
+      <view class="imgB bone"></view>
+      <view class="albumTitB">
+        <view class="tb bone"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <bgConfirm id="bgConfirm" msg="{{confirm}}" confirm="确定" cancel=""></bgConfirm>
+  <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
+</view>

@@ -16,8 +16,8 @@
         <view class="adminCenterDetail">请登录后查看详情</view>
         <view class="adminBtnOut" bindtap="loginIn" data-state="login" style="background-color: {{mainColor}}"
           wx:if="{{showWxLogin}}">立即登录</view>
-        <button class="adminBtnOut" style="background-color: {{mainColor}}"
-         bindtap="getUserInfo" wx:if="{{!showWxLogin}}">用户授权</button>
+        <button    open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="adminBtnOut" style="background-color: {{mainColor}}"
+          wx:if="{{!showWxLogin}}">用户授权</button>
       </view>
     </view>
 
