@@ -13,8 +13,8 @@
  * 4、其他模板外的功能开发者在这个文件自行开发
  */
 const app = getApp()
-import { mediaPlay, mediaFavoriteAdd, mediaFavoriteCancel, isFavorite, saveHistory } from '../utils/httpOpt/api'
-const { showData } = require('../utils/httpOpt/localData')
+// import { mediaPlay, mediaFavoriteAdd, mediaFavoriteCancel, isFavorite, saveHistory } from '../utils/httpOpt/api'
+const { showData } = require('../utils/localData')
 
 module.exports = {
   data: {

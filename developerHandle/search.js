@@ -16,7 +16,7 @@
     })
  */
 // import { search } from "../utils/httpOpt/api";
-const { showData } = require("../utils/httpOpt/localData");
+const { showData } = require("../utils/localData");
 
 module.exports = {
   data: {

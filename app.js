@@ -1,4 +1,4 @@
-import { init, checkStatus } from './utils/httpOpt/api'
+// import { init, checkStatus } from './utils/api'
 import btnConfig from './utils/pageOtpions/pageOtpions'
 import { getMedia } from './developerHandle/playInfo'
 
