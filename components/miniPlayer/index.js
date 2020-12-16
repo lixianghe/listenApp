@@ -1,6 +1,7 @@
 const app = getApp()
-import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
+import tool from '../../utils/util'
+
 // import { isFavorite, like } from '../../developerHandle/playInfo'
 
 var timer = null

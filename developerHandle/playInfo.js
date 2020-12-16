@@ -14,7 +14,7 @@
  */
 const app = getApp()
 // import { mediaPlay, mediaFavoriteAdd, mediaFavoriteCancel, isFavorite, saveHistory } from '../utils/httpOpt/api'
-const { showData } = require('../utils/localData')
+const { showData } = require('../utils/httpOpt/localData')
 
 module.exports = {
   data: {

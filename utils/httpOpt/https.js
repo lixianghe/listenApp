@@ -1,4 +1,7 @@
-import util from './../util'
+
+
+
+const util = require('util.js')
 const baseUrl = 'https://www.ximalaya.com'
 const appId = 60023
 // 开放平台

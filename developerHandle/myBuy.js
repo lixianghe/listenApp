@@ -18,7 +18,7 @@
     })
  */
 const app = getApp()
-const { showData } = require('../utils/localData')
+const { showData } = require('../utils/httpOpt/localData')
 import { bought } from '../utils/httpOpt/api'
 
 module.exports = {

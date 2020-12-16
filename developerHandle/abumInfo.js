@@ -18,7 +18,7 @@
     })
  */
 // import { albumMedia, isAlbumFavorite, fm, albumFavoriteAdd, albumFavoriteCancel } from '../utils/httpOpt/api'
-const { showData } = require('../utils/localData')
+const { showData } = require('../utils/httpOpt/localData')
 
 module.exports = {
   data: {
