@@ -4,7 +4,7 @@
 const util = require('../util.js')
 const baseUrl = 'https://www.ximalaya.com'
 const appId = 60023
-// 平台数据
+// 开放平台数据
 const APP_KEY = 'a42f6121d901e1748eb14e5c0f1ad62a'
 const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
 const OPEN_DOMAIN = 'https://api.ximalaya.com'
