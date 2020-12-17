@@ -1,10 +1,10 @@
-const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
+// const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
 // 开放平台
 const APP_KEY = 'a42f6121d901e1748eb14e5c0f1ad62a'
 const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
 const baseUrl = 'https://api.ximalaya.com'
 //设置设备diviceId
-const deviceId = util.getDeviceId()
+// const deviceId = util.getDeviceId()
 function formatNumber(n) {
   n = n.toString()
   return n[1] ? n : '0' + n

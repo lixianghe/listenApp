@@ -1,7 +1,7 @@
 
 
 
-const util = require('util.js')
+const util = require('../util.js')
 const baseUrl = 'https://www.ximalaya.com'
 const appId = 60023
 // 开放平台

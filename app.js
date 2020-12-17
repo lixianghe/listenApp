@@ -65,7 +65,7 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    this.initCode()
+    // this.initCode()
     // 获取小程序颜色主题
     this.getTheme()
     // 判断playInfo页面样式，因为这里最快执行所以放在这
