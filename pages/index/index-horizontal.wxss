@@ -1,9 +1,9 @@
 .h .index {
   overflow: auto;
-  padding-left: 7.3vh;
+  /* padding-left: 7.3vh; */
   box-sizing: border-box;
   height: 82vh;
-  padding: 5.5vh 0;
+  padding: 5.5vh 0 5.5vh 9.05vh;
   white-space: nowrap;
 }
 
@@ -20,14 +20,83 @@
 }
 .h .quickEntry{
   /* flex: 0 0 41.3vh; */
-  width: 43.65vh;
-  padding: 0 6.12vh 0 7.35vh;
+  width:130vh;
+  /* padding: 0 6.12vh 0 7.35vh; */
   vertical-align: top;
   display: inline-block;
-  height: 68.6vh;
+  height: 77.35vh;
+  /* background: red; */
   overflow: hidden;
-  border-right: 0.58vh solid rgba(255,255,255, 0.04);
+  border-radius: 2vh;
+  
+
 } 
+.h .swiper{
+  width:130vh;
+  padding: 0 ;
+ 
+  height: 50vh;
+  /* background: yellow; */
+  border-radius: 2vh;
+
+}
+.swiper-item{
+  margin-top: 0;
+  margin-left: 0;
+  width:130vh;
+  height: 50vh;
+  /* background: blue; */
+}
+.swipe-image{
+  margin-top: 0;
+  margin-left: 0;
+  width:130vh;
+  height: 50vh;
+  border-radius: 2vh;
+}
+.h .left{
+  position: relative;
+  float: left;
+  margin-left: 0;
+  margin-top: 4.5vh;
+  width: 61.5vh;
+  height: 16vh;
+  background:  rgba(255,255,255, 0.1);
+
+  border-radius: 2vh; 
+}
+.h .right{ 
+  position: relative;
+  float: right;
+  margin-right: 0;
+  margin-top: 4.5vh;
+  width: 61.5vh;
+  height: 16vh;
+  background:  rgba(255,255,255, 0.1);
+  /* background: orange; */
+  border-radius: 2vh;
+}
+
+.h .left-icon{
+ position: absolute;
+  display: inline-block;
+  width: 14vh;
+  height: 14vh;
+  margin-top: 1vh;
+  margin-left: 9vh;
+  /* background: red; */
+  
+}
+.h .left-text{
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  left: 25vh;
+  height: 16vh;
+  margin-top: 3vh;
+  font-size: 7vh;
+  color: white;
+}
 .h .quickEntrybox {
   text-align: center;
   background-color: rgba(255,255,255, 0.06);
@@ -53,16 +122,16 @@
   vertical-align: top;
 }
 .h .albumCard {
-  width: 41.81vh;
+  width: 52.81vh;
   display: inline-block;
   margin-right: 7.6vh;
-  height: 68.6vh;
+  height: 72.3vh;
   overflow: hidden;
-  margin-top: 14.7vh;
+  /* margin-top: 14.7vh; */
 }
 .h .imgB {
-  width: 41.81vh;
-  height: 41.81vh;
+  width: 52.81vh;
+  height: 52.81vh;
   border-radius: 2vh;
 }
 .albumTitB {
@@ -105,7 +174,7 @@
   position: absolute;
 }
 .storyBox {
-  margin-top: 5.89vh;
+  margin-top:0;
   margin-left: 6.12vh;
 }
 .label-box {

@@ -1,0 +1,54 @@
+/* components/log/log.wxss */
+.log-mini{
+  display:none!important;
+  position: absolute;
+  right:0;
+  bottom:0;
+  width:10vh;
+  height: 10vh;
+  background: red;
+  z-index: 9999999999999;
+}
+.log {
+  display:none!important;
+  position: absolute;
+  top: 100vh;
+  right: 0;
+  width: 100vh;
+  max-width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 1);
+  color:#000;
+  z-index: 9999999999999;
+  transition: top .5;
+}
+.max-btn,.min-btn,.close-btn{
+  position: absolute;
+  top:0;
+  font-size:20rpx;
+  z-index: 9;
+}
+.max-btn,.min-btn{
+  left:0;
+}
+.close-btn{
+  left:30vh;
+}
+
+.clear-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 22vh !important;
+  height: 8vh;
+  line-height: 8vh;
+  padding: 0;
+  margin: 0;
+}
+
+.log-scroll-view {
+  width: 100%;
+  height: 100vh;
+  font-size:10rpx;
+  word-break: break-all;
+}

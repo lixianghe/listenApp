@@ -1,23 +1,23 @@
 .halbumCard {
   /* flex: 0 0 46.6vh; */
-  width: 41.81vh;
+  width: 52.8vh;
   display: inline-block;
   margin-right: 7.6vh;
   /* margin-top: 15.7vh; */
-  height: 68.6vh;
+  height: 78.3vh;
   overflow: hidden;
   position: relative;
 }
 .halbumCard .image {
-  width: 41.81vh;
-  height: 41.81vh;
+  width: 52.8vh;
+  height: 50.8vh;
   border-radius: 2vh;
   vertical-align: bottom;
 }
 .halbumCard .albumTit {
   margin-top: 3.5vh;
   color: #ffffff;
-  font-size: 5.2vh;
+  font-size: 6.2vh;
   box-sizing: content-box;
   white-space: nowrap;
   overflow: hidden;
@@ -45,11 +45,14 @@
 }
 .halbumCard .conut {
   position: absolute;
-  top: 1.04vh;
-  right: 1.81vh;
-  height: 4.58vh;
+  top: 0vh;
+  right: 0vh;
+  height: 8vh;
   overflow: hidden;
   line-height: 4.58vh;
+  background: rgba(0,0,0, 0.5);
+  border-top-right-radius: 2vh;
+  border-bottom-left-radius: 2vh;
 }
 .halbumCard .linerbg {
   position: absolute;
@@ -61,15 +64,28 @@
   background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0));
 }
 .halbumCard .countpic {
-  width: 4.58vh;
-  height: 4.58vh;
+  width: 5vh;
+  height: 5vh;
+  margin-top: 1.5vh;
   margin-right: 1.5vh;
   float: left;
 }
 .halbumCard .countxt {
-  font-size: 4.27vh;
+  font-size: 5vh;
   color: #fff;
+  height: 8vh;
+  line-height: 8vh;
   /* position: relative; */
   /* top: -0.5vh; */
   float: left;
+}
+.halbumCard .play-img{
+  position: absolute;
+  left: 3vh;
+  bottom: 31vh;
+  width: 13.6vh;
+  height: 13.6vh;
+ border-radius: 50%;
+  background: red;
+ 
 }

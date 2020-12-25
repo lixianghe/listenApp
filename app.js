@@ -1,9 +1,9 @@
 // import { init, checkStatus } from './utils/api'
 import btnConfig from './utils/pageOtpions/pageOtpions'
-import { getMedia } from './developerHandle/playInfo'
-
+import utils from './utils/util'
+import {encrypt} from './utils/xmSign/utils';
+import { data, getMedia } from './developerHandle/playInfo'
 require('./utils/minixs')
-
 App({
   globalData: {
     appName: 'ximalayaxin',
@@ -65,7 +65,7 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    // this.initCode()
+    this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
     // 判断playInfo页面样式，因为这里最快执行所以放在这
@@ -99,15 +99,7 @@ App({
         }
       })
     });
-    if (wx.canIUse('getShareData')) {
-      wx.getShareData({
-        name: this.globalData.appName,
-        success: (res) => {
-          let playing = res.data.playStatus
-          wx.setStorageSync('playing', playing)
-        }
-      })
-    }
+   
     // 测试getPlayInfoSync
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
@@ -251,40 +243,7 @@ App({
       this.globalData.PIbigScreen = true
     }
   },
-  // 初始化token、deviceId、refreshToken
-  initCode() {
-    let guestInfo = wx.getStorageSync('guestInfo');
-    let userInfo = wx.getStorageSync('userInfo');
-    let authInfo = wx.getStorageSync('authInfo');
-    if (authInfo){
-      this.authInfo = authInfo;
-    }
-    if (userInfo){
-      this.userInfo = userInfo;
-      this.guestInfo = guestInfo;
-      return;
-    }
-    if (guestInfo){
-      this.guestInfo = guestInfo;
-      return;
-    }
 
-    const token = wx.getStorageSync('token')
-    if (token) return false
-    let deviceInfo = {
-      phoneDeviceCode: this.uuid()
-    }
-    wx.getSystemInfo({
-      success: async (res) => {
-        deviceInfo.phoneModel = res.system
-        deviceInfo.sysVersion = res.version
-        let initData = await init(deviceInfo)
-        wx.setStorageSync('deviceId', initData.deviceId)
-        wx.setStorageSync('refreshToken', initData.refreshToken)
-        wx.setStorageSync('token', initData.token)
-      }
-    })
-  },
   checkStatus(){
     if(!this.userInfo.token){
       return
@@ -304,6 +263,107 @@ App({
 
     })
   },
+
+    // 获得token
+   goAuthGetToken() {
+    var isLogin = wx.getStorageSync('USERINFO')
+    var Token = wx.getStorageSync('TOKEN')
+    var canUseToken
+    if(isLogin){
+      if (Token && (+new Date() < Token.deadline) && Token.isLogin) {
+        canUseToken = token
+      } else {
+       //刷新token
+       let param = {
+        client_id: utils.APP_KEY,
+        client_secret:utils.APP_SECRET,
+        device_id: utils.getDeviceId(),
+        grant_type:"refresh_token",
+        refresh_token: wx.getStorageSync('TOKEN').access_token,
+        redirect_uri: utils.baseUrl,
+       }
+       let sig = utils.calcuSig(param, utils.APP_SECRET);
+       let params = {
+        ...param,
+          sig
+       }
+       console.log('sig:',sig)
+       console.log('params:',params)
+    
+       let header ={
+        'xm-sign':encrypt(Date.now()),
+        'content-type': 'application/x-www-form-urlencoded',
+       }
+       console.log('header:',header)
+    
+
+       wx.request({
+        url:utils.baseUrl + 'oauth2/refresh_token',
+        method:"POST",
+        data:params,
+         header:header,
+        success: function(res) {
+          console.log("刷新access_token----success--", res)   
+          res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+          console.log("失效时间", res.data.deadline)   
+          canUseToken = res.data
+          wx.setStorageSync('TOKEN', res.data)
+        },
+        fail: function(err) {
+          console.log("刷新token---fail--",err)  
+        },
+      });
+    
+      }
+  
+    }else{
+    console.log("APP_KEY--",  utils.APP_KEY)
+    console.log("deviceid--",  utils.getDeviceId())
+     console.log("nonce--",  utils.generateRandom())
+
+   let param = {
+    client_id: utils.APP_KEY,
+    device_id: utils.getDeviceId(),
+    grant_type: "client_credentials",
+    nonce: utils.generateRandom(),
+    timestamp: +new Date(),
+   }
+   let sig = utils.calcuSig(param, utils.APP_SECRET);
+   let params = {
+    ...param,
+      sig
+   }
+   console.log('sig:',sig)
+   console.log('params:',params)
+
+   let header ={
+    'xm-sign':encrypt(Date.now()),
+    'content-type': 'application/x-www-form-urlencoded',
+   }
+   console.log('header:',header)
+
+    wx.request({
+      url:utils.baseUrl + 'oauth2/secure_access_token',
+      method:"POST",
+      data:params,
+       header:header,
+      success: function(res) {
+        console.log("access_token----success--", res)   
+        res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+        console.log("失效时间", res.data.deadline)   
+        canUseToken = res.data
+        wx.setStorageSync('TOKEN', res.data)
+      },
+      fail: function(err) {
+        console.log("access_token---fail--",err)  
+      },
+    });
+  
+  }
+  return canUseToken
+      
+   },
+ 
   uuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0,
@@ -395,5 +455,28 @@ App({
       })
     }
   },
-  
+   /**
+   * 记录日志
+   */
+  log(...text){
+    for(let e of text){
+      if(typeof e == 'object'){
+        try{
+          if(e===null){
+            this.logText += 'null'
+          } else if(e.stack){
+            this.logText += e.stack
+          } else{
+            this.logText += JSON.stringify(e)
+          }
+        }catch(err){
+          this.logText += err.stack
+        }
+      } else {
+        this.logText += e
+      }
+      this.logText += '\n'
+    }
+    this.logText += '########################\n'
+  }
 })

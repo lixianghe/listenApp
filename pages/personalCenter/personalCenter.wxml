@@ -29,3 +29,4 @@
   </view>
   <mini-player songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
 </view>
+<log></log>

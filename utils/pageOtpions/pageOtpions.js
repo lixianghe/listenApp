@@ -3,7 +3,7 @@ const btnConfig = {
   // 小程序的主色值
   colorOptions: {
     // 进度条、播放全部、登录按钮色值
-    mainColor: '#ffac2d',
+    mainColor: '#dc5e4e',
     // 小程序背景色值
     bgColor: '#151515'
   },

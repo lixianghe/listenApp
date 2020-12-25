@@ -1,10 +1,152 @@
-// const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
-// 开放平台
-const APP_KEY = 'a42f6121d901e1748eb14e5c0f1ad62a'
-const APP_SECRET = '59ad60cf0865c4de37a5ed55336a5671'
-const baseUrl = 'https://api.ximalaya.com'
+
+import Base64 from '../utils/enc-base64';
+import CryptoJS from '../utils/crypto-js';
+import HmacSHA1 from '../utils/hmac-sha1';
+import md5 from '../utils/md5';
+import {encrypt} from '../utils/xmSign/utils';
+
 //设置设备diviceId
 // const deviceId = util.getDeviceId()
+
+
+
+// GET请求
+function GET(param,url, callback) {
+  console.log('参数', param)
+  console.log('请求URL', this.baseUrl + url)
+  let publicParams = {
+    app_key: this.APP_KEY,
+    device_id: this.getDeviceId(),
+    client_os_type: 3,
+    access_token:  wx.getStorageSync('TOKEN').access_token,
+    pack_id:'com.app.wechat',
+  };
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+  console.log('params',   params)
+  // let header = {}
+  // header['content-type'] = encrypt(Date.now())
+  // content-type: application/json
+  // console.log('header', header)
+//  let header = {
+//    'content-type': 'x-www-form-urlencoded',
+//    // 'content-type': 'application/json',
+//    'app_key':this.APP_KEY,
+//    'device_id':  this.getDeviceId(),
+//    'pack_id':'com.app.wechat',
+//    'access_token':  wx.getStorageSync('TOKEN').access_token,
+//    'sig': 'tencent-open',
+   
+//  }
+//  console.log('header', header)
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: { 
+    'content-type': 'application/json' 
+  }, 
+   method: 'GET',
+   dataType: 'json',
+   success: res=> {
+       console.log('请求成功：', res);
+       callback(res)
+    
+   },
+   fail: err => {
+    console.log('请求失败：', res);
+    callback(res)
+     wx.hideLoading()
+   }
+ })
+
+
+}
+// GET请求
+function MGET(param,url, callback) {
+  console.log('参数', param)
+  console.log('请求URL', this.MbaseUrl + url)
+  let header = {}
+  header['xm-sign'] = encrypt(Date.now())
+  console.log('header', header)
+ wx.request({
+   url: this.MbaseUrl + url,
+   data: param,
+   header:header,
+   method: 'GET',
+   dataType: 'json',
+   success: res=> {
+       console.log('请求成功：', res);
+       callback(res)
+    
+   },
+   fail: err => {
+    console.log('请求失败：', res);
+    callback(res)
+     wx.hideLoading()
+   }
+ })
+
+
+}
+// POST请求
+function POST(param,url, callback) {
+  console.log('参数', param)
+  console.log('URL',  url)
+  console.log('请求URL', this.baseUrl + url)
+  let publicParams = {
+    app_key: this.APP_KEY,
+    device_id: this.getDeviceId(),
+    client_os_type: 3,
+    access_token:  wx.getStorageSync('TOKEN').access_token,
+    pack_id:'com.app.wechat',
+  };
+
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+  console.log('params',   params)
+
+//  let header = {
+//    'content-type': 'x-www-form-urlencoded',
+//    // 'content-type': 'application/json',
+//    'app_key':this.APP_KEY,
+//    'device_id': this.getDeviceId(),
+//    'pack_id':'com.app.wechat',
+//    'access_token':  wx.getStorageSync('TOKEN').access_token,
+//    'sig': 'tencent-open',
+   
+//  }
+let header = {}
+ header['xm-sign'] = encrypt(Date.now())
+ console.log('header', header)
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: header,
+   method: 'POST',
+   dataType: 'json',
+   success: res=> {
+       console.log( '请求成功:', res);
+       callback(res)
+    
+   },
+   fail: err => {
+       console.log('请求失败:', err);
+     
+       callback(res)
+     // let retcode = err.errMsg == 'request:fail timeout' ? 408 : 500
+     // callback({
+     //   retcode: retcode,
+     //   retmsg: '',
+     //   data: null
+     // })
+    
+     wx.hideLoading()
+   }
+ })
+
+
+}
+
 function formatNumber(n) {
   n = n.toString()
   return n[1] ? n : '0' + n
@@ -163,50 +305,6 @@ function generateUUID() {
   }
   return diviceId
 }
-function getAccessToken(){
-  const restParams = {
-    client_id: APP_KEY,
-    device_id: deviceId,
-    nonce: generateRandom(),
-    grant_type: 'client_credentials',
-    timestamp: +new Date()
-  };
-  const sig = calcuSig(restParams, APP_SECRET);
-  const data = {...restParams, sig}
-  let header = {
-    'content-type': 'x-www-form-urlencoded',
-    // 'content-type': 'application/json',
-    'app_key':APP_KEY,
-    'device_id': deviceId,
-    'pack_id':'com.app.wechat',
-    'access_token': 'wxapp-car',
-    'sig': 'tencent-open',
-    
-  }
-  wx.request({
-    url:baseUrl + '/oauth2/secure_access_token',
-    'content-type': 'application/x-www-form-urlencoded',
-    data:data,
-    method:"POST",
-    header:header,
-    success: function(res) {
-     
-      console.log("access_token----success--", res)
-      
-     
-    },
-    fail: function(err) {
-    
-      console.log("---fail--",err)
-     
-    },
-  });
-
-
-
-
-
-}
 
 // 计算sig
  function calcuSig(params, key) {
@@ -219,6 +317,7 @@ function getAccessToken(){
 
 // 生成随机字符串，默认32位
  function generateRandom(n = 32) {
+
   const chars = '0123456789abcdefghijklmnopqrstuvwxyz'
   let res = ''
   for (let i = 0; i < n; i += 1) {
@@ -230,7 +329,34 @@ function getAccessToken(){
 
 
 
+
 module.exports = {
+
+
+ baseUrl : 'https://api.ximalaya.com/',
+ MbaseUrl : 'https://m.ximalaya.com/',
+   appId : 60023,
+  // 开放平台数据
+   APP_KEY : 'a42f6121d901e1748eb14e5c0f1ad62a',
+   APP_SECRET : '59ad60cf0865c4de37a5ed55336a5671',
+   //接口
+   //code获取openid
+   fromCodegetOpenid:'iot/openapi-smart-device-api/customized/wecar/code2session',
+   //首页banners
+   indexBanners:'operation/banners',
+   //首页音频列表
+   indexMediaArr:'iot/openapi-smart-device-api/recommendations-vehicle',
+   //类目分裂
+   categoryFroups:'iot/openapi-smart-device-api/browse/album-categories',
+   //类目详情
+   categoryDetails:'discovery-category/keyword/all/',
+   //该类目下所有专辑
+   allAlbums:'discovery-category/keyword/albums',
+   //专辑详情
+   albumDetails:'iot/openapi-smart-device-api/albums/',
+   //专辑下的所有音频
+   albumAllmedias:'iot/openapi-smart-device-api/albums/',
+
   formatToSend: formatToSend,
   formatduration: formatduration,
   playAlrc: playAlrc,
@@ -240,5 +366,9 @@ module.exports = {
   throttle: throttle,
   debounce: debounce,
   getDeviceId:getDeviceId,
-  getAccessToken:getAccessToken
+  generateRandom:generateRandom,
+  calcuSig:calcuSig,
+  GET:GET,
+  POST:POST,
+  MGET:MGET
 }

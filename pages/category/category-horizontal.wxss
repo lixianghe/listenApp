@@ -3,7 +3,7 @@
   padding-left: 7.3vh;
   box-sizing: border-box;
   height: 82vh;
-  padding: 5.5vh 0;
+  padding: 3vh 0;
   white-space: nowrap;
 }
 

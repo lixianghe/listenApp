@@ -14,7 +14,7 @@
         <story wx:if="{{info.length>0 && req}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
           data-id="{{item.id}}" data-title="{{item.title}}" data-src="{{item.src}}"
           data-contentype="{{item.contentType}}" bindtap="linkAbumInfo" datasource="{{item}}" likePic="{{likePic}}"
-          bind:clickHadle="like" className="{{screen}}"></story>
+          bind:clickHadle="like" bind:clickHadle="playMedia" className="{{screen}}"></story>
 
         <!-- 加载中盒子 -->
         <view class="albumCard" wx:if="{{!req}}" wx:for="{{5}}" wx:key="index">

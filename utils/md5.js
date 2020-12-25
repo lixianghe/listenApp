@@ -1,207 +1,268 @@
-/* 
- * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message 
- * Digest Algorithm, as defined in RFC 1321. 
- * Version 1.1 Copyright (C) Paul Johnston 1999 - 2002. 
- * Code also contributed by Greg Holt 
- * See http://pajhome.org.uk/site/legal.html for details. 
- */
+;(function (root, factory) {
+	if (typeof exports === "object") {
+		// CommonJS
+		module.exports = exports = factory(require("./core"));
+	}
+	else if (typeof define === "function" && define.amd) {
+		// AMD
+		define(["./core"], factory);
+	}
+	else {
+		// Global (browser)
+		factory(root.CryptoJS);
+	}
+}(this, function (CryptoJS) {
 
-/* 
- * Add integers, wrapping at 2^32. This uses 16-bit operations internally 
- * to work around bugs in some JS interpreters. 
- */
-function safe_add(x, y) {
-  var lsw = (x & 0xFFFF) + (y & 0xFFFF)
-  var msw = (x >> 16) + (y >> 16) + (lsw >> 16)
-  return (msw << 16) | (lsw & 0xFFFF)
-}
+	(function (Math) {
+	    // Shortcuts
+	    var C = CryptoJS;
+	    var C_lib = C.lib;
+	    var WordArray = C_lib.WordArray;
+	    var Hasher = C_lib.Hasher;
+	    var C_algo = C.algo;
 
-/* 
- * Bitwise rotate a 32-bit number to the left. 
- */
-function rol(num, cnt) {
-  return (num << cnt) | (num >>> (32 - cnt))
-}
+	    // Constants table
+	    var T = [];
 
-/* 
- * These functions implement the four basic operations the algorithm uses. 
- */
-function cmn(q, a, b, x, s, t) {
-  return safe_add(rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b)
-}
-function ff(a, b, c, d, x, s, t) {
-  return cmn((b & c) | ((~b) & d), a, b, x, s, t)
-}
-function gg(a, b, c, d, x, s, t) {
-  return cmn((b & d) | (c & (~d)), a, b, x, s, t)
-}
-function hh(a, b, c, d, x, s, t) {
-  return cmn(b ^ c ^ d, a, b, x, s, t)
-}
-function ii(a, b, c, d, x, s, t) {
-  return cmn(c ^ (b | (~d)), a, b, x, s, t)
-}
+	    // Compute constants
+	    (function () {
+	        for (var i = 0; i < 64; i++) {
+	            T[i] = (Math.abs(Math.sin(i + 1)) * 0x100000000) | 0;
+	        }
+	    }());
 
-/* 
- * Calculate the MD5 of an array of little-endian words, producing an array 
- * of little-endian words. 
- */
-function coreMD5(x) {
-  var a = 1732584193
-  var b = -271733879
-  var c = -1732584194
-  var d = 271733878
+	    /**
+	     * MD5 hash algorithm.
+	     */
+	    var MD5 = C_algo.MD5 = Hasher.extend({
+	        _doReset: function () {
+	            this._hash = new WordArray.init([
+	                0x67452301, 0xefcdab89,
+	                0x98badcfe, 0x10325476
+	            ]);
+	        },
 
-  for (var i = 0; i < x.length; i += 16) {
-    var olda = a
-    var oldb = b
-    var oldc = c
-    var oldd = d
+	        _doProcessBlock: function (M, offset) {
+	            // Swap endian
+	            for (var i = 0; i < 16; i++) {
+	                // Shortcuts
+	                var offset_i = offset + i;
+	                var M_offset_i = M[offset_i];
 
-    a = ff(a, b, c, d, x[i + 0], 7, -680876936)
-    d = ff(d, a, b, c, x[i + 1], 12, -389564586)
-    c = ff(c, d, a, b, x[i + 2], 17, 606105819)
-    b = ff(b, c, d, a, x[i + 3], 22, -1044525330)
-    a = ff(a, b, c, d, x[i + 4], 7, -176418897)
-    d = ff(d, a, b, c, x[i + 5], 12, 1200080426)
-    c = ff(c, d, a, b, x[i + 6], 17, -1473231341)
-    b = ff(b, c, d, a, x[i + 7], 22, -45705983)
-    a = ff(a, b, c, d, x[i + 8], 7, 1770035416)
-    d = ff(d, a, b, c, x[i + 9], 12, -1958414417)
-    c = ff(c, d, a, b, x[i + 10], 17, -42063)
-    b = ff(b, c, d, a, x[i + 11], 22, -1990404162)
-    a = ff(a, b, c, d, x[i + 12], 7, 1804603682)
-    d = ff(d, a, b, c, x[i + 13], 12, -40341101)
-    c = ff(c, d, a, b, x[i + 14], 17, -1502002290)
-    b = ff(b, c, d, a, x[i + 15], 22, 1236535329)
+	                M[offset_i] = (
+	                    (((M_offset_i << 8)  | (M_offset_i >>> 24)) & 0x00ff00ff) |
+	                    (((M_offset_i << 24) | (M_offset_i >>> 8))  & 0xff00ff00)
+	                );
+	            }
 
-    a = gg(a, b, c, d, x[i + 1], 5, -165796510)
-    d = gg(d, a, b, c, x[i + 6], 9, -1069501632)
-    c = gg(c, d, a, b, x[i + 11], 14, 643717713)
-    b = gg(b, c, d, a, x[i + 0], 20, -373897302)
-    a = gg(a, b, c, d, x[i + 5], 5, -701558691)
-    d = gg(d, a, b, c, x[i + 10], 9, 38016083)
-    c = gg(c, d, a, b, x[i + 15], 14, -660478335)
-    b = gg(b, c, d, a, x[i + 4], 20, -405537848)
-    a = gg(a, b, c, d, x[i + 9], 5, 568446438)
-    d = gg(d, a, b, c, x[i + 14], 9, -1019803690)
-    c = gg(c, d, a, b, x[i + 3], 14, -187363961)
-    b = gg(b, c, d, a, x[i + 8], 20, 1163531501)
-    a = gg(a, b, c, d, x[i + 13], 5, -1444681467)
-    d = gg(d, a, b, c, x[i + 2], 9, -51403784)
-    c = gg(c, d, a, b, x[i + 7], 14, 1735328473)
-    b = gg(b, c, d, a, x[i + 12], 20, -1926607734)
+	            // Shortcuts
+	            var H = this._hash.words;
 
-    a = hh(a, b, c, d, x[i + 5], 4, -378558)
-    d = hh(d, a, b, c, x[i + 8], 11, -2022574463)
-    c = hh(c, d, a, b, x[i + 11], 16, 1839030562)
-    b = hh(b, c, d, a, x[i + 14], 23, -35309556)
-    a = hh(a, b, c, d, x[i + 1], 4, -1530992060)
-    d = hh(d, a, b, c, x[i + 4], 11, 1272893353)
-    c = hh(c, d, a, b, x[i + 7], 16, -155497632)
-    b = hh(b, c, d, a, x[i + 10], 23, -1094730640)
-    a = hh(a, b, c, d, x[i + 13], 4, 681279174)
-    d = hh(d, a, b, c, x[i + 0], 11, -358537222)
-    c = hh(c, d, a, b, x[i + 3], 16, -722521979)
-    b = hh(b, c, d, a, x[i + 6], 23, 76029189)
-    a = hh(a, b, c, d, x[i + 9], 4, -640364487)
-    d = hh(d, a, b, c, x[i + 12], 11, -421815835)
-    c = hh(c, d, a, b, x[i + 15], 16, 530742520)
-    b = hh(b, c, d, a, x[i + 2], 23, -995338651)
+	            var M_offset_0  = M[offset + 0];
+	            var M_offset_1  = M[offset + 1];
+	            var M_offset_2  = M[offset + 2];
+	            var M_offset_3  = M[offset + 3];
+	            var M_offset_4  = M[offset + 4];
+	            var M_offset_5  = M[offset + 5];
+	            var M_offset_6  = M[offset + 6];
+	            var M_offset_7  = M[offset + 7];
+	            var M_offset_8  = M[offset + 8];
+	            var M_offset_9  = M[offset + 9];
+	            var M_offset_10 = M[offset + 10];
+	            var M_offset_11 = M[offset + 11];
+	            var M_offset_12 = M[offset + 12];
+	            var M_offset_13 = M[offset + 13];
+	            var M_offset_14 = M[offset + 14];
+	            var M_offset_15 = M[offset + 15];
 
-    a = ii(a, b, c, d, x[i + 0], 6, -198630844)
-    d = ii(d, a, b, c, x[i + 7], 10, 1126891415)
-    c = ii(c, d, a, b, x[i + 14], 15, -1416354905)
-    b = ii(b, c, d, a, x[i + 5], 21, -57434055)
-    a = ii(a, b, c, d, x[i + 12], 6, 1700485571)
-    d = ii(d, a, b, c, x[i + 3], 10, -1894986606)
-    c = ii(c, d, a, b, x[i + 10], 15, -1051523)
-    b = ii(b, c, d, a, x[i + 1], 21, -2054922799)
-    a = ii(a, b, c, d, x[i + 8], 6, 1873313359)
-    d = ii(d, a, b, c, x[i + 15], 10, -30611744)
-    c = ii(c, d, a, b, x[i + 6], 15, -1560198380)
-    b = ii(b, c, d, a, x[i + 13], 21, 1309151649)
-    a = ii(a, b, c, d, x[i + 4], 6, -145523070)
-    d = ii(d, a, b, c, x[i + 11], 10, -1120210379)
-    c = ii(c, d, a, b, x[i + 2], 15, 718787259)
-    b = ii(b, c, d, a, x[i + 9], 21, -343485551)
+	            // Working varialbes
+	            var a = H[0];
+	            var b = H[1];
+	            var c = H[2];
+	            var d = H[3];
 
-    a = safe_add(a, olda)
-    b = safe_add(b, oldb)
-    c = safe_add(c, oldc)
-    d = safe_add(d, oldd)
-  }
-  return [a, b, c, d]
-}
+	            // Computation
+	            a = FF(a, b, c, d, M_offset_0,  7,  T[0]);
+	            d = FF(d, a, b, c, M_offset_1,  12, T[1]);
+	            c = FF(c, d, a, b, M_offset_2,  17, T[2]);
+	            b = FF(b, c, d, a, M_offset_3,  22, T[3]);
+	            a = FF(a, b, c, d, M_offset_4,  7,  T[4]);
+	            d = FF(d, a, b, c, M_offset_5,  12, T[5]);
+	            c = FF(c, d, a, b, M_offset_6,  17, T[6]);
+	            b = FF(b, c, d, a, M_offset_7,  22, T[7]);
+	            a = FF(a, b, c, d, M_offset_8,  7,  T[8]);
+	            d = FF(d, a, b, c, M_offset_9,  12, T[9]);
+	            c = FF(c, d, a, b, M_offset_10, 17, T[10]);
+	            b = FF(b, c, d, a, M_offset_11, 22, T[11]);
+	            a = FF(a, b, c, d, M_offset_12, 7,  T[12]);
+	            d = FF(d, a, b, c, M_offset_13, 12, T[13]);
+	            c = FF(c, d, a, b, M_offset_14, 17, T[14]);
+	            b = FF(b, c, d, a, M_offset_15, 22, T[15]);
 
-/* 
- * Convert an array of little-endian words to a hex string. 
- */
-function binl2hex(binarray) {
-  var hex_tab = "0123456789abcdef"
-  var str = ""
-  for (var i = 0; i < binarray.length * 4; i++) {
-    str += hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8 + 4)) & 0xF) +
-      hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8)) & 0xF)
-  }
-  return str
-}
+	            a = GG(a, b, c, d, M_offset_1,  5,  T[16]);
+	            d = GG(d, a, b, c, M_offset_6,  9,  T[17]);
+	            c = GG(c, d, a, b, M_offset_11, 14, T[18]);
+	            b = GG(b, c, d, a, M_offset_0,  20, T[19]);
+	            a = GG(a, b, c, d, M_offset_5,  5,  T[20]);
+	            d = GG(d, a, b, c, M_offset_10, 9,  T[21]);
+	            c = GG(c, d, a, b, M_offset_15, 14, T[22]);
+	            b = GG(b, c, d, a, M_offset_4,  20, T[23]);
+	            a = GG(a, b, c, d, M_offset_9,  5,  T[24]);
+	            d = GG(d, a, b, c, M_offset_14, 9,  T[25]);
+	            c = GG(c, d, a, b, M_offset_3,  14, T[26]);
+	            b = GG(b, c, d, a, M_offset_8,  20, T[27]);
+	            a = GG(a, b, c, d, M_offset_13, 5,  T[28]);
+	            d = GG(d, a, b, c, M_offset_2,  9,  T[29]);
+	            c = GG(c, d, a, b, M_offset_7,  14, T[30]);
+	            b = GG(b, c, d, a, M_offset_12, 20, T[31]);
 
-/* 
- * Convert an array of little-endian words to a base64 encoded string. 
- */
-function binl2b64(binarray) {
-  var tab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-  var str = ""
-  for (var i = 0; i < binarray.length * 32; i += 6) {
-    str += tab.charAt(((binarray[i >> 5] << (i % 32)) & 0x3F) |
-      ((binarray[i >> 5 + 1] >> (32 - i % 32)) & 0x3F))
-  }
-  return str
-}
+	            a = HH(a, b, c, d, M_offset_5,  4,  T[32]);
+	            d = HH(d, a, b, c, M_offset_8,  11, T[33]);
+	            c = HH(c, d, a, b, M_offset_11, 16, T[34]);
+	            b = HH(b, c, d, a, M_offset_14, 23, T[35]);
+	            a = HH(a, b, c, d, M_offset_1,  4,  T[36]);
+	            d = HH(d, a, b, c, M_offset_4,  11, T[37]);
+	            c = HH(c, d, a, b, M_offset_7,  16, T[38]);
+	            b = HH(b, c, d, a, M_offset_10, 23, T[39]);
+	            a = HH(a, b, c, d, M_offset_13, 4,  T[40]);
+	            d = HH(d, a, b, c, M_offset_0,  11, T[41]);
+	            c = HH(c, d, a, b, M_offset_3,  16, T[42]);
+	            b = HH(b, c, d, a, M_offset_6,  23, T[43]);
+	            a = HH(a, b, c, d, M_offset_9,  4,  T[44]);
+	            d = HH(d, a, b, c, M_offset_12, 11, T[45]);
+	            c = HH(c, d, a, b, M_offset_15, 16, T[46]);
+	            b = HH(b, c, d, a, M_offset_2,  23, T[47]);
 
-/* 
- * Convert an 8-bit character string to a sequence of 16-word blocks, stored 
- * as an array, and append appropriate padding for MD4/5 calculation. 
- * If any of the characters are >255, the high byte is silently ignored. 
- */
-function str2binl(str) {
-  var nblk = ((str.length + 8) >> 6) + 1 // number of 16-word blocks  
-  var blks = new Array(nblk * 16)
-  for (var i = 0; i < nblk * 16; i++) blks[i] = 0
-  for (var i = 0; i < str.length; i++)
-    blks[i >> 2] |= (str.charCodeAt(i) & 0xFF) << ((i % 4) * 8)
-  blks[i >> 2] |= 0x80 << ((i % 4) * 8)
-  blks[nblk * 16 - 2] = str.length * 8
-  return blks
-}
+	            a = II(a, b, c, d, M_offset_0,  6,  T[48]);
+	            d = II(d, a, b, c, M_offset_7,  10, T[49]);
+	            c = II(c, d, a, b, M_offset_14, 15, T[50]);
+	            b = II(b, c, d, a, M_offset_5,  21, T[51]);
+	            a = II(a, b, c, d, M_offset_12, 6,  T[52]);
+	            d = II(d, a, b, c, M_offset_3,  10, T[53]);
+	            c = II(c, d, a, b, M_offset_10, 15, T[54]);
+	            b = II(b, c, d, a, M_offset_1,  21, T[55]);
+	            a = II(a, b, c, d, M_offset_8,  6,  T[56]);
+	            d = II(d, a, b, c, M_offset_15, 10, T[57]);
+	            c = II(c, d, a, b, M_offset_6,  15, T[58]);
+	            b = II(b, c, d, a, M_offset_13, 21, T[59]);
+	            a = II(a, b, c, d, M_offset_4,  6,  T[60]);
+	            d = II(d, a, b, c, M_offset_11, 10, T[61]);
+	            c = II(c, d, a, b, M_offset_2,  15, T[62]);
+	            b = II(b, c, d, a, M_offset_9,  21, T[63]);
 
-/* 
- * Convert a wide-character string to a sequence of 16-word blocks, stored as 
- * an array, and append appropriate padding for MD4/5 calculation. 
- */
-function strw2binl(str) {
-  var nblk = ((str.length + 4) >> 5) + 1 // number of 16-word blocks  
-  var blks = new Array(nblk * 16)
-  for (var i = 0; i < nblk * 16; i++) blks[i] = 0
-  for (var i = 0; i < str.length; i++)
-    blks[i >> 1] |= str.charCodeAt(i) << ((i % 2) * 16)
-  blks[i >> 1] |= 0x80 << ((i % 2) * 16)
-  blks[nblk * 16 - 2] = str.length * 16
-  return blks
-}
+	            // Intermediate hash value
+	            H[0] = (H[0] + a) | 0;
+	            H[1] = (H[1] + b) | 0;
+	            H[2] = (H[2] + c) | 0;
+	            H[3] = (H[3] + d) | 0;
+	        },
 
-/* 
- * External interface 
- */
-function hexMD5(str) { return binl2hex(coreMD5(str2binl(str))) }
-function hexMD5w(str) { return binl2hex(coreMD5(strw2binl(str))) }
-function b64MD5(str) { return binl2b64(coreMD5(str2binl(str))) }
-function b64MD5w(str) { return binl2b64(coreMD5(strw2binl(str))) }
-/* Backward compatibility */
-function calcMD5(str) { return binl2hex(coreMD5(str2binl(str))) }
+	        _doFinalize: function () {
+	            // Shortcuts
+	            var data = this._data;
+	            var dataWords = data.words;
+
+	            var nBitsTotal = this._nDataBytes * 8;
+	            var nBitsLeft = data.sigBytes * 8;
+
+	            // Add padding
+	            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
+
+	            var nBitsTotalH = Math.floor(nBitsTotal / 0x100000000);
+	            var nBitsTotalL = nBitsTotal;
+	            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = (
+	                (((nBitsTotalH << 8)  | (nBitsTotalH >>> 24)) & 0x00ff00ff) |
+	                (((nBitsTotalH << 24) | (nBitsTotalH >>> 8))  & 0xff00ff00)
+	            );
+	            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = (
+	                (((nBitsTotalL << 8)  | (nBitsTotalL >>> 24)) & 0x00ff00ff) |
+	                (((nBitsTotalL << 24) | (nBitsTotalL >>> 8))  & 0xff00ff00)
+	            );
+
+	            data.sigBytes = (dataWords.length + 1) * 4;
+
+	            // Hash final blocks
+	            this._process();
+
+	            // Shortcuts
+	            var hash = this._hash;
+	            var H = hash.words;
+
+	            // Swap endian
+	            for (var i = 0; i < 4; i++) {
+	                // Shortcut
+	                var H_i = H[i];
+
+	                H[i] = (((H_i << 8)  | (H_i >>> 24)) & 0x00ff00ff) |
+	                       (((H_i << 24) | (H_i >>> 8))  & 0xff00ff00);
+	            }
+
+	            // Return final computed hash
+	            return hash;
+	        },
+
+	        clone: function () {
+	            var clone = Hasher.clone.call(this);
+	            clone._hash = this._hash.clone();
+
+	            return clone;
+	        }
+	    });
+
+	    function FF(a, b, c, d, x, s, t) {
+	        var n = a + ((b & c) | (~b & d)) + x + t;
+	        return ((n << s) | (n >>> (32 - s))) + b;
+	    }
+
+	    function GG(a, b, c, d, x, s, t) {
+	        var n = a + ((b & d) | (c & ~d)) + x + t;
+	        return ((n << s) | (n >>> (32 - s))) + b;
+	    }
+
+	    function HH(a, b, c, d, x, s, t) {
+	        var n = a + (b ^ c ^ d) + x + t;
+	        return ((n << s) | (n >>> (32 - s))) + b;
+	    }
+
+	    function II(a, b, c, d, x, s, t) {
+	        var n = a + (c ^ (b | ~d)) + x + t;
+	        return ((n << s) | (n >>> (32 - s))) + b;
+	    }
+
+	    /**
+	     * Shortcut function to the hasher's object interface.
+	     *
+	     * @param {WordArray|string} message The message to hash.
+	     *
+	     * @return {WordArray} The hash.
+	     *
+	     * @static
+	     *
+	     * @example
+	     *
+	     *     var hash = CryptoJS.MD5('message');
+	     *     var hash = CryptoJS.MD5(wordArray);
+	     */
+	    C.MD5 = Hasher._createHelper(MD5);
+
+	    /**
+	     * Shortcut function to the HMAC's object interface.
+	     *
+	     * @param {WordArray|string} message The message to hash.
+	     * @param {WordArray|string} key The secret key.
+	     *
+	     * @return {WordArray} The HMAC.
+	     *
+	     * @static
+	     *
+	     * @example
+	     *
+	     *     var hmac = CryptoJS.HmacMD5(message, key);
+	     */
+	    C.HmacMD5 = Hasher._createHmacHelper(MD5);
+	}(Math));
 
 
-module.exports = {
-  hexMD5: hexMD5
-}  
+	return CryptoJS.MD5;
+
+}));

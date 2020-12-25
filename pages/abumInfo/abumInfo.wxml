@@ -78,7 +78,7 @@
       </button>
       <button class="select" style="background: rgba(255,255,255, 0.1)" bindtap="changeProp" wx:if="{{selectWordBtn && routeType === 'album'}}">
         
-        <text>共 首</text>
+        <text>共{{}}首</text>
         <image src="/images/selectWorks.png" />
       </button>
     </view>

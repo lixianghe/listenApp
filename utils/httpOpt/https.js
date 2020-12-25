@@ -64,61 +64,6 @@ export function request(url, data = {}, method = 'GET') {
 
 
 
- // http请求
- function  http(param, method, callback) {  
-  let that = this
-   console.log('请求URL', baseUrl + param.url)
-  let query = param.data ? param.data : {};
-  let header = {
-    'content-type': 'x-www-form-urlencoded',
-    // 'content-type': 'application/json',
-    'app_key':APP_KEY,
-    'device_id': deviceId,
-    'pack_id':'com.app.wechat',
-    'access_token': util.getAccessToken(),
-    'sig': 'tencent-open',
-    
-  }
-  console.log('发起请求', baseUrl + url)
-  console.log('header', JSON.stringify(header))
-  console.log('data', JSON.stringify(query))
-  wx.request({
-    url: baseUrl + url,
-    data: query,
-    header: header,
-    method: method,
-    dataType: 'json',
-    success: res=> {
-        console.log(that.baseUrl + url + '请求成功:', 'header:', header, 'data:', query, '返回结果：', res);
-        callback(res.data)
-     
-    },
-    fail: err => {
-        console.log(that.baseUrl + url + '请求失败:', 'header:', header, 'data:', query, '失败原因：', err);
-      
-        callback(res.data)
-      // let retcode = err.errMsg == 'request:fail timeout' ? 408 : 500
-      // callback({
-      //   retcode: retcode,
-      //   retmsg: '',
-      //   data: null
-      // })
-     
-      wx.hideLoading()
-    }
-  })
-
-
-}
-
-// GET请求
-function get(param, callback) {
-  this.http(param, 'GET', callback)
-}
-// POST请求
-function post(param, callback) {
-  this.http(param, 'POST', callback)
-}
 
 export const apiFormat = (str, res) => {
   let reg = /\{(\w+?)\}/gi
@@ -127,6 +72,5 @@ export const apiFormat = (str, res) => {
   })
 }
 module.exports = {
-  get: get,
-  post: post
+ 
 }

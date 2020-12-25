@@ -87,6 +87,20 @@ module.exports = {
     })
     this._getList(name)
   },
+  //获取我喜欢的数据
+  _getLikeList(){
+
+    let param = {
+      // code:this.data.code,
+      // appid:utils.appId
+    }
+    utils.GET(param,utils.fromCodegetOpenid,res=>{
+      console.log('我喜欢的:',res)
+
+    })
+    
+
+  },
   _getList(name) {
     setTimeout(() => {
       let info = []
@@ -141,5 +155,8 @@ module.exports = {
   close() {
     this.setData({showModal: false})
   },
+  playMedia(e){
+    console.log('播放',e)
+  }
 
 }

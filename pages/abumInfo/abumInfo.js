@@ -2,15 +2,16 @@ const app = getApp()
 import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
 import { getMedia } from '../../developerHandle/playInfo'
+import utils from '../../utils/util'
 
 // 记录上拉拉刷新了多少次
 let scrollTopNo = 0
 
 // 选择的选集
 let selectedNo = 0
-let abumInfoMixin = require('../../developerHandle/abumInfo')
+// let abumInfoMixin = require('../../developerHandle/abumInfo')
 Page({
-  mixins: [abumInfoMixin],
+  // mixins: [abumInfoMixin],
   data: {
     canplay: [],
     percent: 0,
@@ -35,6 +36,7 @@ Page({
     showLoadEnd: false,
     scrollTop: 0,
     pageNo: 1,
+    pageNub: 0,
     initPageNo: 1,
     pageSize: 15,
     selected: 0,
@@ -55,6 +57,10 @@ Page({
   ctx: null,
   onReady() {},
   async onLoad(options) {
+    let albumid = options.id
+    this.data.optionId = albumid
+    this.getAlbumDetails(albumid)
+    this.getAllList(albumid)
     const msg = '网络异常，请检查网络！'
     this.getNetWork(msg)
     // 暂存专辑全部歌曲
@@ -75,6 +81,74 @@ Page({
     }, 500)
     scrollTopNo = 0
   },
+    // 获取所有的播放列表
+    getAllList(albumid) {
+      // 假设allList是canplay，真实情况根据接口来
+      console.log('专辑id:',albumid)
+      let param={
+        'limit': this.data.pageSize,
+        'offset': this.data.pageNub,
+        'sort': "asc"
+      }
+      utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
+        console.log('专辑列表所有数据:',res)
+         if(res.data && res.statusCode == 200){
+          
+           for (let item of res.data.items) {
+             this.data.canplay.push({
+              title :item.title ,                            // 歌曲名称
+              id : item.id  ,                                  // 歌曲Id
+              dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
+              coverImgUrl :item.image.url ,                         // 歌曲的封面
+              src:item.play_info.play_64.url
+             })
+           }
+           this.setData({
+            canplay:this.data.canplay
+  
+           })
+           wx.setStorageSync('canplay', this.data.canplay)
+           wx.setStorageSync('allList', this.data.canplay)
+
+
+         }
+  
+      })
+      // wx.setStorageSync('allList', allList)
+    },
+
+     // 播放时间格式化
+     formatMusicTime(time) {
+      let m = parseInt(time / 60);
+      let s = parseInt(time % 60);
+      m = m < 10 ? '0' + m : m;
+      s = s < 10 ? '0' + s : s;
+      return m + ':' + s
+    },
+
+    //专辑详情
+    getAlbumDetails(albumid){
+      console.log('专辑id:',albumid)
+      let param={}
+      utils.GET(param,utils.albumDetails+albumid,res=>{
+        console.log('专辑详情:',res)
+         if(res.data && res.statusCode == 200){
+           this.setData({
+             total:res.data.include_track_count,
+             existed:false,
+             src:res.data.announcer.avatar_url
+  
+           })
+        //    wx.setStorageSync('img', res.data.announcer.avatar_url)
+     
+        //  console.log('src',this.data.src)
+        //  console.log('total',this.data.total)
+
+         }
+  
+      })
+    },
+  
   onShow() {
     const currentId = wx.getStorageSync('songInfo').id
     this.setData({
@@ -99,6 +173,7 @@ Page({
   },
   // 接受子组件传值
   async changeWords(e) {
+    console.log(e)
     // 请求新的歌曲列表
     this.setData({
       scrollTop: 0,
@@ -118,16 +193,20 @@ Page({
   // 点击歌曲名称跳转到歌曲详情
   goPlayInfo(e) {
     const msg = '网络异常，无法播放！'
+    console.log('音频点击',e)
     // 点击歌曲的时候把歌曲信息存到globalData里面
     const songInfo = e.currentTarget.dataset.song
     app.globalData.songInfo = songInfo
     wx.setStorage({ key: 'songInfo', data: songInfo })
     this.setData({ currentId: songInfo.id })
+
     this.getNetWork(msg, this.toInfo)
   },
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId
-    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${this.data.abumInfoName}` })
+    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${app.globalData.songInfo.title}` })
+    
+
   },
   // 改变current
   changeCurrent(currentId) {

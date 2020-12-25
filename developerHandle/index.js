@@ -35,9 +35,11 @@
  *  可选内容，当show为false时不显示分类列表,数量 1~2个
  */
 const app = getApp()
+import utils from '../utils/util'
 
 module.exports = {
   data: {
+    swiperArr:[],
     // 开发者注入快捷入口数据
     lalyLtn: {
       show: true,
@@ -59,19 +61,19 @@ module.exports = {
     // 开发者注入模板标签数据
     labels: {
       show: true,
-      data: [{
-        "name": "推荐",
-        "id": 1
-      }, {
-        "name": "精品",
-        "id": 2
-      }, {
-        "name": "潮流",
-        "id": 3
-      }]
+      // data: [{
+      //   "name": "推荐",
+      //   "id": 1
+      // }, {
+      //   "name": "精品",
+      //   "id": 2
+      // }, {
+      //   "name": "潮流",
+      //   "id": 3
+      // }]
     },
 
-    countPic: '/images/media_num.png',
+     countPic: '/images/media_num.png',
     // 频道列表，内容列表数据标志变量
     reqS: true,
     reqL: false,
@@ -89,8 +91,10 @@ module.exports = {
 
   },
   onLoad(options) {
-    // 初始化加载数据
-    this._getList('推荐')
+    // 首页数据
+     this._swiperData()
+     this._mediaArrData()
+    //  this._getList()
   },
   onReady() {
 
@@ -106,6 +110,63 @@ module.exports = {
     })
     // 这里可以自定义传值传到_getList中
     this._getList(name)
+  },
+  //首页卡片数据
+  _swiperData(){
+    let param = {
+      'banner_content_type':2,
+      'count':10,
+      'is_paid':1,
+      'scope':0
+    }
+    utils.GET(param,utils.indexBanners,res=>{
+      console.log('首页banners数据:',res)
+      if(res.data.banners.length >0 && res.statusCode == 200){
+        this.setData({
+          swiperArr:res.data.banners
+        })
+      }
+
+    })
+     
+
+  },
+  //首页音频列表
+  _mediaArrData(){
+    let param = {
+      'limit': 20
+    }
+    utils.GET(param,utils.indexMediaArr,res=>{
+      console.log('首页音频数据:',res)
+      if(res.data.items.length >0 && res.statusCode == 200){
+        // id: 962,
+        // title: "内容标题1",
+        // src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
+        // contentType: "media",
+        // count: 0,
+        // isVip: false
+        let mediaArr = []
+        for (let item of res.data.items) {
+          mediaArr.push({
+            id:item.album.id,
+            title:item.album.title,
+            src:item.album.cover.middle.url,
+            contentType:item.album.kind,
+            count:item.album.play_count,
+             isVip:item.album.is_vip_free
+
+          })
+        }  
+        // console.log('arr',mediaArr)
+        this.setData({
+          reqL: true,
+          info: mediaArr
+        })
+      }
+
+    })
+    
+
   },
   _getList(name) {
     setTimeout(() => {
@@ -153,7 +214,9 @@ module.exports = {
         isVip: false
       }]
       let info = data.map(item => {
-        item.title = `${name}-${item.title}`
+        //  item.title = `${name}-${item.title}`
+        // item.title = item.title
+
         return item
       })
       this.setData({
@@ -162,6 +225,32 @@ module.exports = {
       })
     }, 500)
   },
+
+   //轮播图的切换事件 
+//  swiperChange: function (e) {
+// console.log('轮播图的切换事件:',e.detail.current)
+//   this.setData({
+//   swiperCurrent: e.detail.current
+//   })
+//   },
+  //点击指示点切换 
+  chuangEvent: function (e) {
+    console.log('点击指示点切换:',e)
+
+  this.setData({
+  swiperCurrent: e.currentTarget.id
+  })
+  },
+  bannerClick(e){
+    console.log('banner切换:',e.currentTarget.dataset.item)
+    let item = e.currentTarget.dataset.item
+    let id = item.id
+    wx.navigateTo({
+       url :'../abumInfo/abumInfo?id='+id
+    })
+
+  },
+ 
   // 跳转到快捷入口页面
   tolatelyListen(e) {
     let page = e.currentTarget.dataset.page
@@ -171,6 +260,8 @@ module.exports = {
   },
   // 跳转到播放详情界面
   linkAbumInfo(e) {
+    console.log('专辑列表')
+
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
     const title = e.currentTarget.dataset.title

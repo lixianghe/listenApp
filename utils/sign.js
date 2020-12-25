@@ -1,10 +1,9 @@
 
 const MD5 = require('md5.js')
-
-const appid = "60313"
+const appid = "60023"
 const nonce = "aDwQZGXgI"
 const version = "1.0"
-const app_secret = "2B8590308CD33D76F7B624B4C7098247"
+const app_secret = "59ad60cf0865c4de37a5ed55336a5671"
 var openid = ""
 
 function getSign(jsonObj) {

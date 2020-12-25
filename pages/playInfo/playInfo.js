@@ -68,6 +68,9 @@ Page({
     const canplay = wx.getStorageSync('allList')
     let abumInfoName = wx.getStorageSync('abumInfoName')
     const songInfo = app.globalData.songInfo
+    console.log('songinfo:',app.globalData.songInfo)
+    console.log('canplay:',canplay)
+
     this.setData({
       songInfo: songInfo,
       canplay: canplay,

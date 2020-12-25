@@ -1,7 +1,30 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
   <scroll-view class="index" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData" bindscroll="scrollhandle">
     <!-- 快捷入口 -->
-    <view class="quickEntry" wx:if="{{lalyLtn.show}}">
+
+ <view class="quickEntry" >
+   <swiper current="{{swiperCurrent}}" bindchange="swiperChange" interval = '2000' autoplay = 'true' indicator-active-color='rgba(0, 0, 0, 0.5)'  indicator-color='rgba(192, 192, 192, 0.5)' indicator-dots = 'true'  class="swiper">
+    <block data-item="{{item}}" wx:for="{{swiperArr}}" wx:key="id">
+    <swiper-item  class="swiper-item">
+
+      <image data-item="{{item}}" catchtap="bannerClick" src="{{item.banner_cover_url}}" class="swipe-image" />
+    </swiper-item>
+    </block>
+  
+   </swiper>
+
+ <view catchtap="like" class="left">
+    <image src="/images/icon_collect.png" class="left-icon"></image>
+ <text class="left-text">我的收藏</text>
+ </view>
+ <view catchtap="tolatelyListen" class="right">
+  <image src="/images/zjst.png" class="left-icon"></image>
+ <view class="left-text">最近播放</view>
+ </view>
+    
+    </view>
+
+    <!-- <view class="quickEntry" wx:if="{{lalyLtn.show}}">
       <view class="quickEntrybox" style="height: 30.73vh"  wx:if="{{lalyLtn.data.length > 1}}" wx:for="{{lalyLtn.data}}" wx:key="index"  bindtap="tolatelyListen" data-page="{{item.name}}" data-index="{{index}}">
         <image class="quickEntryicon" src="{{ item.icon }}"></image>
         <view class="latelyLtnTit">{{ item.title }}</view>
@@ -10,10 +33,10 @@
         <image class="quickEntryicon" src="{{ item.icon }}"></image>
         <view class="latelyLtnTit">{{ item.title }}</view>
       </view>
-    </view>
+    </view> -->
 
     <view class="mianContent">
-      <view class="label-box" wx:if="{{labels.show}}">
+      <!-- <view class="label-box" wx:if="{{labels.show}}">
         <view class="label-view {{ isFixed ? 'fixeds' : 'absolutes' }}" wx:if="{{reqS}}">
           <view class="title" wx:for="{{labels.data}}" wx:key="index" style="color: {{index === currentTap ? mainColor : '#bebebe'}}" 
             data-index="{{index}}"  data-groupid="{{item.id}}" data-name="{{item.name}}" bindtap="selectTap">
@@ -24,7 +47,7 @@
           <view class="titleBg" wx:for="{{5}}" wx:key="index"  >
           </view>
         </view>
-      </view>
+      </view> -->
       <!-- 页面盒子 -->
       <view class="storyBox">
         <story wx:if="{{info.length>0 && reqL}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"

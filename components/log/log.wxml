@@ -1,0 +1,11 @@
+<!--components/log/log.wxml-->
+<view class="log-mini" catchtap="tapLog"  data-disablefocus="true"  style="display:{{mini?'block':'none'}}"></view>
+<view class="log" style="top:{{logTop}};width:{{logWidth}};display:{{mini?'none':'block'}}">
+  <view class="max-btn" bindtap="maxLog" wx:if="{{logWidth=='100vh'}}">＜</view>
+  <view class="min-btn" bindtap="minLog" wx:else>＞</view>
+  <view class="close-btn" bindtap="closeLog">×</view>
+  <scroll-view class="log-scroll-view" scroll-y="true">
+    <text>{{log}}</text>
+  </scroll-view>
+  <button class="clear-btn" bindtap="clearLog">清空</button>
+</view>

@@ -75,6 +75,18 @@ module.exports = {
     })
     this._getList(name)
   },
+  //我购买的
+  _myBuy(){
+    let param = {
+      // code:this.data.code,
+      // appid:utils.appId
+    }
+    utils.GET(param,utils.fromCodegetOpenid,res=>{
+      console.log('我购买的:',res)
+
+    })
+    
+  },
   _getList(name) {
     setTimeout(() => {
       let info = []

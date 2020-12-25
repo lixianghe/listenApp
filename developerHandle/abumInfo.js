@@ -19,43 +19,27 @@
  */
 // import { albumMedia, isAlbumFavorite, fm, albumFavoriteAdd, albumFavoriteCancel } from '../utils/httpOpt/api'
 const { showData } = require('../utils/httpOpt/localData')
+import utils from '../utils/util'
 
 module.exports = {
   data: {
-    pageNoName: 'pageNum',
+    pageNoName: 0,
     pageSizeName: 'pageSize',
     pageSize: 10,
-    idName: 'albumId',
+    idName: '',
     existed: false,                     // 是否被收藏
-    playAllPic: '/images/playAll.png'
+    playAllPic: '/images/playAll.png',
+   
   },
   onShow() {
 
   },
   async onLoad(options) {
-    let id = options.id
-    this._getList()
-    this.getAllList()
+    
   },
   onReady() {
 
   },
-  // 获取分页歌曲列表，假数据
-  async _getList(params) {
-    let canplay = await this.getData()
-    this.setData({canplay})
-    wx.setStorageSync('canplay', canplay)
-  },
-  getData() {
-    let canplay = showData.abumInfo.data
-    let total = showData.abumInfo.total
-    this.setData({total})
-    return canplay
-  },
-  // 获取所有的播放列表
-  async getAllList() {
-    // 假设allList是canplay，真实情况根据接口来
-    let allList = await this.getData()
-    wx.setStorageSync('allList', allList)
-  }
+
+
 }

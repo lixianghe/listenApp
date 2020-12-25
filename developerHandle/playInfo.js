@@ -14,7 +14,7 @@
  */
 const app = getApp()
 // import { mediaPlay, mediaFavoriteAdd, mediaFavoriteCancel, isFavorite, saveHistory } from '../utils/httpOpt/api'
-const { showData } = require('../utils/httpOpt/localData')
+// const { showData } = require('../utils/httpOpt/localData')
 
 module.exports = {
   data: {
@@ -66,6 +66,7 @@ module.exports = {
       this.play() 
     })
   },
+  
   async getMedia(params, that = this) {   
     const app = getApp()
     // 模拟请求数据    

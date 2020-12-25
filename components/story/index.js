@@ -45,7 +45,14 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    playMedia(e){
+      console.log('播放:',e.currentTarget.dataset.typeid)
+      let typeid = e.currentTarget.dataset.typeid
+
+      this.triggerEvent('clickHadle', { typeid: typeid});
+    },
     likeOne(e) {
+      console.log('喜欢')
       let flag = !this.data.flag
       let num = Number(flag)
       this.setData({
