@@ -244,9 +244,9 @@ module.exports = {
   bannerClick(e){
     console.log('banner切换:',e.currentTarget.dataset.item)
     let item = e.currentTarget.dataset.item
-    let id = item.id
+    let id = item.banner_content_id
     wx.navigateTo({
-       url :'../abumInfo/abumInfo?id='+id
+       url :'../abumInfo/abumInfo?id='+id+'&routeType=album'
     })
 
   },
@@ -258,7 +258,7 @@ module.exports = {
       url: `../${page}/${page}`
     })
   },
-  // 跳转到播放详情界面
+  // 跳转到播放界面
   linkAbumInfo(e) {
     console.log('专辑列表')
 

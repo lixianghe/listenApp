@@ -47,6 +47,9 @@ Page({
       
     }, 800);
   },
+  swiperChange(){
+
+  },
   onShow() {
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()

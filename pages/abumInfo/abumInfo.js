@@ -9,9 +9,9 @@ let scrollTopNo = 0
 
 // 选择的选集
 let selectedNo = 0
-// let abumInfoMixin = require('../../developerHandle/abumInfo')
+ let abumInfoMixin = require('../../developerHandle/abumInfo')
 Page({
-  // mixins: [abumInfoMixin],
+   mixins: [abumInfoMixin],
   data: {
     canplay: [],
     percent: 0,
@@ -87,7 +87,7 @@ Page({
       console.log('专辑id:',albumid)
       let param={
         'limit': this.data.pageSize,
-        'offset': this.data.pageNub,
+        'offset': this.data.pageNub*15,
         'sort': "asc"
       }
       utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
@@ -165,29 +165,27 @@ Page({
     let val = {
       hidShow: true,
       sum: this.data.total,
+      selected:this.data.pageNum
+
     }
     this.selectWorks.hideShow(val)
-    this.setData({
-      selected: selectedNo + this.data.pageNo - 1,
-    })
+    
   },
   // 接受子组件传值
   async changeWords(e) {
     console.log(e)
     // 请求新的歌曲列表
     this.setData({
-      scrollTop: 0,
+      pageNub: e.detail.pageNum,
+      selected:e.detail.pageNum
     })
-    // 重置
-    scrollTopNo = 0
+    // this.listScroll()
+    this.getAllList(this.data.optionId)
     this.setData({
-      pageNo: e.detail.pageNum,
-      pageSize: e.detail.pageSize,
-      initPageNo: e.detail.pageNum,
+      scrollTop: e.detail.pageNum*this.data.tenHeight,
+
     })
-    let idName = this.data.idName
-    const canplay = await this.getData({ ...e.detail, [idName]: this.data.optionId })
-    this.setCanplay(canplay)
+    this.setCanplay(this.data.canplay)
   },
 
   // 点击歌曲名称跳转到歌曲详情
@@ -276,8 +274,16 @@ Page({
   },
   // 列表滚动事件
   listScroll: tool.debounce(async function (res) {
+    console.log(res)
     let top = res.detail.scrollTop
+    console.log('top:',top)
     selectedNo = parseInt(top / this.data.tenHeight)
+    console.log('selectedNo:',selectedNo)
+    this.setData({
+      select:selectedNo,
+
+    })
+
   }, 50),
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
@@ -294,11 +300,16 @@ Page({
       this.setData({ showLoadEnd: true })
     }
     scrollTopNo++
+    console.log('scrollTopNo:',scrollTopNo)
+
     let pageNoName = this.data.pageNoName
     let idName = this.data.idName
     let params = { [pageNoName]: this.data.initPageNo + scrollTopNo, [idName]: this.data.optionId }
-    const data = await this.getData(params)
-    const list = this.data.canplay.concat(data)
+   this.data.pageNub++
+
+    console.log('pageNub:',this.data.pageNub)
+    this.getAllList(this.data.optionId)
+    const list = this.data.canplay
     setTimeout(() => {
       this.setData({
         canplay: list,
@@ -317,8 +328,9 @@ Page({
       .boundingClientRect((rect) => {
         let listHeight = rect.height
         this.setData({
-          tenHeight: listHeight - 40,
+          tenHeight: listHeight - 35,
         })
+        console.log('songListH:',this.data.tenHeight)
       })
       .exec()
   },

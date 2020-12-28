@@ -224,6 +224,8 @@ Page({
       key: "songInfo",
       data: app.globalData.songInfo
     })
+    this.closeList()
+
   },
   // 开始拖拽
   dragStartHandle(event) {

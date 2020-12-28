@@ -9,7 +9,7 @@ Component({
     },
     pageSize: {
       type: Number,
-      default: 20
+      default: 15
     }
   },
   data: {
@@ -21,11 +21,17 @@ Component({
   },
   methods: {
     selectThis(e) {
+      console.log('selected:',e)
       this.setData({
         selected: e.currentTarget.dataset.index
       })
-      let pageNo = this.data.order ? e.currentTarget.dataset.index + 1 : (this.data.data.length - e.currentTarget.dataset.index)
-      this.triggerEvent('changeWords', {pageNum: pageNo, pageSize: this.data.pageSize})
+      console.log('selected:',this.data.selected)
+
+      let pageNo =  e.currentTarget.dataset.index 
+      console.log('selected:',pageNo)
+      
+
+       this.triggerEvent('changeWords', {pageNum: pageNo, pageSize: this.data.pageSize})
       this.closeWords()
     },
     closeWords (e) {

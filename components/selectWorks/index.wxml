@@ -20,7 +20,7 @@
     <image class="closeWords" src="/images/close-words.png" bindtap="closeWords"></image>
     <view class="worksList">
       <view 
-        class="worksItem {{ selected === m1.filterNo(item.start, item.end, pageSize) ? 'selectedWork': 'normalWork' }}" 
+        class="worksItem {{ index == selected  ? 'selectedWork': 'normalWork' }}" 
         wx:for="{{data}}" 
         wx:key="index" 
         data-index="{{index}}"

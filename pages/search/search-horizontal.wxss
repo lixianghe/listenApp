@@ -1,9 +1,10 @@
 .h .searchContent {
   overflow: auto;
   box-sizing: border-box;
-  height: 82vh;
-  padding: 2.5vh 9vh;
+  height: 78vh;
+  padding: 0vh 9vh;
   white-space: nowrap;
+  /* background:white */
 }
 .h .quickEntry{
   /* flex: 0 0 41.3vh; */
@@ -80,16 +81,16 @@
   height: 36vh;
   border-radius: 2vh;
 }
-.label-view {
+.h .label-view {
   display: flex;
   color: #fff;
   font-size: 5.5vh;
   margin-bottom: 4.89vh;
-  position: fixed;
+  /* position: fixed; */
   left: 9vh;
   top: 19vh;
 }
-.label-view .title {
+.h .label-view .title {
   padding: 2vh 1vh;
   margin-right: 5vh;
   padding: 1.81vh 5.35vh 1.5vh 5.35vh;
@@ -99,6 +100,56 @@
 .label-view .active-tap {
   color: #fa6500;
 }
+/*推荐搜索view*/
+
+.h .remindTitle{
+ 
+  color: #ffffff;
+  font-size:7vh ;
+  font-weight: 550;
+  margin-top: -2vh;
+
+
+
+}
+.h .remindresultView{
+  display:flex;
+flex-direction:column;
+flex-wrap: wrap;
+  margin-top: -21vh;
+  margin-left: 0vh;
+  width: 100%;
+  height:78vh ;
+  line-height: 47vh;
+  /* background: red; */
+
+
+}
+.h .reminditem{
+  margin-top: 4vh;
+  margin-right: 15vh;
+  width: 55vh;
+  height: 16vh;
+  /* color: #ffffff; */
+  font-size:6vh ;
+  font-weight: 500;
+  /* background: blue; */
+  text-align: left;
+}
+.h .item-num{
+  display: inline-block;
+  margin-left: 0;
+  height: 100%;
+  color: #dc5e4e;
+
+}
+.h .item-text{
+  display: inline-block;
+  height: 100%;
+  margin-left: 5vh;
+  color: white;
+  opacity: 0.7;
+}
 
 /* 卡片的样式 */
 .halbumCard {
@@ -106,7 +157,7 @@
   width: 33.81vh;
   display: inline-block;
   margin-right: 7.6vh;
-  margin-top: 32vh;
+  /* margin-top: 32vh; */
   height: 68.6vh;
   overflow: hidden;
   position: relative;
