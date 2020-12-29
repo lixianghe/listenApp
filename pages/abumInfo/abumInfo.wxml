@@ -36,7 +36,7 @@
     <!-- <view class="songList"> -->
     <view class="songList" animation="{{loadAnimate}}" bindtouchstart="touchStart" bindtouchend="touchEnd" bindtouchmove="touchMove">
       <view wx-if="{{showLoadTop}}" class="loading">加载中...</view>
-      <view bindtap="goPlayInfo" style="color: {{item.id === currentId ? mainColor : '#fff'}}" data-song='{{item}}' data-no='{{index}}' wx:key="index" wx:for="{{canplay}}">
+      <view bindtap="goPlayInfo" style="color: {{item.id === currentId ? mainColor : '#fff'}};display: flex" data-song='{{item}}' data-no='{{index}}' wx:key="index" wx:for="{{canplay}}">
         <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
         
         <text wx:else>{{(pageNo-1) * pageSize + index + 1}}</text>

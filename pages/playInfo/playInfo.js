@@ -4,8 +4,6 @@ import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
 // const { getData } = require('../../utils/https')
 
-var timer = null
-
 Page({
   mixins: [require('../../developerHandle/playInfo')],
   data: {
@@ -87,27 +85,16 @@ Page({
     const that = this;
     // 监听歌曲播放状态，比如进度，时间
     tool.playAlrc(that, app);
-    timer = setInterval(function () {
-      tool.playAlrc(that, app);
-    }, 1000);
     that.queryProcessBarWidth()
-  },
-  onUnload: function () {
-    clearInterval(timer);
-  },
-  onHide: function () {
-    clearInterval(timer)
   },
   imgOnLoad() {
     this.setData({ showImg: true })
   },
   play() {
-    // 初始化audioManager
     let that = this
-    tool.initAudioManager(that, this.data.canplay)
     // 从统一播放界面切回来，根据playing判断播放状态options.noPlay为true代表从minibar过来的
     const playing = wx.getStorageSync('playing')
-    if (playing || this.data.noPlay !== 'true') app.playing()
+    if (playing || this.data.noPlay !== 'true') app.playing(that)
   },
   btnsPlay(e) {
     const type = e.currentTarget.dataset.name
@@ -208,18 +195,19 @@ Page({
   },
   // 在播放列表里面点击播放歌曲
   async playSong(e) {
+    let that = this
     const songInfo = e.currentTarget.dataset.song
     app.globalData.songInfo = songInfo
     // 获取歌曲详情
     let params = {mediaId: app.globalData.songInfo.id, contentType: 'story'}
-    await this.getMedia(params)
-    this.setData({
+    await that.getMedia(params)
+    that.setData({
       songInfo: songInfo,
       currentId: app.globalData.songInfo.id,
       playing: true
       // noTransform: ''
     })
-    app.playing()
+    app.playing(that)
     wx.setStorage({
       key: "songInfo",
       data: app.globalData.songInfo

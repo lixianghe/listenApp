@@ -2,10 +2,6 @@ const app = getApp()
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
 import tool from '../../utils/util'
 
-// import { isFavorite, like } from '../../developerHandle/playInfo'
-
-var timer = null
-
 Component({
   properties: {
     percent: {
@@ -113,6 +109,8 @@ Component({
     },
     // 暂停
     toggle() {
+      
+      this.triggerEvent('setPlaying', !this.data.playing)
       tool.toggleplay(this, app)
     },
     // 进入播放详情
@@ -133,9 +131,6 @@ Component({
       }
       // 监听歌曲播放状态，比如进度，时间
       tool.playAlrc(that, app);
-      timer = setInterval(() => {
-        tool.playAlrc(that, app);
-      }, 1000);
     },
     btnstart(e) {
       const index = e.currentTarget.dataset.index
@@ -166,20 +161,21 @@ Component({
     },
     // 因为1.9.2版本无法触发onshow和onHide所以事件由它父元素触发
     setOnShow() {
-      clearInterval(timer)
+      let that = this
       const canplay = wx.getStorageSync('canplay')
-      this.setData({
+      that.listenPlaey()
+      const playing = wx.getStorageSync('playing')
+      that.setData({
+        playing: playing,
         canplay: canplay
       })
-      this.listenPlaey()
-      const playing = wx.getStorageSync('playing')
-      if (playing) app.playing()
+      if (playing) app.playing(that)
       // 是否被收藏
       // let songInfo = wx.getStorageSync('songInfo')
       // isFavorite({mediaId: songInfo.id}, that)
     },
     setOnHide() {
-      clearInterval(timer)
+
     }
   }
 })

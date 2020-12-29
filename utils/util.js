@@ -167,38 +167,24 @@ function formatToSend(dt) {
 
 //音乐播放监听
 function playAlrc(that, app) {
-  wx.getBackgroundAudioPlayerState({
-    complete: function (res) {
-      var time = 0, playing = false, playtime = 0;
-      // 1是正常播放，2是异常
-      if (res.status != 2) {
-        time = res.currentPosition / res.duration * 100 || 0
-        playtime = res.currentPosition;
-      }
-      if (res.status == 1) {
-        playing = true;
-        wx.hideLoading()
-      }
-      app.globalData.playing = playing;
-      app.globalData.percent = time
-      if (that.data.isDrag) return
+  var time = 0, playtime = 0;
+  app.audioManager.onTimeUpdate((res) => {
+    time = app.audioManager.currentTime / app.audioManager.duration * 100
+    playtime = app.audioManager.currentTime
+    app.globalData.percent = time
+    app.globalData.currentPosition = app.audioManager.currentTime
+    app.globalData.playtime = playtime ? formatduration(playtime * 1000) : '00:00'
+    if (!that.data.isDrag) {
       that.setData({
         playtime: playtime ? formatduration(playtime * 1000) : '00:00',
         percent: time || 0,
-        playing: playing
       })
-      wx.setStorage({
-        key: "playing",
-        data: playing
-      })
-      // 设置abumInfo页面的播放状态用来控制gif是否展示
-      that.triggerEvent('setPlaying', playing)
     }
-  });
-};
+  })
+}
 
 
-function toggleplay(that, app, cb) {
+function toggleplay(that, app) {
   if (that.data.playing) {
     console.log("暂停播放");
     that.setData({ 
@@ -210,15 +196,25 @@ function toggleplay(that, app, cb) {
     that.setData({
       playing: true
     });
-    app.playing(app.globalData.currentPosition, cb);
+    app.playing(app.globalData.currentPosition, that);
   }
 }
 
 
 // 初始化 BackgroundAudioManager
-function initAudioManager(that, list) {
+function initAudioManager(app, that, songInfo) {
+  let list = wx.getStorageSync('nativeList')
   that.audioManager = wx.getBackgroundAudioManager()
-  that.audioManager.playInfo = {playList: list};
+  that.audioManager.playInfo = {
+    playList: list,
+    playState: {
+      // curIndex: app.globalData.songIndex,                                      //当前播放列表索引
+      // duration: app.globalData.songInfo.trial ? app.globalData.songInfo.trialDuration : app.globalData.songInfo.duration,                                  //总时长
+      // currentPosition: app.globalData.currentPosition,             //当前播放时间
+      // status: true,                                                   //当前播放状态 0暂停状态 1播放状态 2没有音乐播放
+    },
+    context: songInfo
+  };
   EventListener(that)
 }
 
@@ -226,13 +222,17 @@ function initAudioManager(that, list) {
 function EventListener(that){
   //播放事件
   that.audioManager.onPlay(() => {
-    console.log('-------------------------------onPlay-----------------------------------')
-    // wx.hideLoading()
+    console.log('-------------------------------onPlay-----------------------------------', that)
+    wx.hideLoading()
+    that.setData({ playing: true });
+    let miniPlayer = that.selectComponent('#miniPlayer')
+    if (miniPlayer) miniPlayer.setData({ playing: true })
     wx.setStorageSync('playing', true)
   })
   //暂停事件
   that.audioManager.onPause(() => {
     console.log('触发播放暂停事件');
+    that.setData({ playing: false });
     wx.setStorageSync('playing', false)
   })
   //上一首事件
@@ -248,10 +248,14 @@ function EventListener(that){
   //停止事件
   that.audioManager.onStop(() => {
     console.log('触发停止事件');
+    that.setData({ playing: false });
+    wx.setStorageSync('playing', false)
   })
   //播放错误事件
   that.audioManager.onError(() => {
     console.log('触发播放错误事件');
+    that.setData({ playing: false });
+    wx.setStorageSync('playing', false)
   })
   //播放完成事件
   that.audioManager.onEnded(() => {

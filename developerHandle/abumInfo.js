@@ -26,7 +26,7 @@ module.exports = {
     pageNoName: 0,
     pageSizeName: 'pageSize',
     pageSize: 10,
-    idName: '',
+    idName: 'id',
     existed: false,                     // 是否被收藏
     playAllPic: '/images/playAll.png',
    

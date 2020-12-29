@@ -99,10 +99,13 @@ App({
         }
       })
     });
-   
+    wx.setStorageSync('playing', false)
     // 测试getPlayInfoSync
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
+      console.log('res-------------' + JSON.stringify(res))
+      let playing = res.playState.status == 1 ? true : false
+      wx.setStorageSync('playing', playing)
     }
 
   },
@@ -148,7 +151,7 @@ App({
       contentType: 'story'
     }
     await getMedia(params, that)
-    loopType === 'singleLoop' ? this.playing(0) : this.playing()
+    loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
   },
   // 根据循环模式设置播放列表
   setList(loopType, list, cutFlag = false){
@@ -189,15 +192,15 @@ App({
     wx.pauseBackgroundAudio();
   },
   // 根据歌曲url播放歌曲
-  playing: function (seek, cb) {
+  playing: function (seek, that) {
+    if (that == undefined) {
+      that = seek
+    }
     const songInfo = this.globalData.songInfo
     // 如果是车载情况
-    if (!this.globalData.useCarPlay) {
-      this.carHandle(songInfo, seek)
-    } else {
-      this.wxPlayHandle(songInfo, seek, cb)
-    }
-
+    this.carHandle(songInfo, seek)
+    let app = this
+    utils.initAudioManager(app, that, songInfo)
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
@@ -209,25 +212,6 @@ App({
         position: seek
       })
     }
-  },
-  // 非车载情况的播放
-  wxPlayHandle(songInfo, seek, cb) {
-    var that = this
-    wx.playBackgroundAudio({
-      dataUrl: songInfo.src,
-      title: songInfo.title,
-      success: function (res) {
-        if (seek != undefined && typeof (seek) === 'number') {
-          wx.seekBackgroundAudio({
-            position: seek
-          })
-        };
-        that.globalData.playing = true;
-        cb && cb();
-      },
-      fail: function () {
-      }
-    })
   },
 
   // 根据分辨率判断显示哪种样式

@@ -100,6 +100,12 @@
 }
 .page .left .songList view text:nth-child(2) {
   margin-left: 7.35vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 130vh;
+  display: inline-block;
+  vertical-align: top;
 }
 .page .left .songList view text:last-child {
   float: right;

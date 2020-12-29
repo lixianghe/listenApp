@@ -19,7 +19,6 @@
  *  其他入口，配置入口点击事件方法名，入口图标，入口名称；入口数量开发者根据项目需要配置
  */
 const app = getApp()
-import util from '../components/indepMIniBar/util'
 import utils from '../utils/util'
 
 
