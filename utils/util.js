@@ -360,6 +360,19 @@ module.exports = {
    albumDetails:'iot/openapi-smart-device-api/albums/',
    //专辑下的所有音频
    albumAllmedias:'iot/openapi-smart-device-api/albums/',
+   //热词
+   hot:'iot/openapi-smart-device-api/browse/hot-words',
+   //专辑搜索
+   albumSearch:'iot/openapi-smart-device-api/customized/search/albums',
+   //主播搜索
+   peopleSearch:'iot/openapi-smart-device-api/customized/search/users',
+   //音频搜索
+   audioSearch:'iot/openapi-smart-device-api/customized/search/tracks',
+
+
+
+
+
 
   formatToSend: formatToSend,
   formatduration: formatduration,

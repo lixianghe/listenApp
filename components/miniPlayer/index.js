@@ -46,13 +46,13 @@ Component({
         name: 'next',
         img: '/images/next.png'
       },
-      // {
-      //   name: 'like',                                         
-      //   img: {
-      //     noLike: '/images/like_none.png' ,                   
-      //     liked: '/images/like.png'                          
-      //   }
-      // }
+      {
+        name: 'like',                                         
+        img: {
+          noLike: '/images/like_none.png' ,                   
+          liked: '/images/like.png'                          
+        }
+      }
     ],
     // 开发者不传的话默认的按钮
     defaultBtns: [

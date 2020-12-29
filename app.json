@@ -4,12 +4,12 @@
     "pages/index/index", 
     "pages/personalCenter/personalCenter",
     "pages/like/like",
+    "pages/member/member",
     "pages/abumInfo/abumInfo",
     "pages/playInfo/playInfo",
     "pages/latelyListen/latelyListen",
     "pages/search/search",
     "pages/member/pay",
-    "pages/member/member",
     "pages/myBuy/myBuy",
     "pages/category/category"
     

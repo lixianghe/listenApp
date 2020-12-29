@@ -21,16 +21,7 @@ Page({
     reqL:false,
     labels: {
       show: true,
-      data: [{
-        "name": "推荐",
-        "id": 1
-      }, {
-        "name": "精品",
-        "id": 2
-      }, {
-        "name": "潮流",
-        "id": 3
-      }]
+      data: []
     },
 
   },
