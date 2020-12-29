@@ -155,6 +155,8 @@ Page({
       currentId: Number(currentId),
     })
     this.selectComponent('#miniPlayer').setOnShow()
+    let playing = wx.getStorageSync('playing')
+    this.setData({playing})
   },
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()
