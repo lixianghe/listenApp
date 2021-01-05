@@ -13,12 +13,11 @@ App({
     // 登录相关
     openid: '',
     appId: '60023',
-    userId: '-1',
+    userId: '',
     haveLogin: false,
     token: '',
-    appId: '60180',
     // 版本号
-    version: '1.0.195.20200928',
+    version: '1.0.0',
     isNetConnected: true,
     indexData: [], // 静态首页数据
     latelyListenId: [], // 静态记录播放id
@@ -32,7 +31,9 @@ App({
     currentList: [],
     loopType: 'listLoop', // 默认列表循环
     useCarPlay: wx.canIUse('backgroundAudioManager.onUpdateAudio'),
-    PIbigScreen: null
+    PIbigScreen: null,
+    startTime:'00:00',
+    playBeginAt:''
   },
   // 小程序颜色主题
   sysInfo: {
@@ -152,6 +153,8 @@ App({
     }
     await getMedia(params, that)
     loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
+    this.globalData.playBeginAt = new Date().getTime();
+    this.upLoadPlayinfo()
   },
   // 根据循环模式设置播放列表
   setList(loopType, list, cutFlag = false){
@@ -190,6 +193,8 @@ App({
   // 暂停音乐
   stopmusic: function () {
     wx.pauseBackgroundAudio();
+    this.globalData.playBeginAt = new Date().getTime();
+    this.upLoadPlayinfo()
   },
   // 根据歌曲url播放歌曲
   playing: function (seek, that) {
@@ -201,6 +206,8 @@ App({
     this.carHandle(songInfo, seek)
     let app = this
     utils.initAudioManager(app, that, songInfo)
+    this.globalData.playBeginAt = new Date().getTime();
+    this.upLoadPlayinfo()
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
@@ -250,6 +257,7 @@ App({
 
     // 获得token
    goAuthGetToken() {
+     var that = this
     var isLogin = wx.getStorageSync('USERINFO')
     var Token = wx.getStorageSync('TOKEN')
     var canUseToken
@@ -267,10 +275,7 @@ App({
         redirect_uri: utils.baseUrl,
        }
        let sig = utils.calcuSig(param, utils.APP_SECRET);
-       let params = {
-        ...param,
-          sig
-       }
+       let params = { ...param, sig }
        console.log('sig:',sig)
        console.log('params:',params)
     
@@ -279,8 +284,6 @@ App({
         'content-type': 'application/x-www-form-urlencoded',
        }
        console.log('header:',header)
-    
-
        wx.request({
         url:utils.baseUrl + 'oauth2/refresh_token',
         method:"POST",
@@ -325,13 +328,13 @@ App({
     'content-type': 'application/x-www-form-urlencoded',
    }
    console.log('header:',header)
-
     wx.request({
       url:utils.baseUrl + 'oauth2/secure_access_token',
       method:"POST",
       data:params,
        header:header,
       success: function(res) {
+        that.log("access_token----success--", res)
         console.log("access_token----success--", res)   
         res.data.deadline = +new Date() + (res.data.expires_in * 1000);
         console.log("失效时间", res.data.deadline)   
@@ -378,6 +381,33 @@ App({
       this.logText += '\n'
     }
     this.logText += '########################\n'
+  },
+  //全局上传播放行为
+  upLoadPlayinfo:function(){
+    console.log('-----------------------songInfo:',this.globalData.songInfo)
+    const playRecords = {
+       track_id:this.globalData.songInfo.id,
+      played_secs: ~~this.globalData.currentPosition || ~~this.globalData.startTime,
+      started_at:this.globalData.playBeginAt,
+      ended_at:new Date().getTime(),
+      play_type:0,
+    } 
+      console.log('播放行为数据:',playRecords)
+      let param = {
+        track_records:JSON.stringify(playRecords)
+      }
+      utils.PLAYRECORDPOST(param,utils.upLoadPlayInfo,res=>{
+        console.log('上传播放信息:',res)
+        if(res.statusCode == 200){
+         
+        }else{
+  
+        }
+      } )
+
+
+   
+
   },
   // 获取颜色主题
   getTheme: function () {

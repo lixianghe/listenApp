@@ -95,10 +95,43 @@ Page({
     // 从统一播放界面切回来，根据playing判断播放状态options.noPlay为true代表从minibar过来的
     const playing = wx.getStorageSync('playing')
     if (playing || this.data.noPlay !== 'true') app.playing(that)
+   
   },
   btnsPlay(e) {
     const type = e.currentTarget.dataset.name
-    if (type) this[type]()
+    console.log('type:',type)
+      switch (type) {
+        case 'pre':
+         
+            console.log('上一首')
+          this.pre()
+        
+          break;
+        case 'toggle':
+         this.toggle()
+          
+          break;
+          case 'next':
+            
+              console.log('下一首')
+              this.next()
+            
+          
+            break;
+          case 'like':
+            if(this.data.existed){
+              console.log('取消收藏')
+            }else{
+              console.log('添加收藏')
+            }
+          
+            break;
+      
+        default:
+          break;
+      }
+
+   
   },
   // 上一首
   pre() {
@@ -106,6 +139,7 @@ Page({
     if (loopType !== 'singleLoop') this.setData({ showImg: false })
     const that = this
     app.cutplay(that, -1)
+   
   },
   // 下一首
   next() {
@@ -113,6 +147,7 @@ Page({
     if (loopType !== 'singleLoop') this.setData({ showImg: false })
     const that = this
     app.cutplay(that, 1)
+   
   },
   // 切换播放模式
   loopType() {
@@ -159,6 +194,8 @@ Page({
   toggle() {
     const that = this
     tool.toggleplay(that, app)
+    app.globalData.playBeginAt = new Date().getTime();
+    app.upLoadPlayinfo()
   },
   // 播放列表
   more() {

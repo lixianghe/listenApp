@@ -68,3 +68,4 @@
   <bgConfirm id="bgConfirm" msg="{{confirm}}" confirm="确定" cancel=""></bgConfirm>
   <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
 </view>
+<log></log>

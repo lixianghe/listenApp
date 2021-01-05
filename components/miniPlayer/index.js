@@ -1,6 +1,6 @@
 const app = getApp()
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
-import tool from '../../utils/util'
+import utils from '../../utils/util'
 
 Component({
   properties: {
@@ -81,9 +81,79 @@ Component({
   },
   methods: {
     player(e) {
+      console.log(e)
       if (!this.data.songInfo || !this.data.songInfo.title) return false
       const type = e.currentTarget.dataset.name
-      if (type) this[type]()
+      console.log('type:',type)
+      switch (type) {
+        case 'pre':     
+            console.log('上一首')
+          this.pre()
+          break;
+        case 'toggle':
+         this.toggle()        
+          break;
+          case 'next':         
+              console.log('下一首')
+              this.next()      
+            break;
+          case 'like':
+            if(this.data.existed){
+              console.log('取消收藏')
+              this.cancelAudioCollect()
+            }else{
+              console.log('添加收藏')
+              this.collectAudio()
+            }
+          
+            break;
+      
+        default:
+          break;
+      }
+
+    },
+    //收藏音频
+    collectAudio(){
+      let param = {
+        id:wx.getStorageSync('songInfo').id
+      }
+      utils.PLAYHISTORYGET(param,utils.audioCollect,res=>{
+        console.log('收藏音频:',res)
+        if(res.data.status == 200 && res.data.errmsg == 'ok'){
+          this.setData({
+            existed:true
+          })
+          wx.showToast({
+            title: '专辑订阅成功',
+            icon:'none'
+          })
+         
+        }else{
+  
+        }
+      } )
+    },
+    //取消音频收藏
+    cancelAudioCollect(){
+      let param = {
+        id:wx.getStorageSync('songInfo').id
+      }
+      utils.PLAYHISTORYGET(param,utils.audioCancelCollect,res=>{
+        console.log('取消音频收藏:',res)
+        if(res.data.status == 200 && res.data.errmsg == 'ok'){
+          this.setData({
+            existed:true
+          })
+          wx.showToast({
+            title: '专辑订阅成功',
+            icon:'none'
+          })
+         
+        }else{
+  
+        }
+      } )
     },
     // 上一首
     pre() {
@@ -111,7 +181,7 @@ Component({
     toggle() {
       
       this.triggerEvent('setPlaying', !this.data.playing)
-      tool.toggleplay(this, app)
+      utils.toggleplay(this, app)
     },
     // 进入播放详情
     playInfo() {
@@ -130,7 +200,7 @@ Component({
         })
       }
       // 监听歌曲播放状态，比如进度，时间
-      tool.playAlrc(that, app);
+      utils.playAlrc(that, app);
     },
     btnstart(e) {
       const index = e.currentTarget.dataset.index
@@ -150,8 +220,8 @@ Component({
     },
     // 收藏和取消
     like() {
-      // let that = this
-      // like(that)
+      
+       console.log(' 收藏和取消')
     },
     watchPlay() {
       app.globalData.songInfo = wx.getStorageSync('songInfo')

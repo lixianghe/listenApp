@@ -81,13 +81,92 @@ Page({
     }, 500)
     scrollTopNo = 0
   },
+
+  likeAbum(){
+   
+    if(wx.getStorageSync('OPENID')){
+      console.log('喜欢专辑',wx.getStorageSync('OPENID'))
+      if(this.data.existed){
+        console.log('取消收藏')
+        this.cancelCollectAlbum()
+      }else{
+        console.log('添加收藏')
+        this.collectAlbum()
+      }
+      
+    }else{
+      console.log('喜欢专辑')
+      wx.showModal({
+        title: '登录提示',
+        content: '您尚未登录，请先登录以同步账号信息及收藏、已购、历史等记录',
+        confirmColor:'#dc5e4e',
+        
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+      
+
+
+    }
+
+  },
+  //收藏专辑
+  collectAlbum(){
+    let param = {
+      id:this.data.optionId
+    }
+    utils.PLAYRECORDPOST(param,utils.albumCollect,res=>{
+      console.log('收藏专辑:',res)
+      if(res.data.status == 200 && res.data.errmsg == 'ok'){
+        this.setData({
+          existed:true
+        })
+        wx.showToast({
+          title: '专辑订阅成功',
+          icon:'none'
+        })
+       
+      }else{
+
+      }
+    } )
+
+  },
+  //取消收藏专辑
+  cancelCollectAlbum(){
+    let param = {
+      id:this.data.optionId
+    }
+
+    utils.PLAYRECORDPOST(param,utils.cancelAlbumCollect,res=>{
+      console.log('取消收藏专辑:',res)
+      if(res.data.status == 200 && res.data.errmsg == 'ok'){
+        this.setData({
+          existed:false
+        })
+        wx.showToast({
+          title: '专辑取消订阅成功',
+          icon:'none'
+        })
+       
+      }else{
+
+      }
+    } )
+
+  },
     // 获取所有的播放列表
     getAllList(albumid) {
       // 假设allList是canplay，真实情况根据接口来
       console.log('专辑id:',albumid)
       let param={
         'limit': this.data.pageSize,
-        'offset': this.data.pageNub*15,
+        'offset': this.data.pageNub*this.data.pageSize,
         'sort': "asc"
       }
       utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
@@ -135,7 +214,7 @@ Page({
          if(res.data && res.statusCode == 200){
            this.setData({
              total:res.data.include_track_count,
-             existed:false,
+             existed:res.data.is_subscribe,
              src:res.data.announcer.avatar_url
   
            })

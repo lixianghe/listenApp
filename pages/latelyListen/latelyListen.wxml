@@ -41,3 +41,4 @@
   </view>
   <button bindtap="close">确定</button>
 </view>
+<log></log>

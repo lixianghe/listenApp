@@ -37,13 +37,13 @@ module.exports = {
         name: 'next',                                            
         img: '/images/next2.png'                                 
       },
-      // {
-      //   name: 'like',                                             
-      //   img: {
-      //     noLike: '/images/info_like_no.png' ,                    
-      //     liked: '/images/info_like.png'                          
-      //   }
-      // },
+      {
+        name: 'like',                                             
+        img: {
+          noLike: '/images/info_like_no.png' ,                    
+          liked: '/images/info_like.png'                          
+        }
+      },
       {
         name: 'loopType',                                         
         img: {
@@ -74,6 +74,7 @@ module.exports = {
     let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
     app.globalData.songInfo = Object.assign({}, data)
     that.setData({ songInfo: data })
+    console.log('播放信息：',data)
     wx.setStorageSync('songInfo', data)
   }
 }

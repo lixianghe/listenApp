@@ -26,6 +26,7 @@
     })
  */
 const app = getApp()
+import utils from '../utils/util'
 
 module.exports = {
   data: {
@@ -35,14 +36,14 @@ module.exports = {
     // 开发者注入模板标签数据
     labels: {
       show: true,
-      data: [{
-        name: '专辑',
-        value: 'album'
-      },
-      {
-        name: '故事',
-        value: 'media'
-      }]
+      // data: [{
+      //   name: '专辑',
+      //   value: 'album'
+      // },
+      // {
+      //   name: '故事',
+      //   value: 'media'
+      // }]
     },
     // 开发者注入模板页面数据
     info: []
@@ -51,7 +52,7 @@ module.exports = {
 
   },
   onLoad(options) {
-    this._getList('专辑')
+    this.getLaterListen()
   },
   onReady() {
 
@@ -63,16 +64,20 @@ module.exports = {
     const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
     const routeType = e.currentTarget.dataset.contentype
-    let url
-    if (routeType === 'album') {
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}`
-    } else if (routeType === 'media') {
-      url = `../playInfo/playInfo?id=${id}`
-    }
-
+ 
     wx.navigateTo({
-      url: url
+      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
     })
+    // let url
+    // if (routeType === 'album') {
+    //   url = `../abumInfo/abumInfo?id=${id}&title=${title}`
+    // } else if (routeType === 'media') {
+    //   url = `../playInfo/playInfo?id=${id}`
+    // }
+    // wx.navigateTo({
+    //   url:url
+    // })
+
   },
   selectTap(e) {
     const index = e.currentTarget.dataset.index
@@ -87,13 +92,53 @@ module.exports = {
     this._getList(name)
   },
   //最近收听
-  _getLaterListen(){
+  getLaterListen(){
     let param = {
-      // code:this.data.code,
-      // appid:utils.appId
+     
     }
-    utils.GET(param,utils.fromCodegetOpenid,res=>{
-      console.log('最近收听:',res)
+    utils.PLAYHISTORYGET(param,utils.historyPlay,res=>{
+      app.log('最近收听:',res)
+      if(res.data.items.length > 0 && res.statusCode == 200){
+        // item.title = item.mediaName                               // 歌曲名称
+        // item.id = item.mediaId                                    // 歌曲Id
+        // item.src = item.coverUrl                                  // 歌曲的封面
+        // item.contentType = 'album'                                // 类别（例如专辑或歌曲）
+        // item.isVip = true                                         // 是否是会员
+        let laterArr = []
+        for(let i = 0;i <res.data.items.length;i++ ){
+          
+          
+          console.log('---------',i)
+          if( !res.data.items[i].track ||res.data.items[i].track== null ||  res.data.items[i].track.played_secs== null){
+            res.data.items[i].track =new Object()
+            res.data.items[i].track.played_secs = 0
+          }else{
+            res.data.items[i].track.played_secs = res.data.items[i].track.played_secs
+          }
+
+          laterArr.push({
+            title:res.data.items[i].album.title,
+            id:res.data.items[i].album.id,
+            src:res.data.items[i].album.cover.middle.url,
+            contentType:'album',
+            isVip:wx.getStorageInfoSync('USERINFO').is_vip,
+            perceent:(res.data.items[i].track.played_secs/res.data.items[i].track.duration)*100
+
+          })
+        }
+         
+   
+          this.setData({
+            req: true,
+            info:laterArr
+          })
+          app.log('info:',this.data.info)
+        
+       
+
+      }else{
+
+      }
 
     })
     

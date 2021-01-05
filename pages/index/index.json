@@ -2,6 +2,10 @@
   "navigationBarTitleText": "推荐",
   "component": true,  
   "usingComponents": {
-    "story": "/components/story/index"
+    "story": "/components/story/index",
+    "log": "/components/log/log"
+
   }
+
+ 
 }

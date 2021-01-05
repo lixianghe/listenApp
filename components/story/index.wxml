@@ -18,5 +18,6 @@
   <view class="albumTit">
     <text class="vip" wx:if="{{datasource.isVip}}" style="background-color:{{mainColor}}">VIP</text>
     <text>{{ datasource.title }}</text>
+    <text wx:if="{{datasource.perceent}}">{{ datasource.perceent }}%</text>
   </view>
 </view>

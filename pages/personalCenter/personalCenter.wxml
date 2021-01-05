@@ -3,7 +3,7 @@
     <!-- 登录部分 -->
     <view class="mine">
       <view class="adminCenter" wx:if="{{isLogin}}">
-        <image class="image" src="{{userInfo.avatar}}"></image>
+        <image class="image" src="{{userInfo.avatar_url}}"></image>
         <view class="adminCenterName">
           <text>{{userInfo.nickname}}</text>
         </view>
