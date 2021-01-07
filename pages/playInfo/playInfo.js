@@ -3,6 +3,7 @@ const app = getApp()
 import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
 // const { getData } = require('../../utils/https')
+import utils from '../../utils/util'
 
 Page({
   mixins: [require('../../developerHandle/playInfo')],
@@ -119,11 +120,24 @@ Page({
           
             break;
           case 'like':
-            if(this.data.existed){
-              console.log('取消收藏')
+            if(wx.getStorageSync('USERINFO')){
+              if(this.data.existed){
+                console.log('取消收藏')
+                this.cancelAudioCollect()
+              }else{
+                console.log('添加收藏')
+                this.collectAudio()
+              }
             }else{
-              console.log('添加收藏')
+              wx.showToast({
+                title: '请登录后操作',
+                icon:'none'
+              })
+                // wx.switchTab({
+                //   url: 'pages/personalCenter/personalCenter'
+                // })
             }
+          
           
             break;
       
@@ -133,6 +147,49 @@ Page({
 
    
   },
+
+     //收藏音频
+     collectAudio(){
+      let param = {
+        id:wx.getStorageSync('songInfo').id
+      }
+      utils.PLAYHISTORYGET(param,utils.audioCollect,res=>{
+        console.log('收藏音频:',res)
+        if(res.data.status == 200 && res.data.errmsg == 'ok'){
+          this.setData({
+            existed:true
+          })
+          wx.showToast({
+            title: '音频订阅成功',
+            icon:'none'
+          })
+         
+        }else{
+  
+        }
+      } )
+    },
+    //取消音频收藏
+    cancelAudioCollect(){
+      let param = {
+        id:wx.getStorageSync('songInfo').id
+      }
+      utils.PLAYHISTORYGET(param,utils.audioCancelCollect,res=>{
+        console.log('取消音频收藏:',res)
+        if(res.data.status == 200 && res.data.errmsg == 'ok'){
+          this.setData({
+            existed:false
+          })
+          wx.showToast({
+            title: '音频取消订阅成功',
+            icon:'none'
+          })
+         
+        }else{
+  
+        }
+      } )
+    },
   // 上一首
   pre() {
     let loopType = wx.getStorageSync('loopType')

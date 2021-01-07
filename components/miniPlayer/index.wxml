@@ -20,3 +20,4 @@
   </view>
   <view catchtap="playInfo" style="flex: 1;height: 100%"></view>
 </view>
+<log></log>

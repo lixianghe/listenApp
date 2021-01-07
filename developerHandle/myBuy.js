@@ -18,28 +18,28 @@
     })
  */
 const app = getApp()
-const { showData } = require('../utils/httpOpt/localData')
-import { bought } from '../utils/httpOpt/api'
+
+import utils from '../utils/util'
 
 module.exports = {
   data: {
     info: [],
     showModal: false,
-    labels: {
-      show: true,
-      data: [{
-        name: '专辑',
-        value: 'album'
-      },
-      {
-        name: '故事',
-        value: 'media'
-      }],
-    },
+    // labels: {
+    //   show: true,
+    //   data: [{
+    //     name: '专辑',
+    //     value: 'album'
+    //   },
+    //   {
+    //     name: '故事',
+    //     value: 'media'
+    //   }],
+    // },
     req: false  // 数据请求完毕为true
   },
   onLoad(options) {   
-    this._getList('专辑')
+    this._myBuy()
   },
   onReady() {
 
@@ -78,13 +78,43 @@ module.exports = {
   //我购买的
   _myBuy(){
     let param = {
-      // code:this.data.code,
-      // appid:utils.appId
-    }
-    utils.GET(param,utils.fromCodegetOpenid,res=>{
-      console.log('我购买的:',res)
-
-    })
+     
+     }
+     utils.LIKEGET(param,utils.userBuy,res=>{
+       console.log('我的已经购买:',res)
+       if(res.data.items.length > 0 && res.statusCode == 200){
+         // item.title = item.mediaName                               // 歌曲名称
+         // item.id = item.mediaId                                    // 歌曲Id
+         // item.src = item.coverUrl                                  // 歌曲的封面
+         // item.contentType = 'album'                                // 类别（例如专辑或歌曲）
+         // item.isVip = true                                         // 是否是会员
+         let laterArr = []
+         for(let i = 0;i <res.data.items.length;i++ ){
+           console.log('---------',i)
+           laterArr.push({
+             title:res.data.items[i].title,
+             id:res.data.items[i].id,
+             src:res.data.items[i].cover.middle.url,
+             contentType:res.data.items[i].kind,
+             isVip:wx.getStorageInfoSync('USERINFO').is_vip,
+            //  lastUpdate:res.data.items[i].last_updated_track_id
+           })
+         }
+           this.setData({
+             req: true,
+             info:laterArr
+           })
+           app.log('info:',this.data.info)
+         
+        
+ 
+       }else{
+         this.setData({
+           showModal: true
+         })
+       }
+ 
+     } )
     
   },
   _getList(name) {

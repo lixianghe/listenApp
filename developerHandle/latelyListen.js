@@ -106,8 +106,6 @@ module.exports = {
         // item.isVip = true                                         // 是否是会员
         let laterArr = []
         for(let i = 0;i <res.data.items.length;i++ ){
-          
-          
           console.log('---------',i)
           if( !res.data.items[i].track ||res.data.items[i].track== null ||  res.data.items[i].track.played_secs== null){
             res.data.items[i].track =new Object()
@@ -126,8 +124,6 @@ module.exports = {
 
           })
         }
-         
-   
           this.setData({
             req: true,
             info:laterArr
@@ -137,7 +133,9 @@ module.exports = {
        
 
       }else{
-
+        this.setData({
+          showModal: true
+        })
       }
 
     })

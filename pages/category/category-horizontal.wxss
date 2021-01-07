@@ -88,6 +88,16 @@
   color: "#bebebe";
   border-radius: 5.5vh;
 }
+.label-view .vip {
+  border-radius: 0.89vh;
+  font-size: 4vh;
+  display: inline-block;
+  margin-right: 1.81vh;
+  width: 8vh;
+  text-align: center;
+  height: 5vh;
+  line-height: 5vh;
+}
 .label-view .titleBg {
   padding: 2vh 1vh;
   margin-right: 5vh;

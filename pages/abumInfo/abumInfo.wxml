@@ -40,9 +40,10 @@
         <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
         
         <text wx:else>{{(pageNo-1) * pageSize + index + 1}}</text>
+        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:{{mainColor}};border: 1px solid {{mainColor}};width:46px;text-align:center;line-height:7vh;height:7vh" wx:if="{{item.feeType }}">试听</text>
+
         <text>{{item.title}}</text>
         <!-- <text class="playCount">{{m1.filterNum(item.playCount)}}</text> -->
-        <text class="audition" style="color:{{mainColor}};border: 1px solid {{mainColor}}" wx:if="{{item.feeType === '01'}}">试听</text>
         <text>{{item.dt}}</text>
       </view>
       <view wx-if="{{showLoadEnd}}" class="loading">加载中...</view>
@@ -98,3 +99,4 @@
 <selectWorks id="selectWorks" bindchangeWords="changeWords" selected="{{selected}}" pageSize="{{pageSize}}"> </selectWorks>
 <mini-player id="miniPlayer" songInfo="{{songInfo}}" bindcurrent="changeCurrent" bindsetPlaying="setPlaying"></mini-player>
 <bgConfirm id="bgConfirm" msg="{{msg}}" confirm="确定" cancel=""></bgConfirm>
+<log></log>

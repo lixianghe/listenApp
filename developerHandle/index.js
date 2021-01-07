@@ -36,6 +36,7 @@
  */
 const app = getApp()
 import utils from '../utils/util'
+// import { getMedia } from '../../developerHandle/playInfo'
 
 module.exports = {
   data: {
@@ -77,6 +78,9 @@ module.exports = {
     // 频道列表，内容列表数据标志变量
     reqS: true,
     reqL: false,
+    canplay:[],
+    audioManager: null
+
   },
   // 页面后台数据(不参与渲染)
   pageData: {
@@ -92,13 +96,25 @@ module.exports = {
   },
   onLoad(options) {
     // 首页数据
-     this._swiperData()
-     this._mediaArrData()
+    console.log('index---onLoad:')
+    app.log('index---onLoad:')
+   
+  app.goAuthGetToken().then((res) => {
+    app.log('res:',res)
+ 
+  this._swiperData()
+  this._mediaArrData()
+});
+   
     //  this._getList()
   },
   onReady() {
 
   },
+  like() {
+    wx.navigateTo({ url: '../like/like' })
+  },
+ 
   selectTap(e) {
     const index = e.currentTarget.dataset.index
     const name = e.currentTarget.dataset.name
@@ -120,7 +136,7 @@ module.exports = {
       'scope':0
     }
     utils.GET(param,utils.indexBanners,res=>{
-      console.log('首页banners数据:',res)
+      app.log('首页banners数据:',res)
       if(res.data.banners.length >0 && res.statusCode == 200){
         this.setData({
           swiperArr:res.data.banners
@@ -131,13 +147,81 @@ module.exports = {
      
 
   },
+  clickHadle(e){
+  console.log('播放全部专辑id',e.detail.typeid)
+  let albumid = e.detail.typeid
+  // this.getAlbumDetails(albumid)
+  wx.wx.setStorageSync('playing', false)
+
+  this.getAllList(albumid)
+
+},
+
+  // 获取所有的播放列表
+   getAllList(albumid) {
+    this.data.canplay = []
+    // 假设allList是canplay，真实情况根据接口来
+    console.log('专辑id:',albumid)
+    let param={
+      'limit': 15,
+      'offset': 0,
+      'sort': "asc"
+    }
+    utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
+      console.log('专辑列表所有数据:',res)
+       if(res.data && res.statusCode == 200){
+        
+         for (let item of res.data.items) {
+           this.data.canplay.push({
+            title :item.title ,                            // 歌曲名称
+            id : item.id  ,                                  // 歌曲Id
+            dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
+            coverImgUrl :item.image.url ,                         // 歌曲的封面
+            src:item.play_info.play_64.url,
+            feeType:item.is_vip_free 
+           })
+         }
+         this.setData({
+          canplay:this.data.canplay
+
+         })
+         wx.setStorageSync('canplay', this.data.canplay)
+         wx.setStorageSync('allList', this.data.canplay)
+         //minibar  播放
+
+         app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
+         app.globalData.songInfo = app.globalData.canplay[0]
+         this.initAudioManager(this.data.canplay)
+         this.selectComponent('#miniPlayer').toggle()
+        //  this.selectComponent('#miniPlayer').setOnShow()
+        //  this.selectComponent('#miniPlayer').watchPlay()
+
+       }
+
+    })
+  },
+   // 初始化 BackgroundAudioManager
+   initAudioManager(list) {
+    this.audioManager = wx.getBackgroundAudioManager()
+    this.audioManager.playInfo = { playList: list }
+  },
+
+// 播放时间格式化
+formatMusicTime(time) {
+  let m = parseInt(time / 60);
+  let s = parseInt(time % 60);
+  m = m < 10 ? '0' + m : m;
+  s = s < 10 ? '0' + s : s;
+  return m + ':' + s
+},
   //首页音频列表
   _mediaArrData(){
+    wx.wx.setStorageSync('playing', true)
     let param = {
       'limit': 20
     }
     utils.GET(param,utils.indexMediaArr,res=>{
-      console.log('首页音频数据:',res)
+      app.log('首页音频数据:',res)
       if(res.data.items.length >0 && res.statusCode == 200){
         // id: 962,
         // title: "内容标题1",
@@ -157,92 +241,37 @@ module.exports = {
 
           })
         }  
-        // console.log('arr',mediaArr)
+        // app.log('arr',mediaArr)
         this.setData({
           reqL: true,
           info: mediaArr
         })
+        this.getAllList(this.data.info[0].id)
       }
 
     })
     
 
   },
-  _getList(name) {
-    setTimeout(() => {
-      wx.hideLoading()
-      let data = [{
-        id: 958,
-        title: "内容标题1",
-        src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",
-        contentType: "album",
-        count: 17,
-        isVip: true
-      },
-      {
-        id: 959,
-        title: "内容标题2",
-        src: "https://cdn.kaishuhezi.com/kstory/ablum/image/f20dda35-d945-4ce0-99fb-e59db62ac7c9_info_w=450&h=450.jpg",
-        contentType: "album",
-        count: 13,
-        isVip: true
-      },
-      {
-        id: 960,
-        title: "内容标题3",
-        src:  "https://cdn.kaishuhezi.com/kstory/ablum/image/7b0fe07a-e036-4d93-a8ab-bf6ad2b5a390_info_w=450&h=450.jpg",
-        contentType: "album",
-        count: 10,
-        isVip: true
-      },
-      {
-        id: 961,
-        title: "内容标题4",
-        src: "https://cdn.kaishuhezi.com/kstory/ablum/image/0816edeb-f8b0-4894-91ad-ab64e1b72549_info_w=450&h=450.jpg",
-        contentType: "album",
-        count: 19,
-        isVip: false
-
-      },
-    
-      {
-        id: 962,
-        title: "内容标题1",
-        src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
-        contentType: "media",
-        count: 0,
-        isVip: false
-      }]
-      let info = data.map(item => {
-        //  item.title = `${name}-${item.title}`
-        // item.title = item.title
-
-        return item
-      })
-      this.setData({
-        reqL: true,
-        info: info
-      })
-    }, 500)
-  },
+ 
 
    //轮播图的切换事件 
 //  swiperChange: function (e) {
-// console.log('轮播图的切换事件:',e.detail.current)
+// app.log('轮播图的切换事件:',e.detail.current)
 //   this.setData({
 //   swiperCurrent: e.detail.current
 //   })
 //   },
   //点击指示点切换 
   chuangEvent: function (e) {
-    console.log('点击指示点切换:',e)
+    app.log('点击指示点切换:',e)
 
   this.setData({
   swiperCurrent: e.currentTarget.id
   })
   },
   bannerClick(e){
-    console.log('banner切换:',e.currentTarget.dataset.item)
+    app.log('banner切换:',e.currentTarget.dataset.item)
     let item = e.currentTarget.dataset.item
     let id = item.banner_content_id
     wx.navigateTo({
@@ -254,13 +283,15 @@ module.exports = {
   // 跳转到快捷入口页面
   tolatelyListen(e) {
     let page = e.currentTarget.dataset.page
-    wx.navigateTo({
-      url: `../${page}/${page}`
-    })
+    // wx.navigateTo({
+    //   url: `../${page}/${page}`
+    // })
+    wx.navigateTo({ 
+      url: '../latelyListen/latelyListen' })
   },
   // 跳转到播放界面
   linkAbumInfo(e) {
-    console.log('专辑列表')
+    app.log('专辑列表')
 
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src

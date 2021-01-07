@@ -34,7 +34,7 @@
     <image src="../../images/modal_close.png" />
   </view>
   <view class="info">
-    暂时还没有内容哦，请去收藏喜欢的故事吧
+    暂时还没有内容哦，请去购买喜欢的专辑吧
   </view>
   <button bindtap="close">确定</button>
 </view>

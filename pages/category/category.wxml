@@ -17,6 +17,7 @@
         <view class="label-view {{ isFixed ? 'fixeds' : 'absolutes' }}" wx:if="{{reqS}}">
           <view class="title" wx:for="{{labels.data}}" wx:key="index" style="color: {{index === currentTap ? mainColor : '#bebebe'}}" 
             data-index="{{index}}"  data-groupid="{{item.id}}" data-name="{{item.name}}" bindtap="selectTap">
+            <text class="vip" wx:if="{{item.isVip}}" style="background-color:{{mainColor}}">VIP</text>
             <text>{{item.name}}</text>
           </view>
         </view>

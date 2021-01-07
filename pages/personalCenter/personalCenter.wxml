@@ -14,10 +14,10 @@
       <view class="adminCenter" wx:if="{{!isLogin}}">
         <view class="adminCenterZwdl">暂未登录</view>
         <view class="adminCenterDetail">请登录后查看详情</view>
-        <view class="adminBtnOut" bindtap="loginIn" data-state="login" style="background-color: {{mainColor}}"
-          wx:if="{{showWxLogin}}">立即登录</view>
+        <!-- <view class="adminBtnOut" bindtap="loginIn" data-state="login" style="background-color: {{mainColor}}"
+          wx:if="{{showWxLogin}}">立即登录</view> -->
         <button    open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="adminBtnOut" style="background-color: {{mainColor}}"
-          wx:if="{{!showWxLogin}}">用户授权</button>
+          wx:if="{{showWxLogin}}">授权登录</button>
       </view>
     </view>
 

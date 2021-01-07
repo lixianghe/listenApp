@@ -66,7 +66,7 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    this.goAuthGetToken()
+    // this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
     // 判断playInfo页面样式，因为这里最快执行所以放在这
@@ -256,99 +256,81 @@ App({
   },
 
     // 获得token
-   goAuthGetToken() {
-     var that = this
-    var isLogin = wx.getStorageSync('USERINFO')
-    var Token = wx.getStorageSync('TOKEN')
-    var canUseToken
-    if(isLogin){
-      if (Token && (+new Date() < Token.deadline) && Token.isLogin) {
-        canUseToken = token
-      } else {
-       //刷新token
-       let param = {
-        client_id: utils.APP_KEY,
-        client_secret:utils.APP_SECRET,
-        device_id: utils.getDeviceId(),
-        grant_type:"refresh_token",
-        refresh_token: wx.getStorageSync('TOKEN').access_token,
-        redirect_uri: utils.baseUrl,
-       }
-       let sig = utils.calcuSig(param, utils.APP_SECRET);
-       let params = { ...param, sig }
-       console.log('sig:',sig)
-       console.log('params:',params)
+ goAuthGetToken() {
+   var that = this
+     return new Promise(function (resolve, reject) {
+      var isLogin = wx.getStorageSync('USERINFO')
+      var Token = wx.getStorageSync('TOKEN')
+      var canUseToken
+      console.log('-------islogin',isLogin)
+      if(isLogin ){
+        that.log('-------')
+        if (Token && (+new Date() < Token.deadline) && Token.isLogin) {
+          canUseToken = token
+          resolve(canUseToken)
+        } else {
+          that.log('-------')
+          that.getToken(resolve, reject)
+
+      
+        }
     
-       let header ={
-        'xm-sign':encrypt(Date.now()),
-        'content-type': 'application/x-www-form-urlencoded',
-       }
-       console.log('header:',header)
-       wx.request({
-        url:utils.baseUrl + 'oauth2/refresh_token',
-        method:"POST",
-        data:params,
-         header:header,
-        success: function(res) {
-          console.log("刷新access_token----success--", res)   
-          res.data.deadline = +new Date() + (res.data.expires_in * 1000);
-          console.log("失效时间", res.data.deadline)   
-          canUseToken = res.data
-          wx.setStorageSync('TOKEN', res.data)
-        },
-        fail: function(err) {
-          console.log("刷新token---fail--",err)  
-        },
-      });
-    
+      }else{
+        that.getToken(resolve, reject)
       }
+    // return canUseToken
+
+     })
+
+   
+      
+   },
+    getToken(resolve, reject){
+      this.log("APP_KEY--",  utils.APP_KEY)
+      this.log("deviceid--",  utils.getDeviceId())
+       this.log("nonce--",  utils.generateRandom())
   
-    }else{
-    console.log("APP_KEY--",  utils.APP_KEY)
-    console.log("deviceid--",  utils.getDeviceId())
-     console.log("nonce--",  utils.generateRandom())
-
-   let param = {
-    client_id: utils.APP_KEY,
-    device_id: utils.getDeviceId(),
-    grant_type: "client_credentials",
-    nonce: utils.generateRandom(),
-    timestamp: +new Date(),
-   }
-   let sig = utils.calcuSig(param, utils.APP_SECRET);
-   let params = {
-    ...param,
-      sig
-   }
-   console.log('sig:',sig)
-   console.log('params:',params)
-
-   let header ={
-    'xm-sign':encrypt(Date.now()),
-    'content-type': 'application/x-www-form-urlencoded',
-   }
-   console.log('header:',header)
-    wx.request({
-      url:utils.baseUrl + 'oauth2/secure_access_token',
+     let param = {
+      client_id: utils.APP_KEY,
+      device_id: utils.getDeviceId(),
+      grant_type: "client_credentials",
+      nonce: utils.generateRandom(),
+      timestamp: +new Date(),
+     }
+     let sig = utils.calcuSig(param, utils.APP_SECRET);
+     let params = {
+      ...param,
+        sig
+     }
+     console.log('sig:',sig)
+     console.log('params:',params)
+     let header ={
+      'xm-sign':encrypt(Date.now()),
+      'content-type': 'application/x-www-form-urlencoded',
+     }
+     console.log('header:',header)
+      wx.request({
+        url:utils.baseUrl + 'oauth2/secure_access_token',
       method:"POST",
       data:params,
        header:header,
-      success: function(res) {
-        that.log("access_token----success--", res)
-        console.log("access_token----success--", res)   
-        res.data.deadline = +new Date() + (res.data.expires_in * 1000);
-        console.log("失效时间", res.data.deadline)   
-        canUseToken = res.data
-        wx.setStorageSync('TOKEN', res.data)
-      },
-      fail: function(err) {
-        console.log("access_token---fail--",err)  
-      },
-    });
+        success: res => {
+          
+          this.log("access_token----success--", res)   
+          res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+          console.log("失效时间", res.data.deadline)   
+          // canUseToken = res.data
+          resolve(res.data)
+          wx.setStorageSync('TOKEN', res.data)
+
+        },
+        fail: err => {
+          reject(err.data)
+        }
+      })
+    
   
-  }
-  return canUseToken
-      
+
    },
  
   uuid() {
@@ -366,21 +348,21 @@ App({
       if(typeof e == 'object'){
         try{
           if(e===null){
-            this.logText += 'null'
+            console.logText += 'null'
           } else if(e.stack){
-            this.logText += e.stack
+            console.logText += e.stack
           } else{
-            this.logText += JSON.stringify(e)
+            console.logText += JSON.stringify(e)
           }
         }catch(err){
-          this.logText += err.stack
+          console.logText += err.stack
         }
       } else {
-        this.logText += e
+        console.logText += e
       }
-      this.logText += '\n'
+      console.logText += '\n'
     }
-    this.logText += '########################\n'
+    console.logText += '########################\n'
   },
   //全局上传播放行为
   upLoadPlayinfo:function(){
@@ -420,7 +402,7 @@ App({
           // this.initTabbar()
         },
         fail: (res) => {
-          this.log('配色加载失败')
+          console.log('配色加载失败')
           this.sysInfo.backgroundColor = this.sysInfo.defaultBgColor
           this.globalData.themeLoaded = true
           // this.initTabbar()
@@ -477,20 +459,20 @@ App({
       if(typeof e == 'object'){
         try{
           if(e===null){
-            this.logText += 'null'
+            console.logText += 'null'
           } else if(e.stack){
-            this.logText += e.stack
+            console.logText += e.stack
           } else{
-            this.logText += JSON.stringify(e)
+            console.logText += JSON.stringify(e)
           }
         }catch(err){
-          this.logText += err.stack
+          console.logText += err.stack
         }
       } else {
-        this.logText += e
+        console.logText += e
       }
-      this.logText += '\n'
+      console.logText += '\n'
     }
-    this.logText += '########################\n'
+    console.logText += '########################\n'
   }
 })

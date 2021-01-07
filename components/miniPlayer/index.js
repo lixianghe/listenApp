@@ -98,13 +98,24 @@ Component({
               this.next()      
             break;
           case 'like':
-            if(this.data.existed){
-              console.log('取消收藏')
-              this.cancelAudioCollect()
+            if(wx.getStorageSync('USERINFO')){
+              if(this.data.existed){
+                console.log('取消收藏')
+                this.cancelAudioCollect()
+              }else{
+                console.log('添加收藏')
+                this.collectAudio()
+              }
             }else{
-              console.log('添加收藏')
-              this.collectAudio()
+              wx.showToast({
+                title: '请登录后操作',
+                icon:'none'
+              })
+              // wx.switchTab({
+              //   url: '/pages/personalCenter/personalCenter'
+              // })
             }
+           
           
             break;
       
@@ -125,7 +136,7 @@ Component({
             existed:true
           })
           wx.showToast({
-            title: '专辑订阅成功',
+            title: '音频订阅成功',
             icon:'none'
           })
          
@@ -143,10 +154,10 @@ Component({
         console.log('取消音频收藏:',res)
         if(res.data.status == 200 && res.data.errmsg == 'ok'){
           this.setData({
-            existed:true
+            existed:false
           })
           wx.showToast({
-            title: '专辑订阅成功',
+            title: '音频取消订阅成功',
             icon:'none'
           })
          

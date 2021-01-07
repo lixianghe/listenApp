@@ -58,9 +58,11 @@ Page({
       })
       
     }, 800);
+    this.getCategoryAlbums()
   },
   onShow() {
-    this.getCategoryAlbums()
+   
+   
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()
   },
@@ -76,6 +78,7 @@ Page({
           let obj = Object()
           obj.id =  res.data.items[i].id
           obj.name = res.data.items[i].category_name
+         
           categoryArr.push(obj)
           
         }
@@ -114,7 +117,7 @@ Page({
         src:item.pic,
         contentType:item.materialType,
         count:item.playsCount,
-         isVip:item.isVipFree
+        isVip : item.vipFreeType == 1?true:false
 
       })
     }  

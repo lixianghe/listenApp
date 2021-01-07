@@ -4,6 +4,6 @@
   "component": true,
   "disableScroll": true,
   "usingComponents": {
-
+    "log": "/components/log/log"
   }
 }

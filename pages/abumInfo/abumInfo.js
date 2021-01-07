@@ -120,7 +120,7 @@ Page({
     let param = {
       id:this.data.optionId
     }
-    utils.PLAYRECORDPOST(param,utils.albumCollect,res=>{
+    utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
       console.log('收藏专辑:',res)
       if(res.data.status == 200 && res.data.errmsg == 'ok'){
         this.setData({
@@ -143,7 +143,7 @@ Page({
       id:this.data.optionId
     }
 
-    utils.PLAYRECORDPOST(param,utils.cancelAlbumCollect,res=>{
+    utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
       console.log('取消收藏专辑:',res)
       if(res.data.status == 200 && res.data.errmsg == 'ok'){
         this.setData({
@@ -179,7 +179,8 @@ Page({
               id : item.id  ,                                  // 歌曲Id
               dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
               coverImgUrl :item.image.url ,                         // 歌曲的封面
-              src:item.play_info.play_64.url
+              src:item.play_info.play_64.url,
+              feeType:item.is_vip_free 
              })
            }
            this.setData({
@@ -300,6 +301,12 @@ Page({
       data: canplay,
     })
   },
+
+   // 初始化 BackgroundAudioManager
+   initAudioManager(list) {
+    this.audioManager = wx.getBackgroundAudioManager()
+    this.audioManager.playInfo = { playList: list }
+  },
   
   // 播放全部
   async playAll() {
@@ -348,11 +355,7 @@ Page({
       },
     })
   },
-  // 初始化 BackgroundAudioManager
-  initAudioManager(list) {
-    this.audioManager = wx.getBackgroundAudioManager()
-    this.audioManager.playInfo = { playList: list }
-  },
+ 
   // 列表滚动事件
   listScroll: tool.debounce(async function (res) {
     console.log(res)

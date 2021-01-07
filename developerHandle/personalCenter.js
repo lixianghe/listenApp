@@ -101,11 +101,10 @@ module.exports = {
     if (!e.detail.iv) { 
       //用户点击拒绝
       console.vlog('用户未授权')
-    
      } else {
-        // wx.showLoading({
-        //   title: '登录中...',
-        // })
+        wx.showLoading({
+          title: '登录中...',
+        })
          app.log('--openId', this.data.openId)
         if(this.data.openId){
           //userInfo/mobileLoginNew
@@ -113,10 +112,8 @@ module.exports = {
           // let param = {
           //   iv: e.detail.iv,
           //   encryptedData:e.detail.encryptedData
-          // }
-         
-          this.getUserInfo()
-             
+          // }    
+          this.getUserInfo()     
         }else{
           //userInfo/codeLoginNew
            app.log('通过code获取openid')
@@ -124,7 +121,6 @@ module.exports = {
            this.fromCodeGetOpenid()
         }
       }
-   
   },
   fromCodeGetOpenid:function(){
     let param = {
@@ -154,27 +150,27 @@ module.exports = {
   //刷新token
   refreshToken(){
     let param ={
-
     }
     utils.REFRESHTOKENPOST(param,utils.refreshToken,res=>{
       app.log('刷新Token:',res)
       if(res.data && res.statusCode == 200){
+        res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+        console.log("失效时间", res.data.deadline)   
         res.data.isLogin = true
         wx.setStorageSync('TOKEN', res.data)
         this.getUserInfo()
-      }
-     
+      }  
     } )
-
   },
 
   getUserInfo(){
     let param ={
-
     }
     utils.GET(param,utils.getUserInfo,res=>{
       app.log('用户信息:',res)
+      
       if(res.data && res.statusCode == 200){
+        wx.hideLoading()
         this.setData({
           isLogin:true,
           userInfo:res.data
@@ -182,6 +178,10 @@ module.exports = {
         wx.setStorageSync('USERINFO', res.data)
 
       }else{
+        wx.showToast({
+          title: '登录失败',
+          icon:'none'
+        })
 
       }
     } )

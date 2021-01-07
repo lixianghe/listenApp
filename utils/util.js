@@ -49,6 +49,45 @@ header['content-type'] = 'application/json'
 
 }
 // GET请求
+function LIKEGET(param,url, callback) {
+  console.log('get')
+  console.log('参数', param)
+  console.log('请求URL', this.baseUrl + url)
+  let publicParams = {
+    app_key: this.APP_KEY,
+    device_id: this.getDeviceId(),
+    client_os_type: 3,
+    access_token:  wx.getStorageSync('TOKEN').access_token,
+    pack_id:'com.app.wechat',
+  };
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+  console.log('params',   params)
+ 
+let header = {}
+header['xm-sign'] = encrypt(Date.now())
+  console.log('header', header)
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: header, 
+   method: 'GET',
+   dataType: 'json',
+   success: res=> {
+      console.log('请求成功：', res);
+       callback(res)
+    
+   },
+   fail: err => {
+    // console.log('请求失败：', res);
+    callback(err)
+     wx.hideLoading()
+   }
+ })
+
+
+}
+// GET请求
 function PLAYHISTORYGET(param,url, callback) {
   console.log('PLAYHISTORYGET')
   console.log('URL',  url)
@@ -123,7 +162,6 @@ function MGET(param,url, callback) {
 // POST请求
 function PLAYRECORDPOST(param,url, callback) {
   console.log('PLAYRECORDPOST')
-
   console.log('参数', param)
   console.log('URL',  url)
   console.log('请求URL', this.baseUrl + url)
@@ -139,17 +177,6 @@ function PLAYRECORDPOST(param,url, callback) {
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
   console.log('params',   params)
-
-//  let header = {
-//    'content-type': 'x-www-form-urlencoded',
-//    // 'content-type': 'application/json',
-//    'app_key':this.APP_KEY,
-//    'device_id': this.getDeviceId(),
-//    'pack_id':'com.app.wechat',
-//    'access_token':  wx.getStorageSync('TOKEN').access_token,
-//    'sig': 'tencent-open',
-   
-//  }
 let header = {}
  header['xm-sign'] = encrypt(Date.now())
  console.log('header', header)
@@ -165,16 +192,8 @@ let header = {}
     
    },
    fail: err => {
-       console.log('请求失败:', err);
-     
+      console.log('请求失败:', err);
        callback(err)
-     // let retcode = err.errMsg == 'request:fail timeout' ? 408 : 500
-     // callback({
-     //   retcode: retcode,
-     //   retmsg: '',
-     //   data: null
-     // })
-    
      wx.hideLoading()
    }
  })
@@ -193,7 +212,7 @@ function REFRESHTOKENPOST(param,url, callback) {
         device_id: this.getDeviceId(),
         grant_type:"refresh_token",
         refresh_token: wx.getStorageSync('REFRESHTOKEN'),
-        redirect_uri: 'https://api.ximalaya.com',
+        redirect_uri: this.baseUrl,
    
   };
 
@@ -230,12 +249,9 @@ function REFRESHTOKENPOST(param,url, callback) {
 
 
 }
-
-
 // POST请求
-function POST(param,url, callback) {
+function ALBUMSUBCRIBEPOST(param,url, callback) {
   console.log('POST')
-
   console.log('参数', param)
   console.log('URL',  url)
   console.log('请求URL', this.baseUrl + url)
@@ -250,17 +266,50 @@ function POST(param,url, callback) {
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
   console.log('params',   params)
+  let header ={
+    'xm-sign':encrypt(Date.now()),
+   'content-type': 'application/x-www-form-urlencoded',
+  }
+  console.log('header:',header)
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: header,
+   method: 'POST',
+   dataType: 'json',
+   success: res=> {
+       console.log( '请求成功:', res);
+       callback(res)
+    
+   },
+   fail: err => {
+       console.log('请求失败:', err);  
+       callback(res)
+     wx.hideLoading()
+   }
+ })
 
-//  let header = {
-//    'content-type': 'x-www-form-urlencoded',
-//    // 'content-type': 'application/json',
-//    'app_key':this.APP_KEY,
-//    'device_id': this.getDeviceId(),
-//    'pack_id':'com.app.wechat',
-//    'access_token':  wx.getStorageSync('TOKEN').access_token,
-//    'sig': 'tencent-open',
-   
-//  }
+
+}
+
+
+// POST请求
+function POST(param,url, callback) {
+  console.log('POST')
+  console.log('参数', param)
+  console.log('URL',  url)
+  console.log('请求URL', this.baseUrl + url)
+  let publicParams = {
+    app_key: this.APP_KEY,
+    device_id: this.getDeviceId(),
+    client_os_type: 3,
+    access_token:  wx.getStorageSync('TOKEN').access_token,
+    pack_id:'com.app.wechat',
+  };
+
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+  console.log('params',   params)
 let header = {}
  header['xm-sign'] = encrypt(Date.now())
  console.log('header', header)
@@ -276,16 +325,8 @@ let header = {}
     
    },
    fail: err => {
-       console.log('请求失败:', err);
-     
+       console.log('请求失败:', err);  
        callback(res)
-     // let retcode = err.errMsg == 'request:fail timeout' ? 408 : 500
-     // callback({
-     //   retcode: retcode,
-     //   retmsg: '',
-     //   data: null
-     // })
-    
      wx.hideLoading()
    }
  })
@@ -536,6 +577,9 @@ module.exports = {
  audioCancelCollect:'iot/openapi-smart-device-api/favourite/cancel',
  //获取用户收藏的专辑信息
  getUserCollectAlbums:'iot/openapi-smart-device-api/subscribe/get_albums_by_uid',
+ //我的购买
+ userBuy:'iot/openapi-smart-device-api/pay/get_bought_albums_with_page',
+ 
 
 
 
@@ -555,8 +599,10 @@ module.exports = {
   GET:GET,
   MGET:MGET,
   PLAYHISTORYGET:PLAYHISTORYGET,
+  LIKEGET:LIKEGET,
   POST:POST,
   PLAYRECORDPOST:PLAYRECORDPOST,
-  REFRESHTOKENPOST:REFRESHTOKENPOST
+  REFRESHTOKENPOST:REFRESHTOKENPOST,
+  ALBUMSUBCRIBEPOST:ALBUMSUBCRIBEPOST
  
 }

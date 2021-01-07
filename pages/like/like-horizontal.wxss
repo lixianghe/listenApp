@@ -109,7 +109,7 @@
 .showInfo button {
   position: absolute;
   bottom: 8vh;
-  background: #fd8b22;
+  background: #dc5e4e;
   font-size: 5vh;
   color: #fff;
   width: 60vh;

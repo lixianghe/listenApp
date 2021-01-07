@@ -26,6 +26,7 @@ Page({
     
   },
   onLoad(options) {
+    app.log('--------------------index---onload')
     setTimeout(() => {
       wx.checkSession({
         success:(res)=> {
