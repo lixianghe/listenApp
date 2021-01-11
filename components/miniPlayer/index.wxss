@@ -1,7 +1,7 @@
 .playing-status {
   color: #fff;
   padding: 0 11vh;
-  width: 100%;
+  width: 100vw;
   height: 17.3vh;
   position: fixed;
   bottom: 0;

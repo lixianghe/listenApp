@@ -1,10 +1,9 @@
 .h .searchContent {
   overflow: auto;
   box-sizing: border-box;
-  height: 70vh;
-  padding: 0vh 9vh;
+  height: 82vh;
+  padding: 2.5vh 9vh;
   white-space: nowrap;
-  /* background:white */
 }
 .h .quickEntry{
   /* flex: 0 0 41.3vh; */
@@ -81,16 +80,16 @@
   height: 36vh;
   border-radius: 2vh;
 }
-.h .label-view {
+.label-view {
   display: flex;
   color: #fff;
   font-size: 5.5vh;
   margin-bottom: 4.89vh;
-  /* position: fixed; */
+  position: fixed;
   left: 9vh;
   top: 19vh;
 }
-.h .label-view .title {
+.label-view .title {
   padding: 2vh 1vh;
   margin-right: 5vh;
   padding: 1.81vh 5.35vh 1.5vh 5.35vh;
@@ -100,18 +99,73 @@
 .label-view .active-tap {
   color: #fa6500;
 }
-/*推荐搜索view*/
 
-.h .remindTitle{
- 
-  color: #ffffff;
-  font-size:7vh ;
-  font-weight: 550;
-  margin-top: 2.5vh;
-
-
-
+/* 卡片的样式 */
+.halbumCard {
+  /* flex: 0 0 46.6vh; */
+  width: 33.81vh;
+  display: inline-block;
+  margin-right: 7.6vh;
+  margin-top: 32vh;
+  height: 68.6vh;
+  overflow: hidden;
+  position: relative;
 }
+.halbumCard .image {
+  width: 33.81vh;
+  height: 33.81vh;
+  border-radius: 2vh;
+  vertical-align: bottom;
+}
+.halbumCard .albumTit {
+  margin-top: 2vh;
+  color: #ffffff;
+  font-size: 5.2vh;
+  box-sizing: content-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.miniView {
+  transform: translateX(0);
+  position: absolute;
+  top: 100px;
+}
+.noData {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  color: #bbb;
+  font-size: 5vh;
+}
+
+.image[focus-select=true]:before {
+  content:"";
+  position:absolute;
+  width: 100%;
+  height: 0;
+  padding: 50% 0;
+  border-radius: 2vh;
+  vertical-align: bottom;
+  box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d;
+  z-index: 666;
+}
+.input[focus-select=true]:before {
+  content:"";
+  position:absolute;
+  width: calc(100% - 140px);
+  height: 100%;
+  vertical-align: bottom;
+  box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d;
+  z-index: 666;
+}
+button[focus-select=true]{
+  box-shadow: inset 0px 0px 0px 4px #ff5100;
+}
+.label-view .title[focus-select=true] {
+  box-shadow: inset 0px 0px 0px 4px #ff5100;
+}
+
 .h .remindresultView{
   display:flex;
 flex-direction:column;
@@ -150,30 +204,13 @@ flex-wrap: wrap;
   color: white;
   opacity: 0.7;
 }
-
-/* 卡片的样式 */
-.halbumCard {
-  /* flex: 0 0 46.6vh; */
-  width: 33.81vh;
-  display: inline-block;
-  margin-right: 7.6vh;
-  /* margin-top: 32vh; */
-  height: 68.6vh;
-  overflow: hidden;
-  position: relative;
-}
-.halbumCard .image {
-  width: 33.81vh;
-  height: 33.81vh;
-  border-radius: 2vh;
-  vertical-align: bottom;
-}
-.halbumCard .albumTit {
-  margin-top: 2vh;
+.h .remindTitle{
+   
   color: #ffffff;
-  font-size: 5.2vh;
-  box-sizing: content-box;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size:7vh ;
+  font-weight: 550;
+  margin-top: 21.5vh;
+
+
+
 }

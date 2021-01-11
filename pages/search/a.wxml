@@ -1,0 +1,58 @@
+<view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
+
+  <view class="mianContent" style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
+       <view class="search" style="width: {{126 * times}}px; height: {{11 * times}}px;left: {{9 * times}}px;top:{{2.5 * times}}px">
+        <image src="../../images/search.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
+        <input type="text" value="{{keyWord}}" bindinput="search" bindfocus="focus" bindblur="blur" placeholder="请输入进行搜索"
+        style="width: {{105 * times}}px; height: {{11 * times}}px;  font-size: {{4.9 * times}}px;"/>
+        <image catchtap="clear" src="../../images/search.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
+
+      </view>
+      <button class="cancel" wx:if="{{keyWord}}" bindtap="search" 
+      style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{2.8 * times}}px;">搜索</button>
+      
+
+  </view>
+  <view wx:if="{{info.length == 0}}" style="margin-left: {{9 * times}}px;" class="remindTitle">推荐搜索</view>
+  <view class="label-view" wx:if="{{info.length>0}}" style=" margin-left: {{9 * times}}px; margin-bottom: {{3 * times}}px;  font-size: {{5.5 * times}}px;">
+        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" wx:key="index" data-index="{{index}}" catchtap="selectTap" 
+        style="margin-right: {{5 * times}}px; padding: {{1.2 * times}}px {{5.1 * times}}px; border-radius: {{5.5 * times}}px;background:{{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}};color:{{index === currentTap ? '#000' : '#bebebe'}}">
+          <text>{{item.label}}</text>
+        </view>
+   </view>
+  <scroll-view  style="padding: {{0.2 * times}}px {{9 * times}}px;  margin-top:0vh" class="searchContent" scroll-x="true" scroll-y="false"  lower-threshold="1920" bindscrolltolower="getLayoutData">
+   
+       <view wx:if="{{info.length == 0}}" class="remindresultView">
+         <view catchtap="searchItemClick" item='item'  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">
+           <view class="item-num"> {{item.num}}</view>
+           <view class="item-text">{{item.text}}</view>
+          </view>
+
+       </view>
+
+
+      <!-- 页面盒子 -->
+      <view 
+        wx:if="{{info.length>0}}"
+        wx:for="{{info}}"
+        wx:key="index"
+        data-id="{{item.id}}"
+        data-title="{{item.title}}"
+        data-src="{{item.coverImgUrl}}"
+        data-contentype="{{item.contentType}}"
+        bindtap="linkAbumInfo"
+        class="{{screen}}albumCard"
+        style="width: {{33.7 * times}}px; height: {{68.6 * times}}px; ">
+        <image class="image" src="{{item.coverImgUrl}}" 
+        style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
+        <view class="albumTit" style=" margin-top: {{2 * times}}px; font-size: {{4 * times}}px;">
+          <text>{{ item.title }}</text>
+        </view>
+      </view>
+    <!-- 页面盒子 -->
+  </scroll-view>
+  <mini-player wx:if="{{showMInibar}}" id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
+</view>
+
+
+
