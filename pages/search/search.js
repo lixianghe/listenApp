@@ -8,7 +8,7 @@ const app = getApp()
 Page({
   //  mixins: [searchMixin],
   data: {
-    
+    keyWord:'',
     screen: app.globalData.screen,
     noContent: '/images/nullContent.png',
     info: [],

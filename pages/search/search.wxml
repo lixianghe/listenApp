@@ -9,12 +9,14 @@
         style="width: {{105 * times}}px; height: {{11 * times}}px;  font-size: {{4.9 * times}}px;"
         data-focusindex="2"
         bindtap="aa"/>
+        <image wx:if="{{keyWord != ''}}" catchtap="clear" src="../../images/modal_close.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
+
       </view>
-      <button class="cancel" wx:if="{{keyWord}}" bindtap="cancel"
+      <button class="cancel" wx:if="{{keyWord}}" bindtap="search"
       data-focusindex="2" 
-      style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{4.6 * times}}px;">取消</button>
+      style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{4.6 * times}}px;">搜索</button>
       
-      <view wx:if="{{info.length == 0}}" style="margin-left: {{9 * times}}px;" class="remindTitle">推荐搜索</view>
+      <view wx:if="{{info.length == 0}}"  class="remindTitle">推荐搜索</view>
 
       <view class="label-view" wx:if="{{info.length>0}}" style="top: {{19.5 * times}}px; left: {{9 * times}}px; margin-bottom: {{4.89 * times}}px;  font-size: {{5.5 * times}}px;">
         <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" data-focusindex="3"  wx:key="index" data-index="{{index}}" bindtap="selectTap" 

@@ -45,6 +45,7 @@
   margin-left: 0;
   width:130vh;
   height: 50vh;
+  border-radius: 2vh;
   /* background: blue; */
 }
 .swipe-image{
