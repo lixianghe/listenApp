@@ -165,38 +165,40 @@ Page({
   },
     // 获取所有的播放列表
     getAllList(albumid) {
-      // 假设allList是canplay，真实情况根据接口来
-      console.log('专辑id:',albumid)
-      let param={
-        'limit': this.data.pageSize,
-        'offset': this.data.pageNub*this.data.pageSize,
-        'sort': "asc"
-      }
-      utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
-        console.log('专辑列表所有数据:',res)
-         if(res.data && res.statusCode == 200){
-          
-           for (let item of res.data.items) {
-             this.data.canplay.push({
-              title :item.title ,                            // 歌曲名称
-              id : item.id  ,                                  // 歌曲Id
-              dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
-              coverImgUrl :item.image.url ,                         // 歌曲的封面
-              src:item.play_info.play_64.url,
-              feeType:item.is_vip_free 
+      return new Promise((resolve, reject) => {
+        // 假设allList是canplay，真实情况根据接口来
+        console.log('专辑id:',albumid)
+        let param={
+          'limit': this.data.pageSize,
+          'offset': this.data.pageNub*this.data.pageSize,
+          'sort': "asc"
+        }
+        utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
+          console.log('专辑列表所有数据:',res)
+           if(res.data && res.statusCode == 200){
+
+             for (let item of res.data.items) {
+               this.data.canplay.push({
+                title :item.title ,                            // 歌曲名称
+                id : item.id  ,                                  // 歌曲Id
+                dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
+                coverImgUrl :item.image.url ,                         // 歌曲的封面
+                src:item.play_info.play_64.url,
+                feeType:item.is_vip_free 
+               })
+             }
+             this.setData({
+               total:res.data.total,
+              canplay:this.data.canplay
+  
              })
+             wx.setStorageSync('canplay', this.data.canplay)
+             wx.setStorageSync('allList', this.data.canplay)
+
+
            }
-           this.setData({
-             total:res.data.total,
-            canplay:this.data.canplay
-  
-           })
-           wx.setStorageSync('canplay', this.data.canplay)
-           wx.setStorageSync('allList', this.data.canplay)
-
-
-         }
-  
+           resolve()
+        })
       })
       // wx.setStorageSync('allList', allList)
     },
@@ -266,15 +268,21 @@ Page({
       selected:e.detail.pageNum
     })
     // this.listScroll()
-    this.getAllList(this.data.optionId)
+    this.getAllList(this.data.optionId).then(() => {
+      this.setData({
+        scrollTop:0.985 * this.data.pageNub*this.data.tenHeight,
+      })
+    })
     console.log('pageNum',this.data.pageNub)
     console.log('tenHeight',this.data.tenHeight)
 
-    this.setData({
-      scrollTop:this.data.pageNub*this.data.tenHeight,
-    })
+    // setTimeout(() => {
+    //   this.setData({
+    //     scrollTop:this.data.pageNub*this.data.tenHeight,
+    //   })
+    // }, 1000)
 
-    console.log('scrollTop',this.data.scrollTop)
+    console.log('scrollTop-------------',this.data.scrollTop)
 
     this.setCanplay(this.data.canplay)
   },
