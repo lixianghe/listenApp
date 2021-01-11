@@ -154,7 +154,7 @@ App({
     await getMedia(params, that)
     loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
     this.globalData.playBeginAt = new Date().getTime();
-    this.upLoadPlayinfo()
+    // this.upLoadPlayinfo()
   },
   // 根据循环模式设置播放列表
   setList(loopType, list, cutFlag = false){
@@ -376,7 +376,7 @@ App({
     } 
       console.log('播放行为数据:',playRecords)
       let param = {
-        track_records:JSON.stringify(playRecords)
+        track_records:JSON.stringify([playRecords])
       }
       utils.PLAYRECORDPOST(param,utils.upLoadPlayInfo,res=>{
         console.log('上传播放信息:',res)

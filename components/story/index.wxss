@@ -86,6 +86,6 @@
   width: 13.6vh;
   height: 13.6vh;
  border-radius: 50%;
-  background: red;
+  /* background: red; */
  
 }

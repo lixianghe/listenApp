@@ -151,7 +151,7 @@ module.exports = {
   console.log('播放全部专辑id',e.detail.typeid)
   let albumid = e.detail.typeid
   // this.getAlbumDetails(albumid)
-  wx.wx.setStorageSync('playing', false)
+  wx.setStorageSync('playing', true)
 
   this.getAllList(albumid)
 
@@ -192,10 +192,14 @@ module.exports = {
          app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
          app.globalData.songInfo = app.globalData.canplay[0]
          this.initAudioManager(this.data.canplay)
-         this.selectComponent('#miniPlayer').toggle()
-        //  this.selectComponent('#miniPlayer').setOnShow()
-        //  this.selectComponent('#miniPlayer').watchPlay()
+         wx.setStorageSync('playing', true)
 
+         console.log('playing:',wx.getStorageSync('playing'))
+           
+          
+         this.selectComponent('#miniPlayer').setOnShow()
+         this.selectComponent('#miniPlayer').watchPlay()
+         this.selectComponent('#miniPlayer').toggle()
        }
 
     })
@@ -216,19 +220,13 @@ formatMusicTime(time) {
 },
   //首页音频列表
   _mediaArrData(){
-    wx.wx.setStorageSync('playing', true)
     let param = {
       'limit': 20
     }
     utils.GET(param,utils.indexMediaArr,res=>{
       app.log('首页音频数据:',res)
       if(res.data.items.length >0 && res.statusCode == 200){
-        // id: 962,
-        // title: "内容标题1",
-        // src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
-        // contentType: "media",
-        // count: 0,
-        // isVip: false
+       
         let mediaArr = []
         for (let item of res.data.items) {
           mediaArr.push({
@@ -236,24 +234,26 @@ formatMusicTime(time) {
             title:item.album.title,
             src:item.album.cover.middle.url,
             contentType:item.album.kind,
-            count:item.album.play_count,
-             isVip:item.album.is_vip_free
+            count:utils.calculateCount(item.album.play_count) ,
+           
+             isVip:item.album.is_vip_free,
+             isHome:true
 
           })
         }  
-        // app.log('arr',mediaArr)
+         console.log('arr',mediaArr)
         this.setData({
           reqL: true,
           info: mediaArr
         })
-        this.getAllList(this.data.info[0].id)
+        // this.getAllList(this.data.info[0].id)
       }
 
     })
     
 
   },
- 
+
 
    //轮播图的切换事件 
 //  swiperChange: function (e) {
@@ -271,11 +271,12 @@ formatMusicTime(time) {
   })
   },
   bannerClick(e){
-    app.log('banner切换:',e.currentTarget.dataset.item)
+    console.log('banner切换:',e.currentTarget.dataset.item)
     let item = e.currentTarget.dataset.item
     let id = item.banner_content_id
+    let title = item.banner_content_title
     wx.navigateTo({
-       url :'../abumInfo/abumInfo?id='+id+'&routeType=album'
+       url :'../abumInfo/abumInfo?id='+id+'&routeType=album'+'&title='+title
     })
 
   },

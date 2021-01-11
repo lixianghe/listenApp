@@ -162,6 +162,7 @@ function MGET(param,url, callback) {
 // POST请求
 function PLAYRECORDPOST(param,url, callback) {
   console.log('PLAYRECORDPOST')
+
   console.log('参数', param)
   console.log('URL',  url)
   console.log('请求URL', this.baseUrl + url)
@@ -177,8 +178,10 @@ function PLAYRECORDPOST(param,url, callback) {
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
   console.log('params',   params)
-let header = {}
- header['xm-sign'] = encrypt(Date.now())
+let header ={
+  
+ 'content-type': 'application/x-www-form-urlencoded',
+}
  console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
@@ -520,6 +523,27 @@ function generateUUID() {
   return res
 }
 
+  //计算播放量
+ function calculateCount(count){
+    let newCount = 0
+    if(!count){
+      return newCount
+
+    }else{
+      if(count >100000000){
+        newCount = (count / 100000000).toFixed(1) + '亿'
+
+      }else if(count >10000){
+        newCount = (count / 10000).toFixed(1) + '万'
+      }else{
+        newCount = count
+      }
+      return newCount
+    }
+
+  }
+ 
+
 
 
 
@@ -596,6 +620,7 @@ module.exports = {
   getDeviceId:getDeviceId,
   generateRandom:generateRandom,
   calcuSig:calcuSig,
+  calculateCount:calculateCount,
   GET:GET,
   MGET:MGET,
   PLAYHISTORYGET:PLAYHISTORYGET,

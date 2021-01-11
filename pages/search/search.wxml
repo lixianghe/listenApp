@@ -1,6 +1,6 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
 
-  <view class="mianContent" style="width: {{126 * times}}px;  border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
+  <view class="mianContent" style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
        <view class="search" style="width: {{126 * times}}px; height: {{11 * times}}px;left: {{9 * times}}px;top:{{2.5 * times}}px">
         <image src="../../images/search.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
         <input type="text" value="{{keyWord}}" bindinput="search" bindfocus="focus" bindblur="blur" placeholder="请输入进行搜索"
@@ -12,18 +12,15 @@
       style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{2.8 * times}}px;">搜索</button>
       
 
-
-   
-
   </view>
   <view wx:if="{{info.length == 0}}" style="margin-left: {{9 * times}}px;" class="remindTitle">推荐搜索</view>
-  <view class="label-view" wx:if="{{info.length>0}}" style="top: {{16 * times}}px; margin-left: {{9 * times}}px; margin-bottom: {{3 * times}}px;  font-size: {{5.5 * times}}px;">
+  <view class="label-view" wx:if="{{info.length>0}}" style=" margin-left: {{9 * times}}px; margin-bottom: {{3 * times}}px;  font-size: {{5.5 * times}}px;">
         <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" wx:key="index" data-index="{{index}}" catchtap="selectTap" 
         style="margin-right: {{5 * times}}px; padding: {{1.2 * times}}px {{5.1 * times}}px; border-radius: {{5.5 * times}}px;background:{{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}};color:{{index === currentTap ? '#000' : '#bebebe'}}">
           <text>{{item.label}}</text>
         </view>
    </view>
-  <scroll-view  style="padding: {{0.2 * times}}px {{9 * times}}px;  margin-top:0vh" class="searchContent" scroll-x="true"   lower-threshold="1920" bindscrolltolower="getLayoutData">
+  <scroll-view  style="padding: {{0.2 * times}}px {{9 * times}}px;  margin-top:0vh" class="searchContent" scroll-x="true" scroll-y="false"  lower-threshold="1920" bindscrolltolower="getLayoutData">
    
        <view wx:if="{{info.length == 0}}" class="remindresultView">
          <view catchtap="searchItemClick" item='item'  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">

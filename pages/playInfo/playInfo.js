@@ -137,8 +137,10 @@ Page({
                 //   url: 'pages/personalCenter/personalCenter'
                 // })
             }
+            case 'more':
+
           
-          
+          this.more()
             break;
       
         default:

@@ -82,7 +82,13 @@ Component({
   methods: {
     player(e) {
       console.log(e)
-      if (!this.data.songInfo || !this.data.songInfo.title) return false
+       if (!this.data.songInfo || !this.data.songInfo.title) {
+        wx.showToast({
+          title: '请添加音频播放',
+          icon:'none'
+        })
+        return
+       }
       const type = e.currentTarget.dataset.name
       console.log('type:',type)
       switch (type) {
@@ -98,6 +104,8 @@ Component({
               this.next()      
             break;
           case 'like':
+            console.log('like')
+
             if(wx.getStorageSync('USERINFO')){
               if(this.data.existed){
                 console.log('取消收藏')
@@ -192,6 +200,7 @@ Component({
     toggle() {
       
       this.triggerEvent('setPlaying', !this.data.playing)
+      console.log('-----------------',this.data.playing)
       utils.toggleplay(this, app)
     },
     // 进入播放详情

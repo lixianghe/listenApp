@@ -96,6 +96,9 @@ Page({
   },
   //分类下所有专辑
   getALLAlbums(categoryId){
+    wx.showLoading({
+      title: '加载中...',
+    })
     let params = {
       'categoryId': categoryId,
       'excludedAlbumIds':'',
@@ -107,6 +110,7 @@ Page({
     // let date = Date.parse(new Date())
     // console.log('时间:',date)
     utils.MGET(params,utils.allAlbums,res=>{
+      wx.hideLoading()
       console.log('分类下所有专辑:',res)
   if(res.data.list.length >0 && res.statusCode == 200){
     let mediaArr = []
@@ -116,7 +120,8 @@ Page({
         title:item.title,
         src:item.pic,
         contentType:item.materialType,
-        count:item.playsCount,
+        count:utils.calculateCount(item.playsCount),
+        
         isVip : item.vipFreeType == 1?true:false
 
       })

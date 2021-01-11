@@ -1,11 +1,23 @@
+.h .topscrollview{
+  overflow: auto;
+  padding-left: 7.3vh;
+  box-sizing: border-box;
+  height: 16vh;
+  padding: 3vh 0 0 0;
+  
+  white-space: nowrap;
+}
+
+
 .h .index {
   overflow: auto;
   padding-left: 7.3vh;
   box-sizing: border-box;
   height: 82vh;
-  padding: 3vh 0;
+  padding:  0;
   white-space: nowrap;
 }
+
 
 .h .latelyListen>image {
   width: 19.8vh;

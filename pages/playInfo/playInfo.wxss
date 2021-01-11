@@ -233,6 +233,7 @@
   font-size: 4.9vh;
   margin-right: 2.4vh;
   float: left;
+  
 }
 .playList .songList text:last-child {
   float: right;

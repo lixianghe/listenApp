@@ -55,7 +55,10 @@ Page({
   },
   audioManager: null,
   ctx: null,
-  onReady() {},
+  onReady() {
+
+  },
+
   async onLoad(options) {
     let albumid = options.id
     this.data.optionId = albumid
@@ -184,6 +187,7 @@ Page({
              })
            }
            this.setData({
+             total:res.data.total,
             canplay:this.data.canplay
   
            })
@@ -263,10 +267,15 @@ Page({
     })
     // this.listScroll()
     this.getAllList(this.data.optionId)
-    this.setData({
-      scrollTop: e.detail.pageNum*this.data.tenHeight,
+    console.log('pageNum',this.data.pageNub)
+    console.log('tenHeight',this.data.tenHeight)
 
+    this.setData({
+      scrollTop:this.data.pageNub*this.data.tenHeight,
     })
+
+    console.log('scrollTop',this.data.scrollTop)
+
     this.setCanplay(this.data.canplay)
   },
 
@@ -285,8 +294,6 @@ Page({
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId
     wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${app.globalData.songInfo.title}` })
-    
-
   },
   // 改变current
   changeCurrent(currentId) {
@@ -357,18 +364,18 @@ Page({
   },
  
   // 列表滚动事件
-  listScroll: tool.debounce(async function (res) {
-    console.log(res)
-    let top = res.detail.scrollTop
-    console.log('top:',top)
-    selectedNo = parseInt(top / this.data.tenHeight)
-    console.log('selectedNo:',selectedNo)
-    this.setData({
-      select:selectedNo,
+  // listScroll: tool.debounce(async function (res) {
+  //   console.log(res)
+  //   let top = res.detail.scrollTop
+  //   console.log('top:',top)
+  //   selectedNo = parseInt(top / this.data.tenHeight)
+  //   console.log('selectedNo:',selectedNo)
+  //   this.setData({
+  //     select:selectedNo,
 
-    })
+  //   })
 
-  }, 50),
+  // }, 50),
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
 
@@ -412,7 +419,7 @@ Page({
       .boundingClientRect((rect) => {
         let listHeight = rect.height
         this.setData({
-          tenHeight: listHeight - 35,
+          tenHeight: listHeight,
         })
         console.log('songListH:',this.data.tenHeight)
       })
