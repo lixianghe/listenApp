@@ -51,7 +51,7 @@
           <image data-name="{{item.name}}" bindtap="btnsPlay" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
           <!-- <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'next'}}" src="{{item.img}}" /> -->
           <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
-          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'loopType'}}" src="{{item.img[loopType]}}" />
+          <!-- <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'loopType'}}" src="{{item.img[loopType]}}" /> -->
           <image data-name="{{item.name}}" style="display: {{(!abumInfoName && item.name === 'more') ? 'none' : 'inline-block'}}" bindtap="btnsPlay" wx:else src="{{item.img}}" />
         </view>
     </view>

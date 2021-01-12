@@ -276,14 +276,9 @@ Page({
     console.log('pageNum',this.data.pageNub)
     console.log('tenHeight',this.data.tenHeight)
 
-    // setTimeout(() => {
-    //   this.setData({
-    //     scrollTop:this.data.pageNub*this.data.tenHeight,
-    //   })
-    // }, 1000)
+   
 
     console.log('scrollTop-------------',this.data.scrollTop)
-
     this.setCanplay(this.data.canplay)
   },
 

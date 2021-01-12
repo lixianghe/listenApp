@@ -104,9 +104,12 @@ App({
     // 测试getPlayInfoSync
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
-      console.log('res-------------' + JSON.stringify(res))
-      let playing = res.playState.status == 1 ? true : false
-      wx.setStorageSync('playing', playing)
+      console.log('res-------------:',  res)
+      if(res.playState){
+        let playing = res.playState.status == 1 ? true : false
+        wx.setStorageSync('playing', playing)
+      }
+    
     }
 
   },
