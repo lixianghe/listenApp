@@ -14,7 +14,7 @@
       data-focusindex="2" 
       style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{4.6 * times}}px;">取消</button>
       
-      <view wx:if="{{info.length == 0}}" style="margin-left: {{9 * times}}px;" class="remindTitle">推荐搜索</view>
+      
 
       <view class="label-view" wx:if="{{info.length>0}}" style="top: {{19.5 * times}}px; left: {{9 * times}}px; margin-bottom: {{4.89 * times}}px;  font-size: {{5.5 * times}}px;">
         <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" data-focusindex="3"  wx:key="index" data-index="{{index}}" bindtap="selectTap" 
@@ -24,14 +24,25 @@
       </view>
 
 
+      <!-- 没有搜索的情况 -->
+      <view class="noSearch" style="margin-top: {{19 * times}}px;">
+        <view class="recentSearch" style="width: {{66 * times}}px">
+          <view wx:if="{{info.length == 0}}" style="font-size: {{5.4 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">最近搜索</view>
+          <view class="recentItem"
+          style="font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
+          wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
+        </view>
 
-      <view wx:if="{{info.length == 0}}" class="remindresultView">
-         <view catchtap="searchItemClick" item='item'  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">
-           <view class="item-num"> {{item.num}}</view>
-           <view class="item-text">{{item.text}}</view>
+        <view class="remind" style="width: {{328 * times}}px">
+          <view wx:if="{{info.length == 0}}" style="font-size: {{5.2 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">推荐搜索</view>
+          <view wx:if="{{info.length == 0}}" class="remindresultView">
+           <view catchtap="searchItemClick" item='item' style="width: {{46 * times}}px;height: {{15 * times}}px"  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">
+            <view style="font-size: {{4.8 * times}}px;" class="item-num"> {{item.num}}</view>
+            <view style="font-size: {{4.8 * times}}px;margin-left: {{5 * times}}px;width: {{34 * times}}px;" class="item-text">{{item.text}}</view>
+           </view>
           </view>
-
-       </view>
+        </view>
+      </view>
 
 
       <!-- 页面盒子 -->

@@ -24,6 +24,7 @@ Page({
     albumNub:0,
     peopleNub:0,
     audioNub:0,
+    recentSearch: ['进击的巨人', '鬼灭之刃', '火影忍者', '死神', '海贼王', '幽灵公主'],
     labels: [
       {value: 'album', label: '专辑'},
       {value: 'people', label: '主播'},

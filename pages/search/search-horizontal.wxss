@@ -165,52 +165,65 @@ button[focus-select=true]{
 .label-view .title[focus-select=true] {
   box-shadow: inset 0px 0px 0px 4px #ff5100;
 }
-
+.h .remind {
+  flex-shrink: 0;
+  padding-right: 20px;
+}
 .h .remindresultView{
-  display:flex;
-flex-direction:column;
-flex-wrap: wrap;
-  margin-top: -21vh;
+  /* display:flex; */
+  flex-direction:column;
+  flex-wrap: wrap;
   margin-left: 0vh;
   width: 100%;
-  height:70vh ;
-  line-height: 47vh;
   /* background: red; */
 
 
 }
 .h .reminditem{
-  margin-top: 3vh;
-  margin-right: 15vh;
-  width: 55vh;
-  height: 16vh;
   /* color: #ffffff; */
-  font-size:6vh ;
   font-weight: 500;
   /* background: blue; */
   text-align: left;
+  float: left;
+  /* line-height: 0; */
+  display: flex;
+  padding-right: 15px;
 }
 .h .item-num{
-  display: inline-block;
+  /* display: inline-block; */
   margin-left: 0;
   height: 100%;
   color: #dc5e4e;
+  float: left;
 
 }
 .h .item-text{
-  display: inline-block;
+  /* display: inline-block; */
   height: 100%;
   margin-left: 5vh;
   color: white;
   opacity: 0.7;
+  float: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .h .remindTitle{
-   
   color: #ffffff;
-  font-size:7vh ;
   font-weight: 550;
-  margin-top: 21.5vh;
 
-
-
+}
+/* 最近搜索 */
+.noSearch {
+  display: flex;
+}
+.recentSearch {
+  color: #fff;
+  flex-shrink: 0;
+}
+.recentSearch .recentItem {
+  float: left;
+  opacity: 0.7;
+  font-weight: 500;
+  text-align: left;
 }
