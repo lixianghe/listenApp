@@ -98,13 +98,25 @@ module.exports = {
    
   app.goAuthGetToken().then((res) => {
     // app.log('res:',res)
-    // console.log('--------res:',res)
+     console.log('---------------------res:',res)
   this._swiperData()
   this._mediaArrData()
 });
+
+
    
 
   },
+  // swiperChange(e){
+  //   console.log(e.detail.current)
+  //   let idx = e.detail.current
+  //   if(idx == 9){
+
+  //   }else{
+
+  //   }
+
+  // },
   onLoad(options) {
     
     //  this._getList()
@@ -148,6 +160,7 @@ module.exports = {
      
 
   },
+ 
   clickHadle(e){
   console.log('播放全部专辑id',e.detail.typeid)
   let albumid = e.detail.typeid
@@ -258,10 +271,13 @@ formatMusicTime(time) {
 
    //轮播图的切换事件 
  swiperChange: function (e) {
-console.log('轮播图的切换事件:',e.detail.current)
-  this.setData({
-  swiperCurrent: e.detail.current
-  })
+// console.log('轮播图的切换事件:',e.detail.current)
+//   this.setData({
+//   swiperCurrent: e.detail.current
+//   })
+//   if(this.data.swiperCurrent == 2){
+//     this._swiperDatatwo()
+//   }
   },
   //点击指示点切换 
   chuangEvent: function (e) {

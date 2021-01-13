@@ -83,6 +83,7 @@
   display: inline-block;
   width: 14vh;
   height: 14vh;
+  line-height: 14vh;
   margin-top: 1vh;
   margin-left: 9vh;
   /* background: red; */
@@ -94,7 +95,7 @@
   top: 0;
   left: 25vh;
   height: 16vh;
-  margin-top: 3vh;
+  line-height: 16vh;
   font-size: 7vh;
   color: white;
 }

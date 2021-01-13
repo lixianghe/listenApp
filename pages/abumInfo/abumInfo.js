@@ -62,6 +62,7 @@ Page({
   async onLoad(options) {
     let albumid = options.id
     this.data.optionId = albumid
+    app.globalData.abumInfoId = this.data.optionId
     this.getAlbumDetails(albumid)
     this.getAllList(albumid)
     const msg = '网络异常，请检查网络！'
@@ -86,7 +87,7 @@ Page({
   },
 
   likeAbum(){ 
-    if(wx.getStorageSync('OPENID')){
+    if(wx.getStorageSync('USERINFO')){
       console.log('喜欢专辑',wx.getStorageSync('OPENID'))
       if(this.data.existed){
         console.log('取消收藏')
@@ -98,24 +99,37 @@ Page({
       
     }else{
       console.log('喜欢专辑')
-      wx.showModal({
-        title: '登录提示',
-        content: '您尚未登录，请先登录以同步账号信息及收藏、已购、历史等记录',
-        confirmColor:'#dc5e4e',
-        
-        success (res) {
-          if (res.confirm) {
-            console.log('用户点击确定')
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
+      wx.showToast({
+        title: '请登录后操作',
+        icon:'none'
       })
+      // wx.showModal({
+      //   title: '登录提示',
+      //   content: '您尚未登录，请先登录以同步账号信息及收藏、已购、历史等记录',
+      //   confirmColor:'#dc5e4e',
+        
+      //   success (res) {
+      //     if (res.confirm) {
+      //       console.log('用户点击确定')
+      //       wx.switchTab({
+      //         url: '',
+      //       })
+      //     } else if (res.cancel) {
+      //       console.log('用户点击取消')
+      //     }
+      //   }
+      // })
       
 
 
     }
 
+  },
+  showExisted(e){
+console.log('existed:',e.detail)
+this.setData({
+  existed:e.detail
+})
   },
   //收藏专辑
   collectAlbum(){
@@ -129,6 +143,8 @@ Page({
           existed:true
         })
         wx.setStorageSync('ALBUMISCOLLECT', true)
+        this.selectComponent('#miniPlayer').setOnShow()
+
         wx.showToast({
           title: '专辑订阅成功',
           icon:'none'
@@ -153,6 +169,7 @@ Page({
           existed:false
         })
         wx.setStorageSync('ALBUMISCOLLECT', false)
+        this.selectComponent('#miniPlayer').setOnShow()
 
         wx.showToast({
           title: '专辑取消订阅成功',
@@ -262,7 +279,8 @@ Page({
     let val = {
       hidShow: true,
       sum: this.data.total,
-      selected:this.data.pageNum
+      selected:this.data.pageNum,
+      existed:this.data.existed
 
     }
     this.selectWorks.hideShow(val)

@@ -1,6 +1,6 @@
 /* components/log/log.wxss */
 .log-mini{
-  display:none!important;
+  /* display:none!important; */
   position: absolute;
   right:0;
   bottom:30vh;
@@ -10,7 +10,7 @@
   z-index: 9999999999999;
 }
 .log {
-  display:none!important;
+  /* display:none!important; */
   position: absolute;
   top: 100vh;
   right: 0;

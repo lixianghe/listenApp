@@ -33,6 +33,7 @@ Page({
   },
   deletaClick(){
     console.log('删除')
+    wx.removeStorageSync('SEARCHWORD')
     this.setData({
       recentSearch:[]
     })
@@ -114,9 +115,9 @@ Page({
 
   clear(){
     console.log('清除')
-    wx.removeStorageSync('SEARCHWORD')
     this.setData({
       keyWord: '',
+      info:[]
     })
   },
   search(e) {

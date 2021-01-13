@@ -124,7 +124,7 @@
   transform: translate(-50%, -50%);
   width: 21.5vh;
   height: 21.5vh;
-  background: #000;
+  /* background: #000; */
   opacity: 0.35;
   border-radius: 50%;
 }

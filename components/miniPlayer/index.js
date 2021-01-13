@@ -82,13 +82,13 @@ Component({
   methods: {
     player(e) {
       console.log(e)
-       if (!this.data.songInfo || !this.data.songInfo.title) {
-        wx.showToast({
-          title: '请添加音频播放',
-          icon:'none'
-        })
-        return
-       }
+      //  if (!this.data.songInfo || !this.data.songInfo.title) {
+      //   wx.showToast({
+      //     title: '请添加音频播放',
+      //     icon:'none'
+      //   })
+      //   return
+      //  }
       const type = e.currentTarget.dataset.name
       console.log('type:',type)
       switch (type) {
@@ -134,8 +134,9 @@ Component({
     },
      //收藏专辑
   collectAlbum(){
+    console.log('----------------minibar-----收藏专辑:',app.globalData.songInfo.albumId)
     let param = {
-      id:app.globalData.songInfo.albumId
+      id:app.globalData.abumInfoId
     }
     utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
       console.log('收藏专辑:',res)
@@ -144,6 +145,7 @@ Component({
           existed:true
         })
         wx.setStorageSync('ALBUMISCOLLECT', true)
+        this.triggerEvent('showExisted', this.data.existed);
 
         wx.showToast({
           title: '专辑订阅成功',
@@ -159,7 +161,7 @@ Component({
   //取消收藏专辑
   cancelCollectAlbum(){
     let param = {
-      id:app.globalData.songInfo.albumId
+      id:app.globalData.abumInfoId
     }
 
     utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
@@ -169,6 +171,7 @@ Component({
           existed:false
         })
         wx.setStorageSync('ALBUMISCOLLECT', false)
+        this.triggerEvent('showExisted', this.data.existed);
 
         wx.showToast({
           title: '专辑取消订阅成功',

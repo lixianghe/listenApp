@@ -266,18 +266,23 @@ App({
       var Token = wx.getStorageSync('TOKEN')
       var canUseToken
       console.log('-------islogin',isLogin)
-      if(isLogin ){
-        that.log('-------')
-        if (Token && (+new Date() < Token.deadline) && Token.isLogin) {
+      console.log('-------Token',Token)
+      console.log('-------Date',new Date().getTime() )
+      var currentTime = new Date().getTime()
+      console.log('-------currentTime',currentTime)
+
+      if(isLogin){
+        console.log('-------')
+        console.log('---==----',(currentTime < Token.deadline)) 
+        console.log('---++++----',Token.isLogin)
+        if ((currentTime < Token.deadline) && Token.isLogin) {
           canUseToken = token
+          console.log('token:',Token)
           resolve(canUseToken)
         } else {
-          that.log('-------')
+          console.log('----====---')
           that.getToken(resolve, reject)
-
-      
         }
-    
       }else{
         that.getToken(resolve, reject)
       }
