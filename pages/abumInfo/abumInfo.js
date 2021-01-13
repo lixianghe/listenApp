@@ -85,8 +85,7 @@ Page({
     scrollTopNo = 0
   },
 
-  likeAbum(){
-   
+  likeAbum(){ 
     if(wx.getStorageSync('OPENID')){
       console.log('喜欢专辑',wx.getStorageSync('OPENID'))
       if(this.data.existed){
@@ -129,6 +128,7 @@ Page({
         this.setData({
           existed:true
         })
+        wx.setStorageSync('ALBUMISCOLLECT', true)
         wx.showToast({
           title: '专辑订阅成功',
           icon:'none'
@@ -152,6 +152,8 @@ Page({
         this.setData({
           existed:false
         })
+        wx.setStorageSync('ALBUMISCOLLECT', false)
+
         wx.showToast({
           title: '专辑取消订阅成功',
           icon:'none'
@@ -187,7 +189,8 @@ Page({
                 feeType:item.is_vip_free ,
                 mediaType:item.announcer.nickname,
                 mediaAuthor:item.album.title,
-                authorId:item.announcer.id
+                authorId:item.announcer.id,
+                albumId:item.album_id
                })
              }
              this.setData({
@@ -228,10 +231,6 @@ Page({
              src:res.data.announcer.avatar_url
   
            })
-        //    wx.setStorageSync('img', res.data.announcer.avatar_url)
-     
-        //  console.log('src',this.data.src)
-        //  console.log('total',this.data.total)
 
          }
   

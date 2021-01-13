@@ -133,10 +133,10 @@ Page({
             if(wx.getStorageSync('USERINFO')){
               if(this.data.existed){
                 console.log('取消收藏')
-                this.cancelAudioCollect()
+                this.cancelCollectAlbum()
               }else{
                 console.log('添加收藏')
-                this.collectAudio()
+                this.collectAlbum()
               }
             }else{
               wx.showToast({
@@ -156,8 +156,55 @@ Page({
           break;
       }
 
+
+      
    
   },
+    //收藏专辑
+    collectAlbum(){
+      let param = {
+        id:app.globalData.songInfo.albumId
+      }
+      utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
+        console.log('收藏专辑:',res)
+        if(res.data.status == 200 && res.data.errmsg == 'ok'){
+          this.setData({
+            existed:true
+          })
+          wx.showToast({
+            title: '专辑订阅成功',
+            icon:'none'
+          })
+         
+        }else{
+  
+        }
+      } )
+  
+    },
+    //取消收藏专辑
+    cancelCollectAlbum(){
+      let param = {
+        id:app.globalData.songInfo.albumId
+      }
+  
+      utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
+        console.log('取消收藏专辑:',res)
+        if(res.data.status == 200 && res.data.errmsg == 'ok'){
+          this.setData({
+            existed:false
+          })
+          wx.showToast({
+            title: '专辑取消订阅成功',
+            icon:'none'
+          })
+         
+        }else{
+  
+        }
+      } )
+  
+    },
 
      //收藏音频
      collectAudio(){

@@ -84,7 +84,9 @@ Page({
     })
 
   },
+  
   onLoad() {
+    this.getLaterSearchWord()
     this.getHotWords()
     this.setData({
       times: ((wx.getSystemInfoSync().screenHeight)/ 100)
@@ -112,6 +114,7 @@ Page({
 
   clear(){
     console.log('清除')
+    wx.removeStorageSync('SEARCHWORD')
     this.setData({
       keyWord: '',
     })
@@ -125,8 +128,61 @@ Page({
    
   },
   searchClick(){
+    console.log('------------搜索')
+    this.data.recentSearch.unshift(this.data.keyWord)
+    this.searchWordToCash(this.data.keyWord)
    this.data.info = []
   this.albumsSearch()
+  },
+  //搜索词存进缓存
+  searchWordToCash(word){
+    console.log('------------搜索词存进缓存',word)
+
+    if(!word){
+
+    }else{
+      if(wx.getStorageSync('SEARCHWORD')){
+        let historyWord = wx.getStorageSync('SEARCHWORD')
+        let newWord = historyWord+'|'+word
+        wx.setStorageSync('SEARCHWORD', newWord)
+
+      }else{
+        wx.setStorageSync('SEARCHWORD', word)
+      }
+
+    }
+
+  },
+  //获取最近搜索词
+  getLaterSearchWord(){
+    if(wx.getStorageSync('SEARCHWORD')){
+      let word = wx.getStorageSync('SEARCHWORD')
+      let arr = word.split('|')
+      if(arr.length > 6){
+        this.setData({
+          recentSearch:arr.slice(0,5)
+        })
+      }else{
+        this.setData({
+          recentSearch:arr
+        })
+      }
+
+     
+      // for(let i = 0;i<arr.length;i++){
+      //   this.data.recentSearch
+      // }
+      console.log('获取最近搜索词-----arr',arr)
+
+
+    }else{
+      this.setData({
+        recentSearch:[]
+      })
+    }
+    
+
+
   },
   selectTap(e) {
     console.log('搜索：',e)
