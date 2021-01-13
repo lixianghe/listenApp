@@ -66,6 +66,8 @@
 /* 按钮样式 */
 .playing-status .btns {
   display: flex;
+  height: 100%;
+  padding-top: 4px;
 }
 .playing-status .btns .image {
   width: 20vh;

@@ -166,7 +166,7 @@ Page({
 
   },
     // 获取所有的播放列表
-    getAllList(albumid) {
+    getAllList(albumid, lazy = false) {
       return new Promise((resolve, reject) => {
         // 假设allList是canplay，真实情况根据接口来
         console.log('专辑id:',albumid)
@@ -175,12 +175,13 @@ Page({
           'offset': this.data.pageNub*this.data.pageSize,
           'sort': "asc"
         }
+        let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
           console.log('专辑列表所有数据:',res)
            if(res.data && res.statusCode == 200){
 
              for (let item of res.data.items) {
-               this.data.canplay.push({
+              _list.push({
                 title :item.title ,                            // 歌曲名称
                 id : item.id  ,                                  // 歌曲Id
                 dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
@@ -193,9 +194,15 @@ Page({
                 albumId:item.album_id
                })
              }
+             // 上拉和下拉的情况
+             if (lazy == 'up'){
+              _list = this.data.canplay.concat(_list)
+             } else if (lazy == 'down') {
+              _list = _list.concat(this.data.canplay)
+             }
              this.setData({
-               total:res.data.total,
-              canplay:this.data.canplay
+              total:res.data.total,
+              canplay: _list
   
              })
              wx.setStorageSync('canplay', this.data.canplay)
@@ -263,25 +270,17 @@ Page({
   },
   // 接受子组件传值
   async changeWords(e) {
-    console.log(e)
     // 请求新的歌曲列表
     this.setData({
       pageNub: e.detail.pageNum,
-      selected:e.detail.pageNum
+      selected:e.detail.pageNum,
+      pageNo: e.detail.pageNum + 1,
+      pageSize: e.detail.pageSize
     })
-    // this.listScroll()
-    this.getAllList(this.data.optionId).then(() => {
-      this.setData({
-        scrollTop:0.985 * this.data.pageNub*this.data.tenHeight,
-      })
+    this.getAllList(this.data.optionId).then(()=> {
+      this.setData({scrollTop: 0})
     })
-    console.log('pageNum',this.data.pageNub)
-    console.log('tenHeight',this.data.tenHeight)
-
-   
-
-    console.log('scrollTop-------------',this.data.scrollTop)
-    this.setCanplay(this.data.canplay)
+    
   },
 
   // 点击歌曲名称跳转到歌曲详情
@@ -404,16 +403,10 @@ Page({
    this.data.pageNub++
 
     console.log('pageNub:',this.data.pageNub)
-    this.getAllList(this.data.optionId)
-    const list = this.data.canplay
+    this.getAllList(this.data.optionId, 'up')
     setTimeout(() => {
       this.setData({
-        canplay: list,
         showLoadEnd: false,
-      })
-      wx.setStorage({
-        key: 'canplay',
-        data: list,
       })
     }, 800)
   }, 1000),
@@ -487,12 +480,9 @@ Page({
   // },
   // 下拉结束后的处理
   async topHandle() {
-    let pageNoName = this.data.pageNoName
-    let idName = this.data.idName
-    const data = await this.getData({ [pageNoName]: this.data.pageNo - 1, [idName]: this.data.optionId })
-    const list = data.concat(this.data.canplay)
+    this.data.pageNub--
+    this.getAllList(this.data.optionId, 'down')
     this.setData({
-      canplay: list,
       showLoadTop: false,
       scrollTop: 0,
       pageNo: this.data.pageNo - 1,

@@ -27,7 +27,7 @@
 
 
       <!-- 没有搜索的情况 -->
-      <view class="noSearch" style="margin-top: {{19 * times}}px;">
+      <view class="noSearch" wx:if="{{info.length == 0}}" style="margin-top: {{19 * times}}px;">
         <view  wx:if="{{recentSearch.length > 0}}" class="recentSearch" style="width: {{66 * times}}px">
           <view wx:if="{{info.length == 0}}" style="font-size: {{5.4 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">
             <text>最近搜索</text>
