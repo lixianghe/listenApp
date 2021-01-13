@@ -98,6 +98,16 @@ Page({
     if (playing || this.data.noPlay !== 'true') app.playing(that)
    
   },
+  authorClick(e){
+    console.log('作者点击:',e)
+    let id = e.currentTarget.dataset.song.authorId
+    console.log('作者id:',id)
+
+    wx.navigateTo({
+      url: '/pages/author/author?authorId='+id,
+    })
+
+  },
   btnsPlay(e) {
     const type = e.currentTarget.dataset.name
     console.log('type:',type)
@@ -137,9 +147,8 @@ Page({
                 //   url: 'pages/personalCenter/personalCenter'
                 // })
             }
+            break;
             case 'more':
-
-          
           this.more()
             break;
       

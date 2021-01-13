@@ -1,0 +1,8 @@
+/* pages/author/author.wxss */
+
+@import "./author-horizontal.wxss";
+@import "./author-vertical.wxss";
+page {
+  margin: 0;
+  padding: 0;
+}

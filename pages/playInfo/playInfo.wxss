@@ -33,6 +33,21 @@
 .page .playLeft .title .title-name {
   display: block;
 }
+.page .playLeft .title .song-type {
+  display: inline-block;
+ 
+  height: 10vh;
+  width: 45vh;
+  background: rgba(255,255,255, 0.1);
+  border-radius: 2vh;
+}.page .playLeft .title .song-author {
+  display: inline-block;
+  margin-left: 10vh;
+  height: 10vh;
+  width: 45vh;
+  background: rgba(255,255,255, 0.1);
+  border-radius: 2vh;
+}
 .page .playLeft .title .title-abumInfo {
   display: block;
   font-size: 5.2vh;
@@ -83,6 +98,7 @@
   height: 15.5vh;
   justify-content: space-around;
   align-items: center;
+  background: clear;
 }
 .page .playLeft .btns > view {
   position: relative;

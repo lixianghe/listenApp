@@ -31,9 +31,25 @@ Page({
       {value: 'audio', label: '声音'}
     ]
   },
+  deletaClick(){
+    console.log('删除')
+    this.setData({
+      recentSearch:[]
+    })
+
+  },
+  latersearchItemClick(e){
+    console.log('searchItem点击',e.currentTarget.dataset.idx)
+    console.log('Item',this.data.recentSearch[idx].text)
+    this.setData({
+      keyWord:this.data.recentSearch[idx].text
+    })
+
+
+  },
   searchItemClick(e){
-    console.log('searchItem点击',e.currentTarget.dataset.idx-1)
-    let idx  = e.currentTarget.dataset.idx-1
+    console.log('searchItem点击',e.currentTarget.dataset.idx)
+    let idx  = e.currentTarget.dataset.idx
     console.log('Item',this.data.remindArr[idx].text)
     this.setData({
       keyWord:this.data.remindArr[idx].text
@@ -43,18 +59,18 @@ Page({
   },
   //获取热搜词
   getHotWords(){
+    this.data.remindArr = []
     let param ={
-
+      limit:'9'
     }
     utils.GET(param,utils.hot,res=>{
-      console.log('热搜词',res)
+      console.log('----------热搜词',res)
       if(res.data.items.length > 0 && res.statusCode == 200){
        for(let i = 0;i<res.data.items.length;i++){
          this.data.remindArr.push({
            num:i+1,
            text:res.data.items[i].hot_word
          })
-
 
        }
        this.setData({
@@ -69,17 +85,19 @@ Page({
 
   },
   onLoad() {
+    this.getHotWords()
     this.setData({
       times: ((wx.getSystemInfoSync().screenHeight)/ 100)
     })
+    this.selectComponent('#miniPlayer').setOnShow()
+
   },
   onShow() {
     //  console.log('--',showData.abumInfo.data)
     //  this.setData({
     //    info:showData.abumInfo.data
     //  })
-    this.getHotWords()
-    this.selectComponent('#miniPlayer').setOnShow()
+   
   },
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()
@@ -98,10 +116,17 @@ Page({
       keyWord: '',
     })
   },
-  search() {
+  search(e) {
+    this.setData({
+      keyWord:e.detail.value
+    })
+
     console.log('搜索：',this.data.keyWord)
-    this.albumsSearch()
    
+  },
+  searchClick(){
+   this.data.info = []
+  this.albumsSearch()
   },
   selectTap(e) {
     console.log('搜索：',e)
@@ -261,14 +286,7 @@ Page({
     // })
   },
  
-  getSearch(type) {
-    let params = {
-      label: type,
-      keyWord: this.data.keyWord
-    }
-    this._getList(params)
-    
-  },
+
   focus() {
     this.setData({showMInibar: false})
   },

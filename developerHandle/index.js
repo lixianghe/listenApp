@@ -92,20 +92,21 @@ module.exports = {
     hasNext: true,
   },
   onShow() {
-
-  },
-  onLoad(options) {
     // 首页数据
-    console.log('index---onLoad:')
-    app.log('index---onLoad:')
+    // console.log('index---onLoad:')
+    // app.log('index---onLoad:')
    
   app.goAuthGetToken().then((res) => {
-    app.log('res:',res)
- 
+    // app.log('res:',res)
+    // console.log('--------res:',res)
   this._swiperData()
   this._mediaArrData()
 });
    
+
+  },
+  onLoad(options) {
+    
     //  this._getList()
   },
   onReady() {
@@ -256,15 +257,15 @@ formatMusicTime(time) {
 
 
    //轮播图的切换事件 
-//  swiperChange: function (e) {
-// app.log('轮播图的切换事件:',e.detail.current)
-//   this.setData({
-//   swiperCurrent: e.detail.current
-//   })
-//   },
+ swiperChange: function (e) {
+console.log('轮播图的切换事件:',e.detail.current)
+  this.setData({
+  swiperCurrent: e.detail.current
+  })
+  },
   //点击指示点切换 
   chuangEvent: function (e) {
-    app.log('点击指示点切换:',e)
+    console.log('点击指示点切换:',e)
 
   this.setData({
   swiperCurrent: e.currentTarget.id

@@ -64,10 +64,10 @@
   background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0));
 }
 .halbumCard .countpic {
-  width: 5vh;
-  height: 5vh;
-  margin-top: 1.5vh;
-  margin-right: 1.5vh;
+  width: 7vh;
+  height: 7vh;
+  margin-top: 0.8vh;
+  /* margin-right: 1.5vh; */
   float: left;
 }
 .halbumCard .countxt {

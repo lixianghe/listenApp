@@ -228,20 +228,32 @@ module.exports = {
   },
 
   order() {
-    if (!app.userInfo || !app.userInfo.token) {
+    if (!wx.getStorageSync('USERINFO')) {
       wx.showToast({ icon: 'none', title: '请登录后进行操作' })
       return;
     }
-    // wx.navigateTo({ url: '../member/member' })
+     wx.navigateTo({ url: '../member/member' })
     app.log('开通续费会员')
   },
   like() {
+    if (!wx.getStorageSync('USERINFO')) {
+      wx.showToast({ icon: 'none', title: '请登录后进行操作' })
+      return;
+    }
     wx.navigateTo({ url: '../like/like' })
   },
   latelyListen() {
+    if (!wx.getStorageSync('USERINFO')) {
+      wx.showToast({ icon: 'none', title: '请登录后进行操作' })
+      return;
+    }
     wx.navigateTo({ url: '../latelyListen/latelyListen' })
   },
   myBuy() {
+    if (!wx.getStorageSync('USERINFO')) {
+      wx.showToast({ icon: 'none', title: '请登录后进行操作' })
+      return;
+    }
     wx.navigateTo({ url: '../myBuy/myBuy' })
   },
 }

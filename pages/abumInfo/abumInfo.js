@@ -184,7 +184,10 @@ Page({
                 dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
                 coverImgUrl :item.image.url ,                         // 歌曲的封面
                 src:item.play_info.play_64.url,
-                feeType:item.is_vip_free 
+                feeType:item.is_vip_free ,
+                mediaType:item.announcer.nickname,
+                mediaAuthor:item.album.title,
+                authorId:item.announcer.id
                })
              }
              this.setData({

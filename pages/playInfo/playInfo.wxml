@@ -20,7 +20,18 @@
   <view class="playLeft">
     <view class="title" wx:if="{{songInfo.title}}">
       <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
-      <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text>
+      <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
+    </view>
+    <view   style="margin-top:7vh" class="title" wx:if="{{songInfo.title}}">
+      <!-- <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text> -->
+      <view catchtap="authorClick"  data-song="{{songInfo}}"  style="position:relative" class="song-type">
+        <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/leftauthor.png" class=""></image>
+        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaAuthor}}</view>
+      </view>
+      <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative"  class="song-author">
+        <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
+        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaType}}</view>
+      </view>
     </view>
     <view class="noReady" wx:else>
       <text class="title-name"></text>
@@ -67,15 +78,22 @@
   <view class="playLeft songDc">
     <view class="songDcTitle">
       <image bindload="imgOnLoad" style="display:{{showImg ? 'block' : 'none'}}" src="{{songInfo.coverImgUrl}}" />
-
       <view class="image" wx:if="{{!showImg}}"></view>
-
-
       <view class="title" wx:if="{{songInfo.title}}">
         <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
-        <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text>
+        <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
       </view>
-
+      <view   style="margin-top:7vh" class="title" wx:if="{{songInfo.title}}">
+      <!-- <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text> -->
+      <view catchtap="authorClick"  data-song="{{songInfo}}"  style="position:relative" class="song-type">
+        <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/leftauthor.png" class=""></image>
+        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaAuthor}}</view>
+      </view>
+      <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative"  class="song-author">
+        <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
+        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaType}}</view>
+      </view>
+    </view>
       
       <view class="noReady" wx:else>
         <text class="title-name"></text>
