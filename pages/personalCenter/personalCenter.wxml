@@ -17,7 +17,7 @@
         <!-- <view class="adminBtnOut" bindtap="loginIn" data-state="login" style="background-color: {{mainColor}}"
           wx:if="{{showWxLogin}}">立即登录</view> -->
         <button    open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="adminBtnOut" style="background-color: {{mainColor}}"
-          wx:if="{{showWxLogin}}">授权登录</button>
+          >授权登录</button>
       </view>
     </view>
 
@@ -27,6 +27,6 @@
       <view class="cardTit">{{ item.title }}</view>
     </view>
   </view>
-  <mini-player songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
+  <mini-player   existed="{{existed}}" songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
 </view>
 <log></log>

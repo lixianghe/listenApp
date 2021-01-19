@@ -13,6 +13,8 @@ let selectedNo = 0
 Page({
    mixins: [abumInfoMixin],
   data: {
+    isVip:false,
+    type:null,
     canplay: [],
     percent: 0,
     id: null,
@@ -60,13 +62,15 @@ Page({
   },
 
   async onLoad(options) {
-    let albumid = options.id
+    console.log('-------------abumInfo---onload:',options)
+    var albumid = options.id
     this.data.optionId = albumid
+    this.data.type = options.from
     app.globalData.abumInfoId = this.data.optionId
     this.getAlbumDetails(albumid)
-    this.getAllList(albumid)
-    const msg = '网络异常，请检查网络！'
-    this.getNetWork(msg)
+      
+    // const msg = '网络异常，请检查网络！'
+    // this.getNetWork(msg)
     // 暂存专辑全部歌曲
     this.setData({
       src: wx.getStorageSync('img'),
@@ -182,7 +186,8 @@ this.setData({
     } )
 
   },
-    // 获取所有的播放列表
+  //
+    // 获取所有的播放列表（首页item点击）
     getAllList(albumid, lazy = false) {
       return new Promise((resolve, reject) => {
         // 假设allList是canplay，真实情况根据接口来
@@ -196,21 +201,22 @@ this.setData({
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
           console.log('专辑列表所有数据:',res)
            if(res.data && res.statusCode == 200){
-
-             for (let item of res.data.items) {
-              _list.push({
-                title :item.title ,                            // 歌曲名称
-                id : item.id  ,                                  // 歌曲Id
-                dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
-                coverImgUrl :item.image.url ,                         // 歌曲的封面
-                src:item.play_info.play_64.url,
-                feeType:item.is_vip_free ,
-                mediaType:item.announcer.nickname,
-                mediaAuthor:item.album.title,
-                authorId:item.announcer.id,
-                albumId:item.album_id
-               })
-             }
+               //非vip
+               for (let item of res.data.items) {
+                _list.push({
+                  title :item.title ,                            // 歌曲名称
+                  id : item.id  ,                                  // 歌曲Id
+                  dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
+                  coverImgUrl :item.image.url ,                         // 歌曲的封面
+                  feeType:item.is_free ,
+                  src:item.play_info.play_64.url,       
+                  mediaType:item.announcer.nickname,
+                  mediaAuthor:item.album.title,
+                  authorId:item.announcer.id,
+                  albumId:item.album_id
+                 })
+               }
+            
              // 上拉和下拉的情况
              if (lazy == 'up'){
               _list = this.data.canplay.concat(_list)
@@ -233,6 +239,29 @@ this.setData({
       // wx.setStorageSync('allList', allList)
     },
 
+    async  getVipMediaUrl(trackid){
+      console.log('-------trackid:',trackid)
+      let param = {  
+      }   
+        var mediaUrl
+        return new Promise((resolve, reject) => {
+          utils.PLAYINFOGET(param,utils.getMediaInfo+trackid+'/play-info',res=>{
+            console.log('bannees音频-------:',res)
+            if(res.data && res.statusCode == 200){
+              mediaUrl = res.data.play_32.url
+              resolve(mediaUrl)
+            }else{
+            }
+      
+          } )
+
+
+        })
+      
+  
+      
+    },
+
      // 播放时间格式化
      formatMusicTime(time) {
       let m = parseInt(time / 60);
@@ -249,12 +278,19 @@ this.setData({
       utils.GET(param,utils.albumDetails+albumid,res=>{
         console.log('专辑详情:',res)
          if(res.data && res.statusCode == 200){
+
            this.setData({
              total:res.data.include_track_count,
              existed:res.data.is_subscribe,
-             src:res.data.announcer.avatar_url
+             src:res.data.cover.large.url,
+             isVip:res.data.is_vip_free
   
            })
+           this.getAllList( this.data.optionId)
+
+           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+           this.selectComponent('#miniPlayer').setOnShow()
+         }else{
 
          }
   

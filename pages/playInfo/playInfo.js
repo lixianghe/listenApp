@@ -61,32 +61,83 @@ Page({
     })
   },
   async onLoad(options) {
+    const that = this;
     // 根据分辨率设置样式
-    this.setStyle()
+    that.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
     let abumInfoName = wx.getStorageSync('abumInfoName')
     const songInfo = app.globalData.songInfo
     console.log('songinfo:',app.globalData.songInfo)
     console.log('canplay:',canplay)
+    if(songInfo.feeType == true){
+      //vip
+     that.getVipMediaUrl(songInfo.id).then((res) => {
+        console.log('vip音频---------------',res)
+        if(res.data && res.statusCode == 200){
+          app.globalData.songInfo.src = res.data.play_32.url
+          wx.setStorage({ key: 'songInfo', data: app.globalData.songInfo })   
+          that.setData({
+            songInfo: app.globalData.songInfo,
+            canplay: canplay,
+            noPlay: options.noPlay || null,
+            abumInfoName: options.abumInfoName || null,
+            loopType: wx.getStorageSync('loopType') || 'listLoop'
+          })
+    
+          // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+        wx.setStorageSync('abumInfoName', options.abumInfoName)
+        if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+        if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
+        // 监听歌曲播放状态，比如进度，时间
+    tool.playAlrc(that, app);
+    that.queryProcessBarWidth()
+    app.playing(that)
 
-    this.setData({
-      songInfo: songInfo,
-      canplay: canplay,
-      noPlay: options.noPlay || null,
-      abumInfoName: options.abumInfoName || null,
-      loopType: wx.getStorageSync('loopType') || 'listLoop'
-    })
-    // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+        }else{
+        }
+      })
+     
+    }else{
+      that.setData({
+        songInfo: songInfo,
+        canplay: canplay,
+        noPlay: options.noPlay || null,
+        abumInfoName: options.abumInfoName || null,
+        loopType: wx.getStorageSync('loopType') || 'listLoop'
+      })
+
+      // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
     wx.setStorageSync('abumInfoName', options.abumInfoName)
     if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
     if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
-  },
-  onShow: function () {
-    const that = this;
-    // 监听歌曲播放状态，比如进度，时间
+     // 监听歌曲播放状态，比如进度，时间
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
+    }
+   
+   
+  },
+    getVipMediaUrl(trackid){
+    console.log('-------trackid:',trackid)
+    let param = {  
+    }   
+      return new Promise((resolve, reject) => {
+        utils.PLAYINFOGET(param,utils.getMediaInfo+trackid+'/play-info',res=>{
+          console.log('bannees音频-------:',res)
+          resolve(res)
+
+        
+        } )
+
+
+      })
+    
+
+    
+  },
+  onShow: function () {
+    
   },
   imgOnLoad() {
     this.setData({ showImg: true })
@@ -96,6 +147,19 @@ Page({
     // 从统一播放界面切回来，根据playing判断播放状态options.noPlay为true代表从minibar过来的
     const playing = wx.getStorageSync('playing')
     if (playing || this.data.noPlay !== 'true') app.playing(that)
+   
+  },
+  albumClick(e){
+    console.log('专辑点击:',e)
+    let id = e.currentTarget.dataset.song.albumId
+    console.log('专辑id:',id)
+    const src = e.currentTarget.dataset.song.src
+    const title = e.currentTarget.dataset.song.title
+    wx.setStorageSync('img', src) 
+    wx.navigateTo({
+      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+    })
+
    
   },
   authorClick(e){
@@ -347,6 +411,7 @@ Page({
   },
   // 在播放列表里面点击播放歌曲
   async playSong(e) {
+    console.log('-=-=-=-=---=')
     let that = this
     const songInfo = e.currentTarget.dataset.song
     app.globalData.songInfo = songInfo
@@ -359,7 +424,12 @@ Page({
       playing: true
       // noTransform: ''
     })
-    app.playing(that)
+    if(that.data.songInfo.src){
+      app.playing(that)
+
+    }else{
+
+    }
     wx.setStorage({
       key: "songInfo",
       data: app.globalData.songInfo

@@ -251,13 +251,19 @@ Component({
     },
     // 暂停
     toggle() {
-      
       this.triggerEvent('setPlaying', !this.data.playing)
       console.log('-----------------',this.data.playing)
       utils.toggleplay(this, app)
     },
     // 进入播放详情
-    playInfo() {
+    playInfo() { 
+      if(!wx.getStorageSync('songInfo') || !app.globalData.songInfo){
+        wx.showToast({
+          title: '暂无播放音频',
+          icon:'none'
+        })
+        return
+      }
       let abumInfoName = wx.getStorageSync('abumInfoName')
       wx.navigateTo({
         url: `../playInfo/playInfo?noPlay=true&abumInfoName=${abumInfoName}`

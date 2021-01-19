@@ -33,6 +33,8 @@ module.exports = {
     showModal: false,
     req: false,
     countPic: '/images/media_num.png',
+    likePic: ['/images/info_like.png', '/images/info_like_no.png'],
+
     // 开发者注入模板标签数据
     labels: {
       show: true,
@@ -63,7 +65,7 @@ module.exports = {
     const src = e.currentTarget.dataset.src
     const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
-    const routeType = e.currentTarget.dataset.contentype
+    // const routeType = e.currentTarget.dataset.contentype
  
     wx.navigateTo({
       url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
@@ -128,13 +130,14 @@ module.exports = {
             req: true,
             info:laterArr
           })
-          app.log('info:',this.data.info)
+          console.log('最近播放-------------info:',this.data.info)
         
        
 
       }else{
         this.setData({
-          showModal: true
+          showModal: true,
+          req:-1
         })
       }
 
@@ -191,6 +194,9 @@ module.exports = {
   close() {
     this.setData({
       showModal: false
+    })
+    wx.navigateBack({
+      
     })
   }
 }

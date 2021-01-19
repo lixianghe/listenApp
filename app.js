@@ -201,6 +201,7 @@ App({
   },
   // 根据歌曲url播放歌曲
   playing: function (seek, that) {
+    console.log('--------------')
     if (that == undefined) {
       that = seek
     }
@@ -375,6 +376,9 @@ App({
   //全局上传播放行为
   upLoadPlayinfo:function(){
     console.log('-----------------------songInfo:',this.globalData.songInfo)
+    if(!this.globalData.songInfo.id || this.globalData.songInfo.id == undefined){
+      return
+    }
     const playRecords = {
        track_id:this.globalData.songInfo.id,
       played_secs: ~~this.globalData.currentPosition || ~~this.globalData.startTime,
@@ -463,6 +467,7 @@ App({
    * 记录日志
    */
   log(...text){
+    console.log('---------------------')
     for(let e of text){
       if(typeof e == 'object'){
         try{

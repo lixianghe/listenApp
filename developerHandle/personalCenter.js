@@ -27,7 +27,6 @@ module.exports = {
     code:'',
     // 是否登录
     isLogin: false,
-    showWxLogin: true,
     // 开发者注入模板用户信息
     userInfo: {
       avatar: '',
@@ -90,12 +89,6 @@ module.exports = {
   /**
    * 登录
    */
-  loginIn(event) {
-    this.setData({
-      showWxLogin: false
-    })
-  
-  },
   getPhoneNumber(e) {
     app.log('--手机号登录---getPhoneNumber', e)
     if (!e.detail.iv) { 
@@ -223,34 +216,38 @@ module.exports = {
     }
     this.setData({
       userInfo: obj,
-      isLogin: false
+      isLogin: false,
+      existed:false
     })
+    wx.setStorageSync('ALBUMISCOLLECT', false)
+    this.selectComponent('#miniPlayer').setOnShow()
+
   },
 
-  order() {
-    if (!wx.getStorageSync('USERINFO')) {
-      wx.showToast({ icon: 'none', title: '请登录后进行操作' })
-      return;
-    }
-     wx.navigateTo({ url: '../member/member' })
-    app.log('开通续费会员')
-  },
+  // order() {
+  //   if (!this.data.isLogin) {
+  //     wx.showToast({ icon: 'none', title: '请登录后进行操作' })
+  //     return;
+  //   }
+  //    wx.navigateTo({ url: '../member/member' })
+  //   app.log('开通续费会员')
+  // },
   like() {
-    if (!wx.getStorageSync('USERINFO')) {
+    if (!this.data.isLogin) {
       wx.showToast({ icon: 'none', title: '请登录后进行操作' })
       return;
     }
     wx.navigateTo({ url: '../like/like' })
   },
   latelyListen() {
-    if (!wx.getStorageSync('USERINFO')) {
+    if (!this.data.isLogin) {
       wx.showToast({ icon: 'none', title: '请登录后进行操作' })
       return;
     }
     wx.navigateTo({ url: '../latelyListen/latelyListen' })
   },
   myBuy() {
-    if (!wx.getStorageSync('USERINFO')) {
+    if (!this.data.isLogin) {
       wx.showToast({ icon: 'none', title: '请登录后进行操作' })
       return;
     }

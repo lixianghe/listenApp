@@ -110,7 +110,8 @@ module.exports = {
  
        }else{
          this.setData({
-           showModal: true
+           showModal: true,
+           req:-1
          })
        }
  
@@ -164,5 +165,8 @@ module.exports = {
   },
   close() {
     this.setData({showModal: false})
+    wx.navigateBack({
+      
+    })
   },
 }

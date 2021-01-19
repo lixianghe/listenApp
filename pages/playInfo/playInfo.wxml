@@ -19,18 +19,18 @@
 <view class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:if="{{bigScreen}}">
   <view class="playLeft">
     <view class="title" wx:if="{{songInfo.title}}">
-      <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
+      <text  style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
       <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
     </view>
     <view   style="margin-top:7vh" class="title" wx:if="{{songInfo.title}}">
       <!-- <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text> -->
-      <view catchtap="authorClick"  data-song="{{songInfo}}"  style="position:relative" class="song-type">
+      <view catchtap="albumClick"  data-song="{{songInfo}}"  style="position:relative" class="song-type">
         <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/leftauthor.png" class=""></image>
-        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaAuthor}}</view>
+        <text style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaAuthor}}</text>
       </view>
       <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative"  class="song-author">
         <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
-        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaType}}</view>
+        <text style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaType}}</text>
       </view>
     </view>
     <view class="noReady" wx:else>
@@ -57,9 +57,9 @@
 
       <text class="duration" wx:if="{{percentBar}}">{{songInfo.dt}}</text>
       <view class="btns">
-        <view wx:for="{{playInfoBtns.length ? playInfoBtns : defaultBtns}}" wx:key="index" bindtouchstart="btnstart" bindtouchend="btend" data-index="{{index}}">
-          <view wx:if="{{btnCurrent === index}}" class="modal"></view>
-          <image data-name="{{item.name}}" bindtap="btnsPlay" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
+        <view style="background:clear" wx:for="{{playInfoBtns.length ? playInfoBtns : defaultBtns}}" wx:key="index" bindtouchstart="btnstart" bindtouchend="btend" data-index="{{index}}">
+          <view style="background:clear" wx:if="{{btnCurrent === index}}" class="modal"></view>
+          <image  data-name="{{item.name}}" bindtap="btnsPlay" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
           <!-- <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'next'}}" src="{{item.img}}" /> -->
           <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
           <!-- <image data-name="{{item.name}}" bindtap="btnsPlay" wx:elif="{{item.name === 'loopType'}}" src="{{item.img[loopType]}}" /> -->
@@ -80,18 +80,18 @@
       <image bindload="imgOnLoad" style="display:{{showImg ? 'block' : 'none'}}" src="{{songInfo.coverImgUrl}}" />
       <view class="image" wx:if="{{!showImg}}"></view>
       <view class="title" wx:if="{{songInfo.title}}">
-        <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
+        <text  style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
         <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
       </view>
       <view   style="margin-top:7vh" class="title" wx:if="{{songInfo.title}}">
       <!-- <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text> -->
-      <view catchtap="authorClick"  data-song="{{songInfo}}"  style="position:relative" class="song-type">
+      <view catchtap="albumClick"  data-song="{{songInfo}}"  style="position:relative" class="song-type">
         <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/leftauthor.png" class=""></image>
-        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaAuthor}}</view>
+        <text style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaAuthor}}</text>
       </view>
       <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative"  class="song-author">
         <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
-        <view style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaType}}</view>
+        <text style="position:absolute;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;height:10vh;line-height:10vh" >{{songInfo.mediaType}}</text>
       </view>
     </view>
       

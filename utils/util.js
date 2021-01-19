@@ -21,12 +21,53 @@ function GET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  console.log('params', params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
 header['content-type'] = 'application/json' 
 
+  console.log('header', header)
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: header, 
+   method: 'GET',
+   dataType: 'json',
+   success: res=> {
+      console.log('请求成功：', res);
+       callback(res)
+    
+   },
+   fail: err => {
+    // console.log('请求失败：', res);
+    callback(err)
+     wx.hideLoading()
+   }
+ })
+
+
+}
+// GET请求
+function PLAYINFOGET(param,url, callback) {
+  console.log('get')
+  console.log('参数', param)
+  console.log('请求URL', this.baseUrl + url)
+  let publicParams = {
+    access_token:  wx.getStorageSync('TOKEN').access_token,
+    app_key: this.APP_KEY,
+    client_os_type: 3,
+    device_id: this.getDeviceId(),
+    device_type: 'web',
+    mac:this.getDeviceId(), 
+    pack_id:'com.app.wechat',
+  };
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+  console.log('params',   params)
+ 
+let header = {}
+header['xm-sign'] = encrypt(Date.now())
   console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
@@ -162,7 +203,6 @@ function MGET(param,url, callback) {
 // POST请求
 function PLAYRECORDPOST(param,url, callback) {
   console.log('PLAYRECORDPOST')
-
   console.log('参数', param)
   console.log('URL',  url)
   console.log('请求URL', this.baseUrl + url)
@@ -172,14 +212,11 @@ function PLAYRECORDPOST(param,url, callback) {
    nonce: this.generateRandom(),
    timestamp: +new Date(),
     access_token:  wx.getStorageSync('TOKEN').access_token,
-   
   };
-
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
   console.log('params',   params)
 let header ={
-  
  'content-type': 'application/x-www-form-urlencoded',
 }
  console.log('header', header)
@@ -603,6 +640,8 @@ module.exports = {
  getUserCollectAlbums:'iot/openapi-smart-device-api/subscribe/get_albums_by_uid',
  //我的购买
  userBuy:'iot/openapi-smart-device-api/pay/get_bought_albums_with_page',
+ //根据id查音频信息
+ getMediaInfo:'iot/openapi-smart-device-api/tracks/',
  
 
 
@@ -623,6 +662,7 @@ module.exports = {
   calculateCount:calculateCount,
   GET:GET,
   MGET:MGET,
+  PLAYINFOGET:PLAYINFOGET,
   PLAYHISTORYGET:PLAYHISTORYGET,
   LIKEGET:LIKEGET,
   POST:POST,

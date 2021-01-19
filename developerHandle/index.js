@@ -93,11 +93,11 @@ module.exports = {
   },
   onShow() {
     // 首页数据
-    // console.log('index---onLoad:')
-    // app.log('index---onLoad:')
+    console.log('index---onLoad:')
+    app.log('index---onLoad:')
    
   app.goAuthGetToken().then((res) => {
-    // app.log('res:',res)
+     app.log('res:',res)
      console.log('---------------------res:',res)
   this._swiperData()
   this._mediaArrData()
@@ -119,14 +119,31 @@ module.exports = {
   // },
   onLoad(options) {
     
-    //  this._getList()
   },
   onReady() {
 
   },
+  //我的收藏
   like() {
-    wx.navigateTo({ url: '../like/like' })
+    if (!this.data.isLogin) {
+      wx.showToast({ icon: 'none', title: '请登录后进行操作' })
+      return;
+    }
+    wx.navigateTo({
+       url: '../like/like'
+       })
   },
+    // 最近播放
+    tolatelyListen(e) {
+      if (!this.data.isLogin) {
+        wx.showToast({ icon: 'none', title: '请登录后进行操作' })
+        return;
+      }
+   
+      wx.navigateTo({ 
+        url: '../latelyListen/latelyListen'
+       })
+    },
  
   selectTap(e) {
     const index = e.currentTarget.dataset.index
@@ -293,23 +310,15 @@ formatMusicTime(time) {
     let id = item.banner_content_id
     let title = item.banner_content_title
     wx.navigateTo({
-       url :'../abumInfo/abumInfo?id='+id+'&routeType=album'+'&title='+title
+       url :'../abumInfo/abumInfo?id='+id+'&routeType=album'+'&title='+title+'&from=1'
     })
 
   },
  
-  // 跳转到快捷入口页面
-  tolatelyListen(e) {
-    let page = e.currentTarget.dataset.page
-    // wx.navigateTo({
-    //   url: `../${page}/${page}`
-    // })
-    wx.navigateTo({ 
-      url: '../latelyListen/latelyListen' })
-  },
+
   // 跳转到播放界面
   linkAbumInfo(e) {
-    app.log('专辑列表')
+    console.log('专辑列表:',e)
 
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
@@ -322,7 +331,7 @@ formatMusicTime(time) {
     }
     let url
     if (routeType === 'album' || routeType === 'fm') {
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}`
+      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
     } else if (routeType === 'media') {
       url = `../playInfo/playInfo?id=${id}`
     }

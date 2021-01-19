@@ -40,11 +40,11 @@
         <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
         
         <text wx:else>{{(pageNo-1) * pageSize + index + 1}}</text>
-        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:{{mainColor}};border: 1px solid {{mainColor}};width:46px;text-align:center;line-height:7vh;height:7vh" wx:if="{{item.feeType }}">试听</text>
+        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:{{mainColor}};border: 1px solid {{mainColor}};width:16vh;text-align:center;line-height:7vh;height:7vh" wx:if="{{item.feeType }}">试听</text>
 
-        <text>{{item.title}}</text>
+        <text style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{item.title}}</text>
         <!-- <text class="playCount">{{m1.filterNum(item.playCount)}}</text> -->
-        <text>{{item.dt}}</text>
+        <text style="margin-left:10vh">{{item.dt}}</text>
       </view>
       <view wx-if="{{showLoadEnd}}" class="loading">加载中...</view>
     </view>
@@ -55,13 +55,11 @@
   </view>
   <view class="right" style="width:{{rightWidth}}">
     <view class="image" style="width: {{imageWidth}};height: {{imageWidth}};background: url({{src}}) no-repeat top left / 100% 100%">
-      <view 
-        class="like"
-        wx:if="{{routeType === 'album'}}"
-        style="background: rgba(0, 0, 0, 0.6) url({{existed ? likeIcon1 : likeIcon2}}) no-repeat center center / 17vh 13vh;"
-        bindtap="likeAbum">
-        <!-- <image src="../../images/like_none.png" /> -->
-      </view>
+      <image wx:if="{{isVip}}"  src="/images/album_tag_premium.png" class="album-icon" style="width: 18vh;height: 7vh; position: absolute;top: 0; left: 0; color: white; font-size: 5vh; text-align: center"></image>
+
+    <view class="like" wx:if="{{routeType === 'album'}}"style="background: rgba(0, 0, 0, 0.6) url({{existed ? likeIcon1 : likeIcon2}}) no-repeat center center / 17vh 13vh;"bindtap="likeAbum">
+   </view>
+     
       <view class="like" wx:else >
 
       </view>

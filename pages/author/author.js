@@ -148,6 +148,7 @@ Page({
         // item.src = item.coverUrl                                  // 歌曲的封面
         // item.contentType = 'album'                                // 类别（例如专辑或歌曲）
         // item.isVip = true                                         // 是否是会员
+
         let laterArr = []
         for(let i = 0;i <res.data.items.length;i++ ){
           console.log('---------',i)
@@ -160,7 +161,7 @@ Page({
           }
 
           laterArr.push({
-            title:res.data.items[i].announcer.ptitle,
+            title:res.data.items[i].title,
             id:res.data.items[i].announcer.id,
             src:res.data.items[i].announcer.avatar_url,
             contentType:'album',
@@ -172,6 +173,10 @@ Page({
 
           })
         }
+        wx.setNavigationBarTitle({
+          title:res.data.items[0].announcer.nickname ,
+        })
+       
           this.setData({
             req: true,
             info:laterArr

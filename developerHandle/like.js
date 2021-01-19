@@ -67,7 +67,8 @@ module.exports = {
 
     let url
     if (routeType === 'album') {
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}`
+
+      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}`
     } else if (routeType === 'media') {
       url = `../playInfo/playInfo?id=${id}`
     }
@@ -109,7 +110,9 @@ module.exports = {
             title:res.data.items[i].title,
             id:res.data.items[i].id,
             src:res.data.items[i].cover.middle.url,
-            contentType:res.data.items[i].kind,
+            // contentType:res.data.items[i].kind,
+            contentType:'album',
+
             isVip:wx.getStorageInfoSync('USERINFO').is_vip,
             lastUpdate:res.data.items[i].last_updated_track_id
           })
@@ -118,13 +121,14 @@ module.exports = {
             req: true,
             info:laterArr
           })
-          app.log('info:',this.data.info)
+          console.log('------------我的收藏--info:',this.data.info)
         
        
 
       }else{
         this.setData({
-          showModal: true
+          showModal: true,
+          req:-1
         })
       }
 
@@ -184,6 +188,9 @@ module.exports = {
   },
   close() {
     this.setData({showModal: false})
+    wx.navigateBack({
+      
+    })
   },
   playMedia(e){
     console.log('播放',e)

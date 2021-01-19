@@ -41,9 +41,10 @@ Page({
   },
   latersearchItemClick(e){
     console.log('searchItem点击',e.currentTarget.dataset.idx)
-    console.log('Item',this.data.recentSearch[idx].text)
+    let idx = e.currentTarget.dataset.idx
+    console.log('Item',this.data.recentSearch[idx])
     this.setData({
-      keyWord:this.data.recentSearch[idx].text
+      keyWord:this.data.recentSearch[idx]
     })
 
 
@@ -117,8 +118,10 @@ Page({
     console.log('清除')
     this.setData({
       keyWord: '',
-      info:[]
+      info:[],
+      currentTap:0
     })
+    this.getLaterSearchWord()
   },
   search(e) {
     this.setData({
@@ -140,11 +143,11 @@ Page({
     console.log('------------搜索词存进缓存',word)
 
     if(!word){
-
+       return
     }else{
       if(wx.getStorageSync('SEARCHWORD')){
         let historyWord = wx.getStorageSync('SEARCHWORD')
-        let newWord = historyWord+'|'+word
+        let newWord =word+'|'+ historyWord
         wx.setStorageSync('SEARCHWORD', newWord)
 
       }else{
@@ -158,7 +161,8 @@ Page({
   getLaterSearchWord(){
     if(wx.getStorageSync('SEARCHWORD')){
       let word = wx.getStorageSync('SEARCHWORD')
-      let arr = word.split('|')
+      let originarr = word.split('|')
+      let arr = this.unique1(originarr)
       if(arr.length > 6){
         this.setData({
           recentSearch:arr.slice(0,5)
@@ -168,11 +172,6 @@ Page({
           recentSearch:arr
         })
       }
-
-     
-      // for(let i = 0;i<arr.length;i++){
-      //   this.data.recentSearch
-      // }
       console.log('获取最近搜索词-----arr',arr)
 
 
@@ -184,6 +183,16 @@ Page({
     
 
 
+  },
+  //数组去重
+   unique1(arr){
+    var hash=[];
+    for (var i = 0; i < arr.length; i++) {
+       if(hash.indexOf(arr[i])==-1){
+        hash.push(arr[i]);
+       }
+    }
+    return hash;
   },
   selectTap(e) {
     console.log('搜索：',e)
@@ -235,7 +244,7 @@ Page({
           // item.coverImgUrl = item.coverUrl                          // 歌曲的封面
           title:item.title,
           id:item.id,
-           coverImgUrl:item.cover.middle.url
+          coverImgUrl:item.cover.middle.url
 
         })
       }
@@ -301,7 +310,7 @@ Page({
         for(let item of res.data.items){
           this.data.info.push({
             title:item.title,
-            id:item.id,
+            id:item.album_id,
             coverImgUrl:item.image.url 
           })
         }
@@ -317,32 +326,41 @@ Page({
     })
 
   },
+    // 跳转到播放详情界面
+    linkAbumInfo (e) {
+      console.log('跳转:',e)
+      let id = e.currentTarget.dataset.id
+      const src = e.currentTarget.dataset.src
+      const title = e.currentTarget.dataset.title
+      wx.setStorageSync('img', src)
+      if(this.data.currentTap == 0 ||this.data.currentTap == 2 ){
+        wx.navigateTo({
+          url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+        })
+      }else{
+        //进主播页面
+        wx.navigateTo({
+          url: '../author/author?authorId='+id
+        })
+      }
+     
+      // const routeType = e.currentTarget.dataset.contentype
+      // let url
+      // if (routeType === 'album') {
+      //   url = `../abumInfo/abumInfo?id=${id}&title=${title}`
+      // } else if (routeType === 'media') {
+      //   url = `../playInfo/playInfo?id=${id}`
+      // } 
+      // wx.navigateTo({
+      //   url: url
+      // })
+    },
+   
+  
   getLayoutData(){
     console.log('加载更多')
 
   },
-  // 跳转到播放详情界面
-  linkAbumInfo (e) {
-    console.log('跳转:',e)
-    let id = e.currentTarget.dataset.id
-    const src = e.currentTarget.dataset.src
-    const title = e.currentTarget.dataset.title
-    wx.setStorageSync('img', src)
-    wx.navigateTo({
-      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
-    })
-    // const routeType = e.currentTarget.dataset.contentype
-    // let url
-    // if (routeType === 'album') {
-    //   url = `../abumInfo/abumInfo?id=${id}&title=${title}`
-    // } else if (routeType === 'media') {
-    //   url = `../playInfo/playInfo?id=${id}`
-    // } 
-    // wx.navigateTo({
-    //   url: url
-    // })
-  },
- 
 
   focus() {
     this.setData({showMInibar: false})

@@ -46,8 +46,8 @@
     {
       "index": 1, 
       "pagePath": "pages/category/category",
-      "iconPath": "images/search.png",
-      "selectedIconPath": "images/searched.png",
+      "iconPath": "images/categray.png",
+      "selectedIconPath": "images/categrayed.png",
       "text": "分类"
     },
     {
