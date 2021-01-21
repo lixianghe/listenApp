@@ -543,9 +543,10 @@ this.setData({
     let startY = this.data.startY
     let dis = endY - startY
     // 判断是否下拉
-    if (dis <= 0 || this.data.pageNo <= 1) {
+    if (dis <= 0 || (this.data.start - 1) / 15 <= 0) {
       return false
     }
+   
     if (dis < 60) {
       // 下拉60内随下拉高度增加
       this.move = wx.createAnimation({
@@ -560,10 +561,12 @@ this.setData({
     }
     // 滑动距离大于20开始刷新
     this.showRefresh = dis > 20
+    console.log('this.showRefresh', this.showRefresh)
   },
   // 触摸结束
   touchEnd: tool.throttle(function(e) {
-    if (this.data.pageNo <= 1 || !this.showRefresh) {
+    console.log((this.data.start - 1) / 15)
+    if ((this.data.start - 1) / 15 <= 0 || !this.showRefresh) {
       return false
     }
     //1s后回弹
@@ -582,7 +585,7 @@ this.setData({
       this.topHandle()
       this.showRefresh = false
     }, 600)
-  }, 2000),
+  }, 1000),
   // touchEnd(e) {
     
   // },
@@ -591,14 +594,15 @@ this.setData({
     console.log('---下拉结束')
     if(this.data.sort == 'asc'){
       this.data.offset-=15
-
+      this.data.start-=15
     }else{
       this.data.offset+=15
-
+      this.data.start-=15
     }    this.getAllList(this.data.optionId, 'down')
     this.setData({
       showLoadTop: false,
       scrollTop: 0,
+      start: this.data.start
       
     })
   },
