@@ -79,6 +79,8 @@ module.exports = {
      
     })
 
+
+
   },
   onLoad(options) {
   },
@@ -169,6 +171,7 @@ module.exports = {
           userInfo:res.data
         })
         wx.setStorageSync('USERINFO', res.data)
+        app.userInfo.islogin = true
 
       }else{
         wx.showToast({
@@ -210,6 +213,7 @@ module.exports = {
     app.log('退出登录')
     wx.removeStorageSync('USERINFO')
     wx.removeStorageSync('ACCESSTOKEN')
+    app.userInfo.islogin = false
     let obj = {
       nickname: '',
       avatar: ''

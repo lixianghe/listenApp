@@ -45,7 +45,8 @@ App({
    userInfo: {
     userId: null,
     token: '',
-    refreshToken: ''
+    refreshToken: '',
+    isLogin:false,
   },
   // 用户认证信息
   authInfo: {
@@ -61,11 +62,15 @@ App({
   },
    // token状态，0-正常，1001-token过期，1003-refresh-token过期，1004-登录过期
   tokenStatus: 0,
+  version: '',
   // 日志文本
   logText: '',
+  // 日志计时器
+  logTimer: null,
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
+    wx.clearStorage()
     // this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
@@ -260,26 +265,21 @@ App({
   },
 
     // 获得token
- goAuthGetToken() {
+  goAuthGetToken() {
    var that = this
      return new Promise(function (resolve, reject) {
       var isLogin = wx.getStorageSync('USERINFO')
       var Token = wx.getStorageSync('TOKEN')
-      var canUseToken
-      console.log('-------islogin',isLogin)
-      console.log('-------Token',Token)
-      console.log('-------Date',new Date().getTime() )
       var currentTime = new Date().getTime()
       console.log('-------currentTime',currentTime)
-
       if(isLogin){
         console.log('-------')
         console.log('---==----',(currentTime < Token.deadline)) 
         console.log('---++++----',Token.isLogin)
-        if ((currentTime < Token.deadline) && Token.isLogin) {
-          canUseToken = token
+        if (currentTime < Token.deadline && Token.isLogin ) {
+          wx.setStorageSync('TOKEN', Token)
           console.log('token:',Token)
-          resolve(canUseToken)
+          resolve(Token)
         } else {
           console.log('----====---')
           that.getToken(resolve, reject)
@@ -287,7 +287,6 @@ App({
       }else{
         that.getToken(resolve, reject)
       }
-    // return canUseToken
 
      })
 
@@ -295,9 +294,9 @@ App({
       
    },
     getToken(resolve, reject){
-      this.log("APP_KEY--",  utils.APP_KEY)
-      this.log("deviceid--",  utils.getDeviceId())
-       this.log("nonce--",  utils.generateRandom())
+      // console.log("APP_KEY--",  utils.APP_KEY)
+      // console.log("deviceid--",  utils.getDeviceId())
+      //  console.log("nonce--",  utils.generateRandom())
   
      let param = {
       client_id: utils.APP_KEY,
@@ -327,7 +326,7 @@ App({
           
           this.log("access_token----success--", res)   
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
-          console.log("失效时间", res.data.deadline)   
+          this.log("失效时间", res.data.deadline)   
           // canUseToken = res.data
           resolve(res.data)
           wx.setStorageSync('TOKEN', res.data)
@@ -463,29 +462,15 @@ App({
       })
     }
   },
-   /**
-   * 记录日志
+    /**
+   * 记录日志。
    */
-  log(...text){
-    console.log('---------------------')
-    for(let e of text){
-      if(typeof e == 'object'){
-        try{
-          if(e===null){
-            console.logText += 'null'
-          } else if(e.stack){
-            console.logText += e.stack
-          } else{
-            console.logText += JSON.stringify(e)
-          }
-        }catch(err){
-          console.logText += err.stack
-        }
-      } else {
-        console.logText += e
-      }
-      console.logText += '\n'
+  log(str, object) {
+    // return
+    this.logText += str + '\n'
+    if (object) {
+      this.logText += JSON.stringify(object) + '\n'
+      // console.log(str + JSON.stringify(object) + '\n')
     }
-    console.logText += '########################\n'
-  }
+  },
 })

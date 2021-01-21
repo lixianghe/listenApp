@@ -24,6 +24,7 @@ Page({
   },
   onShow() {
     this.selectComponent('#miniPlayer').setOnShow()
+
   },
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()

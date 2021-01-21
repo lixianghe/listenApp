@@ -70,29 +70,9 @@ module.exports = {
     wx.navigateTo({
       url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
     })
-    // let url
-    // if (routeType === 'album') {
-    //   url = `../abumInfo/abumInfo?id=${id}&title=${title}`
-    // } else if (routeType === 'media') {
-    //   url = `../playInfo/playInfo?id=${id}`
-    // }
-    // wx.navigateTo({
-    //   url:url
-    // })
 
   },
-  selectTap(e) {
-    const index = e.currentTarget.dataset.index
-    const name = e.currentTarget.dataset.name
-    this.setData({
-      currentTap: index,
-      retcode: 0
-    })
-    wx.showLoading({
-      title: '加载中',
-    })
-    this._getList(name)
-  },
+ 
   //最近收听
   getLaterListen(){
     let param = {
@@ -121,6 +101,7 @@ module.exports = {
             id:res.data.items[i].album.id,
             src:res.data.items[i].album.cover.middle.url,
             contentType:'album',
+            // isHome: true,
             isVip:wx.getStorageInfoSync('USERINFO').is_vip,
             perceent:(res.data.items[i].track.played_secs/res.data.items[i].track.duration)*100
 
@@ -145,52 +126,8 @@ module.exports = {
     
 
   },
-  _getList(name) {
-    setTimeout(() => {
-      let info = []
-      wx.hideLoading()
-      let data = [{
-          id: 958,
-          title: "内容标题1",
-          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",
-          contentType: "album",
-          count: 17,
-          isVip: true
-        },
-        {
-          id: 959,
-          title: "内容标题2",
-          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/f20dda35-d945-4ce0-99fb-e59db62ac7c9_info_w=450&h=450.jpg",
-          contentType: "album",
-          count: 13,
-          isVip: true
-        },
-        {
-          id: 962,
-          title: "内容标题1",
-          src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
-          contentType: "media",
-          count: 0,
-          isVip: false
-        }
-      ]
-      info = data.map(item => {
-        item.title = `${name}-${item.title}`
-        return item
-      })
-      this.setData({
-        req: true,
-        info: info
-      })
-      if (info.length === 0) {
-        this.setData({
-          showModal: true
-        })
-      }
-    }, 500)
-
-    
-  },
+  
+  
   close() {
     this.setData({
       showModal: false

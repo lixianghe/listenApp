@@ -35,7 +35,7 @@ module.exports = {
     info: [],
     showModal: false,
     req: false,
-    likePic: ['/images/info_like.png', '/images/info_like_no.png'],
+    // likePic: ['/images/info_like.png', '/images/info_like_no.png'],
     // labels: {
     //   show: true,
     //   data: [{
@@ -77,18 +77,17 @@ module.exports = {
       url: url
     })
   },
-  selectTap(e) {
-    const index = e.currentTarget.dataset.index
-    const name = e.currentTarget.dataset.name
-    this.setData({
-      currentTap: index,
-      retcode: 0
-    })
-    wx.showLoading({
-      title: '加载中',
-    })
-    this._getList(name)
-  },
+  // selectTap(e) {
+  //   const index = e.currentTarget.dataset.index
+  //   const name = e.currentTarget.dataset.name
+  //   this.setData({
+  //     currentTap: index,
+  //     retcode: 0
+  //   })
+  //   wx.showLoading({
+  //     title: '加载中',
+  //   })
+  // },
   //获取我喜欢的数据
   _getLikeList(){
 
@@ -112,7 +111,7 @@ module.exports = {
             src:res.data.items[i].cover.middle.url,
             // contentType:res.data.items[i].kind,
             contentType:'album',
-
+            isCollect:true,
             isVip:wx.getStorageInfoSync('USERINFO').is_vip,
             lastUpdate:res.data.items[i].last_updated_track_id
           })
@@ -135,63 +134,87 @@ module.exports = {
     } )
 
   },
-  _getList(name) {
-    setTimeout(() => {
-      let info = []
-      wx.hideLoading()
-      let data = [{
-          id: 958,
-          title: "内容标题1",
-          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/389e9f12-0c12-4df3-a06e-62a83fd923ab_info_w=450&h=450.jpg",
-          contentType: "album",
-          count: 17,
-          isVip: true
-        },
-        {
-          id: 959,
-          title: "内容标题2",
-          src: "https://cdn.kaishuhezi.com/kstory/ablum/image/f20dda35-d945-4ce0-99fb-e59db62ac7c9_info_w=450&h=450.jpg",
-          contentType: "album",
-          count: 13,
-          isVip: true
-        },
-        {
-          id: 962,
-          title: "内容标题1",
-          src: "https://cdn.kaishuhezi.com/kstory/story/image/2af5072c-8f22-4b5d-acc2-011084c699f8_info_w=750_h=750_s=670433.jpg",
-          contentType: "media",
-          count: 0,
-          isVip: false
-        }
-      ]
-      info = data.map(item => {
-        item.title = `${name}-${item.title}`
-        return item
-      })
-      this.setData({
-        req: true,
-        info: info
-      })
-      if (info.length === 0) {
-        this.setData({
-          showModal: true
-        })
-      }
-    }, 500)
-
-  },
+  
   // 添加/取消收藏函数
-  like (e) {
-    console.log(e.detail.contentType)     //类型
-    console.log(e.detail.flag)    		// 状态（添加/取消）
-    console.log(e.detail.typeid)    		// 内容id
+  likeOne (e) {
+    console.log('喜欢',e)
+    let idx = e.currentTarget.dataset.no
+    let ablumId = e.detail.item.id
+    let iscollect =e.detail.item.isCollect
+    if(iscollect){
+      this.data.info[idx].isCollect = false
+      //取消搜藏
+      this.cancelCollectAlbum(ablumId)
+    }else{
+      this.data.info[idx].isCollect = true
+
+      //添加搜藏
+      this.collectAlbum(ablumId)
+    }
+   
   },
+
+       //收藏专辑
+       collectAlbum(id){
+        let param = {
+          id:id
+        }
+        utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
+          console.log('收藏专辑:',res)
+          if(res.data.status == 200 && res.data.errmsg == 'ok'){
+            this.setData({
+              info:this.data.info
+            })
+            wx.showToast({
+              title: '专辑订阅成功',
+              icon:'none'
+            })
+           
+          }else{
+            wx.showToast({
+              title: '专辑订阅失败',
+              icon:'none'
+            })
+          }
+        } )
+    
+      },
+      //取消收藏专辑
+      cancelCollectAlbum(id){
+        let param = {
+          id:id
+        }
+    
+        utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
+          console.log('取消收藏专辑:',res)
+          if(res.data.status == 200 && res.data.errmsg == 'ok'){
+            this.setData({
+              info:this.data.info
+            })
+            
+           
+    
+            wx.showToast({
+              title: '专辑取消订阅成功',
+              icon:'none'
+            })
+           
+          }else{
+            wx.showToast({
+              title: '专辑取消订阅失败',
+              icon:'none'
+            })
+          }
+        } )
+    
+      },
   close() {
     this.setData({showModal: false})
     wx.navigateBack({
       
     })
   },
+  // 添加/取消收藏函数
   playMedia(e){
     console.log('播放',e)
   }

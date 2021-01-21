@@ -44,14 +44,14 @@ module.exports = {
           liked: '/images/info_like.png'                          
         }
       },
-      {
-        name: 'loopType',                                         
-        img: {
-          listLoop: '/images/listLoop.png' ,                      
-          singleLoop: '/images/singleLoop.png',                   
-          shufflePlayback: '/images/shufflePlayback.png'          
-        }
-      },
+      // {
+      //   name: 'loopType',                                         
+      //   img: {
+      //     listLoop: '/images/listLoop.png' ,                      
+      //     singleLoop: '/images/singleLoop.png',                   
+      //     shufflePlayback: '/images/shufflePlayback.png'          
+      //   }
+      // },
       {
         name: 'more',                                             
         img: '/images/more2.png'                                  

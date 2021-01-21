@@ -26,12 +26,10 @@ Component({
         selected: e.currentTarget.dataset.index
       })
       console.log('selected:',this.data.selected)
-
-      let pageNo =  e.currentTarget.dataset.index 
-      console.log('selected:',pageNo)
-      
-
-       this.triggerEvent('changeWords', {pageNum: pageNo, pageSize: this.data.pageSize})
+      let sort = e.currentTarget.dataset.order?'asc':'desc'
+      let start = e.currentTarget.dataset.start
+      let end = e.currentTarget.dataset.end
+       this.triggerEvent('changeWords', {sort:sort,start:start,end:end})
       this.closeWords()
     },
     closeWords (e) {
@@ -98,12 +96,15 @@ Component({
         data: result
       })
     },
-    changeOrder() { // 改变排序方式
+    // 改变排序方式
+    changeOrder(e) { 
+      console.log('改变排序方式:',e)
       let currentOrder = !this.data.order
       this.setData({
         order: currentOrder
       })
       this.loadWorks()
+
     }
   },
   attached(options) {

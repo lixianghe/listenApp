@@ -1,9 +1,11 @@
 // import { getData } from '../../utils/httpOpt/httpOpt'
 const app = getApp()
+import utils from '../../utils/util'
 
 Page({
   mixins: [require('../../developerHandle/index')],
   data: {
+    emptyObj:{'title':'已经见底啦~~','src':'/images/album_img_default.png'},
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
@@ -12,6 +14,55 @@ Page({
     currentTap: 0,
     scrollLeft: 0,
     isFixed: false,
+    swiperArr: [],
+    // 开发者注入快捷入口数据
+    lalyLtn: {
+      show: true,
+      data: [{
+          icon: '/images/zjst.png',
+          title: "最近收听",
+          name: 'latelyListen',
+          islogin: false
+        },
+        {
+          icon: '/images/icon_collect.png',
+          title: "我喜欢的",
+          name: 'like',
+          islogin: true
+        }
+      ],
+    },
+    // 开发者注入模板页面数据
+    info: [],
+    // 开发者注入模板标签数据
+    labels: {
+      show: true,
+      // data: [{
+      //   "name": "推荐",
+      //   "id": 1
+      // }, {
+      //   "name": "精品",
+      //   "id": 2
+      // }, {
+      //   "name": "潮流",
+      //   "id": 3
+      // }]
+    },
+    countPic: '/images/media_num.png',
+    // 频道列表，内容列表数据标志变量
+    reqS: true,
+    reqL: false,
+    canplay: [],
+    audioManager: null
+  },
+  // 页面后台数据(不参与渲染)
+  pageData: {
+    pageName: 'index',
+    pageType: 'tab',
+    pageLoaded: false,
+    // 各频道列表页码，根据groupId获取
+    pageNum: 1,
+    hasNext: true,
   },
   scrollhandle(e) {
     if (e.detail.scrollLeft > 230) {
@@ -23,36 +74,277 @@ Page({
         isFixed: false
       })
     }
-    
+
   },
   onLoad(options) {
-    app.log('--------------------index---onload')
-    setTimeout(() => {
-      wx.checkSession({
-        success:(res)=> {
-          if(JSON.stringify(wx.getStorageSync('username'))) {
-            wx.setTabBarItem({
-              index: 2, 
-              text: wx.getStorageSync('username'),
-            })
-          }
-        },
-        fail: (res) => {
-          app.userInfo.token = ''
-          app.userInfo.vipStatus = '';
-          app.userInfo.expireTime = '';
-          wx.removeStorageSync('userInfo');
-          wx.removeStorageSync('username')
+
+  },
+
+  //首页卡片数据
+  _swiperData() {
+    let param = {
+      'banner_content_type': 2,
+      'count': 10,
+      'is_paid': 1,
+      'scope': 0
+    }
+    utils.GET(param, utils.indexBanners, res => {
+      app.log('首页banners数据:', res)
+      if (res.data.banners.length > 0 && res.statusCode == 200) {
+        this.setData({
+          swiperArr: res.data.banners
+        })
+      }
+
+    })
+
+
+  },
+
+  clickHadle(e) {
+    console.log('播放全部专辑id', e.detail.typeid)
+    let albumid = e.detail.typeid
+    // this.getAlbumDetails(albumid)
+    wx.setStorageSync('playing', true)
+
+    this.getAllList(albumid)
+
+  },
+
+  // 获取所有的播放列表
+  getAllList(albumid) {
+    this.data.canplay = []
+    // 假设allList是canplay，真实情况根据接口来
+    console.log('专辑id:', albumid)
+    let param = {
+      'limit': 15,
+      'offset': 0,
+      'sort': "asc"
+    }
+    utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
+      console.log('专辑列表所有数据:', res)
+      if (res.data && res.statusCode == 200) {
+
+        for (let item of res.data.items) {
+          this.data.canplay.push({
+            title: item.title, // 歌曲名称
+            id: item.id, // 歌曲Id
+            dt: this.formatMusicTime(item.duration), // 歌曲的时常
+            coverImgUrl: item.image.url, // 歌曲的封面
+            src: item.play_info.play_64.url,
+            feeType: item.is_vip_free
+          })
         }
+        this.setData({
+          canplay: this.data.canplay
+
+        })
+        wx.setStorageSync('canplay', this.data.canplay)
+        wx.setStorageSync('allList', this.data.canplay)
+        //minibar  播放
+
+        app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
+        app.globalData.songInfo = app.globalData.canplay[0]
+        this.initAudioManager(this.data.canplay)
+        wx.setStorageSync('playing', true)
+
+        console.log('playing:', wx.getStorageSync('playing'))
+
+
+        this.selectComponent('#miniPlayer').setOnShow()
+        this.selectComponent('#miniPlayer').watchPlay()
+        this.selectComponent('#miniPlayer').toggle()
+      }
+
+    })
+  },
+
+  // 初始化 BackgroundAudioManager
+  initAudioManager(list) {
+    this.audioManager = wx.getBackgroundAudioManager()
+    this.audioManager.playInfo = {
+      playList: list
+    }
+  },
+
+  // 播放时间格式化
+  formatMusicTime(time) {
+    let m = parseInt(time / 60);
+    let s = parseInt(time % 60);
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+    return m + ':' + s
+  },
+  //首页音频列表
+  _mediaArrData() {
+    var that = this
+    let param = {
+      'limit': 20
+    }
+    utils.GET(param, utils.indexMediaArr, res => {
+      app.log('首页音频数据:', res)
+      if (res.data.items.length > 0 && res.statusCode == 200) {
+
+        let mediaArr = []
+        for (let item of res.data.items) {
+          mediaArr.push({
+            id: item.album.id,
+            allTitle:item.album.title,
+            title:that.cutStr(item.album.title) ,
+            src: item.album.cover.middle.url,
+            contentType: item.album.kind,
+            count: utils.calculateCount(item.album.play_count),
+            isVip: item.album.is_vip_free,
+            isHome: true
+
+          })
+        }
+        console.log('arr', mediaArr)
+        mediaArr.push(this.data.emptyObj)
+
+        that.setData({
+          reqL: true,
+          info: mediaArr
+        })
+        // this.getAllList(this.data.info[0].id)
+      }
+
+    })
+
+
+  },
+  //截取字符
+  cutStr(str){
+    str = str.replace(/\s/g, "")
+    // console.log('str',str,str.length)
+    var newStr
+    if(str.length<14){
+      newStr = str
+
+    }else{
+      newStr = str.substring(0,12)+'...'
+    }
+    // console.log('newStr:',newStr)
+    return newStr
+
+  },
+
+  //点击指示点切换 
+  chuangEvent: function (e) {
+    console.log('点击指示点切换:', e)
+
+    this.setData({
+      swiperCurrent: e.currentTarget.id
+    })
+  },
+  bannerClick(e) {
+    console.log('banner切换:', e.currentTarget.dataset.item)
+    let item = e.currentTarget.dataset.item
+    let id = item.banner_content_id
+    let title = item.banner_content_title
+    wx.navigateTo({
+      url: '../abumInfo/abumInfo?id=' + id + '&routeType=album' + '&title=' + title + '&from=1'
+    })
+
+  },
+
+
+  // 跳转到播放界面
+  linkAbumInfo(e) {
+    console.log('专辑列表:', e)
+
+    let id = e.currentTarget.dataset.id
+    const src = e.currentTarget.dataset.src
+    const title = e.currentTarget.dataset.title
+    wx.setStorageSync('img', src)
+    const routeType = e.currentTarget.dataset.contentype
+
+    if (!app.globalData.latelyListenId.includes(id)) {
+      app.globalData.latelyListenId.push(id)
+    }
+    let url
+    if (routeType === 'album' || routeType === 'fm') {
+      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
+    } else if (routeType === 'media') {
+      url = `../playInfo/playInfo?id=${id}`
+    }
+
+    wx.navigateTo({
+      url: url
+    })
+  },
+  //轮播图的切换事件 
+  swiperChange: function (e) {
+    // console.log('轮播图的切换事件:',e.detail.current)
+    //   this.setData({
+    //   swiperCurrent: e.detail.current
+    //   })
+    //   if(this.data.swiperCurrent == 2){
+    //     this._swiperDatatwo()
+    //   }
+  },
+
+  //我的收藏
+  like() {
+    if (!wx.getStorageSync('USERINFO') || app.userInfo.islogin == false) {
+      wx.showToast({
+        icon: 'none',
+        title: '请登录后进行操作'
       })
-      
-    }, 800);
+      return;
+    }
+    wx.navigateTo({
+      url: '../like/like'
+    })
   },
- 
+  // 最近播放
+  tolatelyListen(e) {
+    if (!wx.getStorageSync('USERINFO')  || app.userInfo.islogin == false) {
+      wx.showToast({
+        icon: 'none',
+        title: '请登录后进行操作'
+      })
+      return;
+    }
+
+    wx.navigateTo({
+      url: '../latelyListen/latelyListen'
+    })
+  },
+
+  selectTap(e) {
+    const index = e.currentTarget.dataset.index
+    const name = e.currentTarget.dataset.name
+    this.setData({
+      currentTap: index
+    })
+    wx.showLoading({
+      title: '加载中',
+    })
+    // 这里可以自定义传值传到_getList中
+    this._getList(name)
+  },
+
   onShow() {
-    this.selectComponent('#miniPlayer').setOnShow()
-    this.selectComponent('#miniPlayer').watchPlay()
+    // 首页数据
+    console.log('index---onshow:')
+    app.log('index---onshow:')
+
+    app.goAuthGetToken().then((res) => {
+      app.log('res:', res)
+      console.log('=======---------------------res:', res)
+      this._swiperData()
+      this._mediaArrData()
+      this.selectComponent('#miniPlayer').setOnShow()
+      this.selectComponent('#miniPlayer').watchPlay()
+    });
+
+
+
+
   },
+
+
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()
   }

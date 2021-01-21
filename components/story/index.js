@@ -52,16 +52,10 @@ Component({
       this.triggerEvent('clickHadle', { typeid: typeid});
     },
     likeOne(e) {
-      console.log('喜欢')
-      let flag = !this.data.flag
-      let num = Number(flag)
-      this.setData({
-        src: this.data.likePic[num],
-        flag: flag
-      })
-      let typeid = e.currentTarget.dataset.typeid
-      let contentType = e.currentTarget.dataset.contenttype
-      this.triggerEvent('clickHadle', { typeid: typeid, contentType: contentType, flag: flag});
+       let item = e.currentTarget.dataset.item
+      
+      let isCollect = e.currentTarget.dataset.iscollect
+      this.triggerEvent('clickHadle', { item: item, isCollect: isCollect});
     },
     //加载图片失败
     loadImgError: function (res) {

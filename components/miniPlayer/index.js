@@ -82,31 +82,55 @@ Component({
   methods: {
     player(e) {
       console.log(e)
-      //  if (!this.data.songInfo || !this.data.songInfo.title) {
-      //   wx.showToast({
-      //     title: '请添加音频播放',
-      //     icon:'none'
-      //   })
-      //   return
-      //  }
+      
       const type = e.currentTarget.dataset.name
       console.log('type:',type)
       switch (type) {
         case 'pre':     
             console.log('上一首')
+            if(wx.getStorageSync('songInfo') == ''){
+              wx.showToast({
+                title: '请添加音频',
+                icon:'none'
+              })
+              return
+             }
           this.pre()
           break;
-        case 'toggle':
+        case 'toggle': 
+        if(wx.getStorageSync('songInfo') == ''){
+          wx.showToast({
+            title: '请添加音频',
+            icon:'none'
+          })
+          return
+         }
+
          this.toggle()        
           break;
           case 'next':         
               console.log('下一首')
+              if(wx.getStorageSync('songInfo') == ''){
+                wx.showToast({
+                  title: '请添加音频',
+                  icon:'none'
+                })
+                return
+               }
               this.next()      
             break;
           case 'like':
             console.log('like')
 
             if(wx.getStorageSync('USERINFO')){
+              if(wx.getStorageSync('songInfo') == ''){
+                wx.showToast({
+                  title: '请添加音频',
+                  icon:'none'
+                })
+                return
+               }
+
               if(this.data.existed){
                 console.log('取消收藏')
                 this.cancelCollectAlbum()
@@ -229,7 +253,7 @@ Component({
     },
     // 上一首
     pre() {
-      if (app.globalData.songInfo.title) {
+      if (wx.getStorageSync('songInfo')) {
         setTimeout(() => {
           this.triggerEvent('current', this.data.currentId)
         }, 300)
@@ -240,7 +264,7 @@ Component({
     },
     // 下一首
     next() {
-      if (app.globalData.songInfo.title) {
+      if (wx.getStorageSync('songInfo')) {
         setTimeout(() => {
           this.triggerEvent('current', this.data.currentId)
         }, 300)
@@ -251,9 +275,10 @@ Component({
     },
     // 暂停
     toggle() {
+     
       this.triggerEvent('setPlaying', !this.data.playing)
-      console.log('-----------------',this.data.playing)
-      utils.toggleplay(this, app)
+        console.log('-----------------',this.data.playing)
+        utils.toggleplay(this, app)
     },
     // 进入播放详情
     playInfo() { 
@@ -315,6 +340,7 @@ Component({
       that.listenPlaey()
       const playing = wx.getStorageSync('playing')
      const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+     console.log('minibar----setonshow------isCollect:',isCollect)
       that.setData({
         playing: playing,
         canplay: canplay,

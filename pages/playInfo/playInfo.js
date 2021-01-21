@@ -60,7 +60,9 @@ Page({
       timingFunction: 'linear'
     })
   },
-  async onLoad(options) {
+   onLoad(options) {
+    console.log('playinfo------options:',options)
+
     const that = this;
     // 根据分辨率设置样式
     that.setStyle()
@@ -80,6 +82,7 @@ Page({
           that.setData({
             songInfo: app.globalData.songInfo,
             canplay: canplay,
+            existed:options.collect == 'false'?false:true,
             noPlay: options.noPlay || null,
             abumInfoName: options.abumInfoName || null,
             loopType: wx.getStorageSync('loopType') || 'listLoop'
@@ -102,6 +105,8 @@ Page({
       that.setData({
         songInfo: songInfo,
         canplay: canplay,
+        existed:options.collect == 'false'?false:true,
+
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
         loopType: wx.getStorageSync('loopType') || 'listLoop'
@@ -137,6 +142,10 @@ Page({
     
   },
   onShow: function () {
+    this.setData({
+      existed:wx.getSystemInfoSync('ALBUMISCOLLECT')
+    })
+
     
   },
   imgOnLoad() {
@@ -235,6 +244,10 @@ Page({
           this.setData({
             existed:true
           })
+          // if(wx.getStorageSync('songInfo').albumId == app.globalData.songInfo.albumId){
+            wx.setStorageSync('ALBUMISCOLLECT', true)
+            this.selectComponent('#miniPlayer').setOnShow()
+          // }
           wx.showToast({
             title: '专辑订阅成功',
             icon:'none'
@@ -258,6 +271,10 @@ Page({
           this.setData({
             existed:false
           })
+          // if(wx.getStorageSync('songInfo').albumId == app.globalData.songInfo.albumId){
+            wx.setStorageSync('ALBUMISCOLLECT', false)
+            this.selectComponent('#miniPlayer').setOnShow()
+          // }
           wx.showToast({
             title: '专辑取消订阅成功',
             icon:'none'

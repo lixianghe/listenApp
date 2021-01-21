@@ -93,15 +93,14 @@ Page({
     this.setData({
       times: ((wx.getSystemInfoSync().screenHeight)/ 100)
     })
-    this.selectComponent('#miniPlayer').setOnShow()
 
   },
   onShow() {
-    //  console.log('--',showData.abumInfo.data)
-    //  this.setData({
-    //    info:showData.abumInfo.data
-    //  })
-   
+    this.setData({
+      existed:wx.getSystemInfoSync('ALBUMISCOLLECT')
+    })
+    this.selectComponent('#miniPlayer').setOnShow()
+
   },
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()

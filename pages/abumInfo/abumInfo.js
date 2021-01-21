@@ -13,6 +13,10 @@ let selectedNo = 0
 Page({
    mixins: [abumInfoMixin],
   data: {
+    offset:0,
+    start:1,
+    end:null,
+    sort:'asc',
     isVip:false,
     type:null,
     canplay: [],
@@ -146,8 +150,12 @@ this.setData({
         this.setData({
           existed:true
         })
-        wx.setStorageSync('ALBUMISCOLLECT', true)
-        this.selectComponent('#miniPlayer').setOnShow()
+        
+        // if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
+          wx.setStorageSync('ALBUMISCOLLECT', true)
+          this.selectComponent('#miniPlayer').setOnShow()
+        // }
+       
 
         wx.showToast({
           title: '专辑订阅成功',
@@ -172,8 +180,10 @@ this.setData({
         this.setData({
           existed:false
         })
-        wx.setStorageSync('ALBUMISCOLLECT', false)
-        this.selectComponent('#miniPlayer').setOnShow()
+        // if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
+          wx.setStorageSync('ALBUMISCOLLECT', false)
+          this.selectComponent('#miniPlayer').setOnShow()
+        // }
 
         wx.showToast({
           title: '专辑取消订阅成功',
@@ -194,8 +204,8 @@ this.setData({
         console.log('专辑id:',albumid)
         let param={
           'limit': this.data.pageSize,
-          'offset': this.data.pageNub*this.data.pageSize,
-          'sort': "asc"
+          'offset': this.data.offset,
+          'sort': this.data.sort
         }
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
@@ -301,10 +311,13 @@ this.setData({
     const currentId = wx.getStorageSync('songInfo').id
     this.setData({
       currentId: Number(currentId),
+      existed:wx.getSystemInfoSync('ALBUMISCOLLECT')
     })
-    this.selectComponent('#miniPlayer').setOnShow()
     let playing = wx.getStorageSync('playing')
     this.setData({playing})
+
+    this.selectComponent('#miniPlayer').setOnShow()
+    this.selectComponent('#miniPlayer').watchPlay()
   },
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()
@@ -324,13 +337,30 @@ this.setData({
   },
   // 接受子组件传值
   async changeWords(e) {
+    console.log('接受子组件传值-----:',e)
     // 请求新的歌曲列表
-    this.setData({
-      pageNub: e.detail.pageNum,
-      selected:e.detail.pageNum,
-      pageNo: e.detail.pageNum + 1,
-      pageSize: e.detail.pageSize
-    })
+   
+    if(e.detail.sort =='asc'){
+      this.setData({
+        
+        start:e.detail.start,
+        end:e.detail.end,
+        sort:e.detail.sort,
+        offset:e.detail.start
+      })
+    }else{
+      console.log('------=====:',parseInt( this.data.total/15))
+      this.setData({
+       
+        start:e.detail.start,
+        end:e.detail.end,
+        sort:e.detail.sort,
+        offset:e.detail.end
+
+      })
+       console.log('------=====:',this.data.pageNo*this.data.pageSize)
+
+    }
     this.getAllList(this.data.optionId).then(()=> {
       this.setData({scrollTop: 0})
     })
@@ -351,7 +381,7 @@ this.setData({
   },
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId
-    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${app.globalData.songInfo.title}` })
+    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${app.globalData.songInfo.allTitle}&collect=${this.data.existed}` })
   },
   // 改变current
   changeCurrent(currentId) {
@@ -392,7 +422,7 @@ this.setData({
     })
     let that = this
     if (getMedia) await getMedia(params, that)
-    this.getNetWork(msg, app.playing)
+    // this.getNetWork(msg, app.playing)
   },
   setPlaying(e) {
     this.setData({
@@ -422,41 +452,65 @@ this.setData({
   },
  
   // 列表滚动事件
-  // listScroll: tool.debounce(async function (res) {
-  //   console.log(res)
-  //   let top = res.detail.scrollTop
-  //   console.log('top:',top)
-  //   selectedNo = parseInt(top / this.data.tenHeight)
-  //   console.log('selectedNo:',selectedNo)
-  //   this.setData({
-  //     select:selectedNo,
+  listScroll: tool.debounce(async function (res) {
+    // console.log()
+    // if(this.data.sort == 'asc'){
+    //   this.data.offset-=15
 
-  //   })
+    // }else{
+    //   this.data.offset+=15
 
-  // }, 50),
+    // }
+    // console.log('offset:',this.data.offset)
+    // this.getAllList(this.data.optionId, 'down')
+    // setTimeout(() => {
+    //   this.setData({
+    //     showLoadEnd: false,
+    //   })
+    // }, 800)
+
+  }, 50),
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
+     console.log('滚到顶部')
+    // if(this.data.sort == 'asc'){
+    //   this.data.offset-=15
+
+    // }else{
+    //   this.data.offset+=15
+
+    // }
+    // console.log('offset:',this.data.offset)
+    // this.getAllList(this.data.optionId, 'down')
+    // setTimeout(() => {
+    //   this.setData({
+    //     showLoadEnd: false,
+    //   })
+    // }, 800)
 
   }, 2000),
   // 滚到底部
   listBehind: tool.throttle(async function (res) {
     // 滑倒最底下
-    let lastIndex = (this.data.pageNo   - 1) * this.data.pageSize + this.data.canplay.length      // 目前最后一个的索引值
-    if (lastIndex >= this.data.total) {
-      this.setData({ showLoadEnd: false })
-      return false
-    } else {
-      this.setData({ showLoadEnd: true })
+    // let lastIndex = (this.data.pageNo   - 1) * this.data.pageSize + this.data.canplay.length      // 目前最后一个的索引值
+    // if (lastIndex >= this.data.total) {
+    //   this.setData({ showLoadEnd: false })
+    //   return false
+    // } else {
+    //   this.setData({ showLoadEnd: true })
+    // }
+    // scrollTopNo++
+    // console.log('scrollTopNo:',scrollTopNo)
+
+   console.log('sort:',this.data.sort)
+    if(this.data.sort == 'asc'){
+      this.data.offset+=15
+
+    }else{
+      this.data.offset-=15
+
     }
-    scrollTopNo++
-    console.log('scrollTopNo:',scrollTopNo)
-
-    let pageNoName = this.data.pageNoName
-    let idName = this.data.idName
-    let params = { [pageNoName]: this.data.initPageNo + scrollTopNo, [idName]: this.data.optionId }
-   this.data.pageNub++
-
-    console.log('pageNub:',this.data.pageNub)
+    console.log('offset:',this.data.offset)
     this.getAllList(this.data.optionId, 'up')
     setTimeout(() => {
       this.setData({
@@ -534,12 +588,18 @@ this.setData({
   // },
   // 下拉结束后的处理
   async topHandle() {
-    this.data.pageNub--
-    this.getAllList(this.data.optionId, 'down')
+    console.log('---下拉结束')
+    if(this.data.sort == 'asc'){
+      this.data.offset-=15
+
+    }else{
+      this.data.offset+=15
+
+    }    this.getAllList(this.data.optionId, 'down')
     this.setData({
       showLoadTop: false,
       scrollTop: 0,
-      pageNo: this.data.pageNo - 1,
+      
     })
   },
   // 根据分辨率设置样式

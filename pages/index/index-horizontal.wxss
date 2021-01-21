@@ -85,7 +85,7 @@
   height: 14vh;
   line-height: 14vh;
   margin-top: 1vh;
-  margin-left: 9vh;
+  margin-left: 6vh;
   /* background: red; */
   
 }
@@ -93,7 +93,7 @@
   position: absolute;
   display: inline-block;
   top: 0;
-  left: 25vh;
+  left: 24vh;
   height: 16vh;
   line-height: 16vh;
   font-size: 7vh;

@@ -8,12 +8,17 @@
     <text class="countxt">{{datasource.count}}</text>
   </view>
   <image wx:if="{{datasource.isHome}}"  src="../../images/play2.png"   data-typeid="{{datasource.id}}" catchtap="playMedia" class="play-img"></image>
-  <view wx:if="{{src.length > 0}}"
+  <view wx:if="{{datasource.isCollect == true}}"
       class="like"
-      style="background-image:url({{src}})"
+      style="background-image:url(/images/info_like.png)"
       catchtap="likeOne"
-      data-typeid="{{datasource.id}}"
-      data-contentType="{{datasource.contentType}}">
+      data-item="{{datasource}}">
+  </view>
+  <view wx:if="{{datasource.isCollect == false}}"
+      class="like"
+      style="background-image:url('/images/info_like_no.png')"
+      catchtap="likeOne"
+      data-item="{{datasource}}">
   </view>
   <view class="albumTit">
     <text class="vip" wx:if="{{datasource.isVip}}" style="background-color:{{mainColor}}">VIP</text>
