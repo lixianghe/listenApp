@@ -70,7 +70,7 @@ Page({
     var albumid = options.id
     this.data.optionId = albumid
     this.data.type = options.from
-    app.globalData.abumInfoId = this.data.optionId
+    // app.globalData.abumInfoId = this.data.optionId
     this.getAllList( this.data.optionId)
     // const msg = '网络异常，请检查网络！'
     // this.getNetWork(msg)
@@ -150,10 +150,12 @@ this.setData({
           existed:true
         })
         
-        // if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
-          wx.setStorageSync('ALBUMISCOLLECT', true)
+        if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+          wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
           this.selectComponent('#miniPlayer').setOnShow()
-        // }
+        }
+        
+        
        
 
         wx.showToast({
@@ -179,10 +181,12 @@ this.setData({
         this.setData({
           existed:false
         })
-        // if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
-          wx.setStorageSync('ALBUMISCOLLECT', false)
-          this.selectComponent('#miniPlayer').setOnShow()
-        // }
+          if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+            this.selectComponent('#miniPlayer').setOnShow()
+          }
+          
+        
 
         wx.showToast({
           title: '专辑取消订阅成功',
@@ -296,9 +300,10 @@ this.setData({
   
            })
           
-
-           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-           this.selectComponent('#miniPlayer').setOnShow()
+         
+            //  this.selectComponent('#miniPlayer').setOnShow()
+          
+           
          }else{
 
          }

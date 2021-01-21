@@ -118,9 +118,7 @@ Page({
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
     }
-    this.setData({
-      existed:this.data.existed
-    })
+    
     console.log('playinfo------existed:',this.data.existed)
 
    
@@ -144,12 +142,9 @@ Page({
     
   },
   onShow: function () {
-    this.setData({
-      existed:wx.getStorageSync('ALBUMISCOLLECT')
-    })
-    console.log('existed:',this.data.existed)
-
     
+
+    this.selectComponent('#miniPlayer').setOnShow()
   },
   imgOnLoad() {
     this.setData({ showImg: true })
@@ -247,10 +242,11 @@ Page({
           this.setData({
             existed:true
           })
-          // if(wx.getStorageSync('songInfo').albumId == app.globalData.songInfo.albumId){
-            wx.setStorageSync('ALBUMISCOLLECT', true)
+          if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
             this.selectComponent('#miniPlayer').setOnShow()
-          // }
+          }
+          
           wx.showToast({
             title: '专辑订阅成功',
             icon:'none'
@@ -274,10 +270,11 @@ Page({
           this.setData({
             existed:false
           })
-          // if(wx.getStorageSync('songInfo').albumId == app.globalData.songInfo.albumId){
-            wx.setStorageSync('ALBUMISCOLLECT', false)
+          if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
             this.selectComponent('#miniPlayer').setOnShow()
-          // }
+          }
+          
           wx.showToast({
             title: '专辑取消订阅成功',
             icon:'none'
