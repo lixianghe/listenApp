@@ -97,7 +97,7 @@ Page({
   },
   onShow() {
     this.setData({
-      existed:wx.getSystemInfoSync('ALBUMISCOLLECT')
+      existed:wx.getStorageSync('ALBUMISCOLLECT')
     })
     this.selectComponent('#miniPlayer').setOnShow()
 

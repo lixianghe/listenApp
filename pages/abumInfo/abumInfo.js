@@ -71,8 +71,7 @@ Page({
     this.data.optionId = albumid
     this.data.type = options.from
     app.globalData.abumInfoId = this.data.optionId
-    this.getAlbumDetails(albumid)
-      
+    this.getAllList( this.data.optionId)
     // const msg = '网络异常，请检查网络！'
     // this.getNetWork(msg)
     // 暂存专辑全部歌曲
@@ -296,7 +295,7 @@ this.setData({
              isVip:res.data.is_vip_free
   
            })
-           this.getAllList( this.data.optionId)
+          
 
            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
            this.selectComponent('#miniPlayer').setOnShow()
@@ -308,10 +307,12 @@ this.setData({
     },
   
   onShow() {
+    this.getAlbumDetails( this.data.optionId )
+
     const currentId = wx.getStorageSync('songInfo').id
     this.setData({
       currentId: Number(currentId),
-      existed:wx.getSystemInfoSync('ALBUMISCOLLECT')
+      existed:wx.getStorageSync('ALBUMISCOLLECT')
     })
     let playing = wx.getStorageSync('playing')
     this.setData({playing})
