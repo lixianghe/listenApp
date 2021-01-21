@@ -105,5 +105,5 @@
   opacity: 0.32;
   position: absolute;
   left: 0;
-  top: 0;
+  top: 1vh;
 }

@@ -32,6 +32,7 @@
 }
 .page .playLeft .title .title-name {
   display: block;
+  width: 140vh;
 }
 .page .playLeft .title .song-type {
   display: inline-block;
@@ -191,6 +192,7 @@
   height: 23vh;
   border-radius: 2vh;
   margin-right: 7.7vh;
+  flex-shrink: 0;
 }
 
 .page .songDc .songDcTitle .image {
@@ -200,7 +202,9 @@
   margin-right: 7.7vh;
   background: rgba(255,255,255, 0.1);
 }
-
+.page .songDc .songDcTitle .song-type {
+  margin-top: 2.5vh;
+}
 
 .page .songDc .player {
   margin-top: 14vh;
