@@ -48,24 +48,7 @@ module.exports = {
     }]
   },
   onShow() {
-    app.log('onshow-----------')
-    // wx.checkSession({
-    //   success: (res) => {
-    //     console.log('checksession:',res)
-    //     let userinfo = wx.getStorageInfoSync('USERINFO')
-    //     this.setData({
-    //       isLogin:true,
-    //       userInfo:userinfo
-    //     })
-      
-    //   },
-    //   fail: (res) => {
-    //     //走退出接口
-    //      app.log("---checkSession--fail---userInfo/exit")
-    //      wx.removeStorageSync('USERINFO')
-    //      wx.removeStorageSync('ACCESSTOKEN')
-    //   },
-    // })
+    var that = this
     wx.login({
       success: (res) => {
         app.log('res--code:',res)
@@ -78,6 +61,27 @@ module.exports = {
       },
      
     })
+    app.log('personcenter----------onshow')
+    if(wx.canIUse('onTaiAccountStatusChange')){
+      wx.onTaiAccountStatusChange(function (res) {
+         app.log("---onTaiAccountStatusChange--",res)
+        if (res.isLoginUser) { // 有登录，记录数据
+           app.log("---dispatch--codeLoginNew")
+           that.fromCodeGetOpenid()
+          
+        } else { // 有登出，清除数据
+           app.log("---dispatch--exit")
+           that.logoutTap()
+          
+        }
+       })
+    }else{
+      app.log('不支持-----------------onTaiAccountStatusChange')
+
+    }
+   
+    
+   
 
 
 
@@ -150,7 +154,7 @@ module.exports = {
       app.log('刷新Token:',res)
       if(res.data && res.statusCode == 200){
         res.data.deadline = +new Date() + (res.data.expires_in * 1000);
-        console.log("失效时间", res.data.deadline)   
+        app.log("失效时间", res.data.deadline)   
         res.data.isLogin = true
         wx.setStorageSync('TOKEN', res.data)
         this.getUserInfo()
@@ -172,6 +176,10 @@ module.exports = {
         })
         wx.setStorageSync('USERINFO', res.data)
         app.userInfo.islogin = true
+        wx.showToast({
+          title: '登录成功',
+          icon:'none'
+        })
 
       }else{
         wx.showToast({
@@ -222,6 +230,10 @@ module.exports = {
       userInfo: obj,
       isLogin: false,
       existed:false
+    })
+    wx.showToast({
+      title: '退出成功',
+      icon:'none'
     })
     wx.setStorageSync('ALBUMISCOLLECT', false)
     this.selectComponent('#miniPlayer').setOnShow()

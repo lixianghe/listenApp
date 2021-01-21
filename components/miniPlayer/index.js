@@ -339,17 +339,24 @@ Component({
       const canplay = wx.getStorageSync('canplay')
       that.listenPlaey()
       const playing = wx.getStorageSync('playing')
-     const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
-     console.log('minibar----setonshow------isCollect:',isCollect)
+      const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+      console.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
+      console.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
+      console.log('minibar----setonshow------isCollect:',isCollect)
+      if(wx.getStorageSync('songInfo') && wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+        const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+        console.log('minibar----setonshow------isCollect:',isCollect)
+        that.setData({
+          existed:isCollect
+        })
+      }
+    
       that.setData({
         playing: playing,
         canplay: canplay,
-        existed:isCollect
       })
       if (playing) app.playing(that)
-      // 是否被收藏
-      // let songInfo = wx.getStorageSync('songInfo')
-      // isFavorite({mediaId: songInfo.id}, that)
+     
     },
     setOnHide() {
 
