@@ -104,9 +104,6 @@ Page({
   clickHadle(e) {
     console.log('播放全部专辑id', e.detail.typeid)
     let albumid = e.detail.typeid
-    // this.getAlbumDetails(albumid)
-    wx.setStorageSync('playing', true)
-
     this.getAllList(albumid)
 
   },
@@ -135,22 +132,16 @@ Page({
             feeType: item.is_vip_free
           })
         }
-        this.setData({
-          canplay: this.data.canplay
-
-        })
+     
         wx.setStorageSync('canplay', this.data.canplay)
         wx.setStorageSync('allList', this.data.canplay)
         //minibar  播放
-
         app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
         app.globalData.songInfo = app.globalData.canplay[0]
         this.initAudioManager(this.data.canplay)
-        wx.setStorageSync('playing', true)
+        // wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
         console.log('playing:', wx.getStorageSync('playing'))
-
-
         this.selectComponent('#miniPlayer').setOnShow()
         this.selectComponent('#miniPlayer').watchPlay()
         this.selectComponent('#miniPlayer').toggle()
@@ -218,11 +209,11 @@ Page({
     str = str.replace(/\s/g, "")
     // console.log('str',str,str.length)
     var newStr
-    if(str.length<14){
+    if(str.length<16){
       newStr = str
 
     }else{
-      newStr = str.substring(0,12)+'...'
+      newStr = str.substring(0,16)+'...'
     }
     // console.log('newStr:',newStr)
     return newStr

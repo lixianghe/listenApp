@@ -355,6 +355,7 @@ Component({
         playing: playing,
         canplay: canplay,
       })
+      
       if (playing && app.globalData.songInfo) app.playing(that)
       // 是否被收藏
       // let songInfo = wx.getStorageSync('songInfo')

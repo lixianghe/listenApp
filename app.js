@@ -206,17 +206,19 @@ App({
   },
   // 根据歌曲url播放歌曲
   playing: function (seek, that) {
-    console.log('--------------')
+    console.log('--------------playing')
     if (that == undefined) {
       that = seek
     }
     const songInfo = this.globalData.songInfo
+    console.log('--------------playing--------songInfo:',songInfo)
+
     // 如果是车载情况
-    this.carHandle(songInfo, seek)
+     this.carHandle(songInfo, seek)
     let app = this
     utils.initAudioManager(app, that, songInfo)
     this.globalData.playBeginAt = new Date().getTime();
-    this.upLoadPlayinfo()
+     this.upLoadPlayinfo()
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
