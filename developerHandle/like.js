@@ -32,6 +32,7 @@ import utils from '../utils/util'
 
 module.exports = {
   data: {
+    collectId:'',
     info: [],
     showModal: false,
     req: false,
@@ -139,17 +140,17 @@ module.exports = {
   likeOne (e) {
     console.log('喜欢',e)
     let idx = e.currentTarget.dataset.no
-    let ablumId = e.detail.item.id
+    this.data.collectId = e.detail.item.id
     let iscollect =e.detail.item.isCollect
     if(iscollect){
       this.data.info[idx].isCollect = false
       //取消搜藏
-      this.cancelCollectAlbum(ablumId)
+      this.cancelCollectAlbum(this.data.collectId)
     }else{
       this.data.info[idx].isCollect = true
 
       //添加搜藏
-      this.collectAlbum(ablumId)
+      this.collectAlbum(this.data.collectId)
     }
    
   },
@@ -165,6 +166,12 @@ module.exports = {
             this.setData({
               info:this.data.info
             })
+             if(wx.getStorageSync('songInfo').albumId == this.data.collectId){
+          wx.setStorageSync('ALBUMISCOLLECT', true)
+          this.selectComponent('#miniPlayer').setOnShow()
+        }
+
+            
             wx.showToast({
               title: '专辑订阅成功',
               icon:'none'
@@ -192,7 +199,10 @@ module.exports = {
               info:this.data.info
             })
             
-           
+            if(wx.getStorageSync('songInfo').albumId == this.data.collectId){
+              wx.setStorageSync('ALBUMISCOLLECT', false)
+              this.selectComponent('#miniPlayer').setOnShow()
+            }
     
             wx.showToast({
               title: '专辑取消订阅成功',

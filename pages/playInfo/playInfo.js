@@ -8,6 +8,7 @@ import utils from '../../utils/util'
 Page({
   mixins: [require('../../developerHandle/playInfo')],
   data: {
+    existed:false,
     songInfo: {},
     playing: false,
     drapType: false,
@@ -46,7 +47,6 @@ Page({
     showImg: false,
     bigScreen: app.globalData.PIbigScreen,
     abumInfoName: null,
-    existed: false,
     mainColor: btnConfig.colorOptions.mainColor,
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
@@ -85,7 +85,6 @@ Page({
             existed:options.collect == 'false'?false:true,
             noPlay: options.noPlay || null,
             abumInfoName: options.abumInfoName || null,
-            loopType: wx.getStorageSync('loopType') || 'listLoop'
           })
     
           // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
@@ -109,7 +108,6 @@ Page({
 
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
-        loopType: wx.getStorageSync('loopType') || 'listLoop'
       })
 
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
@@ -120,7 +118,11 @@ Page({
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
     }
-   
+    this.setData({
+      existed:this.data.existed
+    })
+    console.log('playinfo------existed:',this.data.existed)
+
    
   },
     getVipMediaUrl(trackid){
@@ -143,8 +145,9 @@ Page({
   },
   onShow: function () {
     this.setData({
-      existed:wx.getSystemInfoSync('ALBUMISCOLLECT')
+      existed:wx.getStorageSync('ALBUMISCOLLECT')
     })
+    console.log('existed:',this.data.existed)
 
     
   },
