@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "最近收听",
+  "navigationBarTitleText": "最近播放",
   "usingComponents": {
     "noData": "/components/noData/index"
   }
