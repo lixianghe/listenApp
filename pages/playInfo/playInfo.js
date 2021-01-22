@@ -1,4 +1,3 @@
-
 const app = getApp()
 import tool from '../../utils/util'
 import btnConfig from '../../utils/pageOtpions/pageOtpions'
@@ -8,7 +7,7 @@ import utils from '../../utils/util'
 Page({
   mixins: [require('../../developerHandle/playInfo')],
   data: {
-    existed:false,
+    existed: false,
     songInfo: {},
     playing: false,
     drapType: false,
@@ -18,15 +17,13 @@ Page({
     showList: false,
     currentId: null,
     // 开发者不传默认的按钮
-    defaultBtns: [
-      {
-        name: 'toggle',                                          // 播放/暂停
-        img: {
-          stopUrl: '/images/stop2.png' ,                         // 播放状态的图标
-          playUrl: '/images/play2.png'                           // 暂停状态的图标
-        }
-      },
-    ],
+    defaultBtns: [{
+      name: 'toggle', // 播放/暂停
+      img: {
+        stopUrl: '/images/stop2.png', // 播放状态的图标
+        playUrl: '/images/play2.png' // 暂停状态的图标
+      }
+    }, ],
     btnCurrent: null,
     noTransform: '',
     typelist: ['listLoop', 'singleLoop', 'shufflePlayback'],
@@ -35,7 +32,7 @@ Page({
       "singleLoop": '单曲循环',
       "shufflePlayback": '随机播放',
     },
-    loopType: 'listLoop',   // 默认列表循环
+    loopType: 'listLoop', // 默认列表循环
     likeType: 'noLike',
     total: 0,
     scrolltop: 0,
@@ -60,292 +57,285 @@ Page({
       timingFunction: 'linear'
     })
   },
-   onLoad(options) {
-    console.log('playinfo------options:',options)
-    console.log('playinfo------existed:',this.data.existed)
-    
+  onLoad(options) {
     const that = this;
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
-    const songInfo =app.globalData.songInfo?app.globalData.songInfo: wx.getStorageSync('songInfo') 
-    console.log('songinfo:',wx.getStorageSync('songInfo') )
-    console.log('canplay:',canplay)
-    if(songInfo.feeType == true){
-      //vip
-  console.log('bannees---vip--------:')
-let param = {  
-}   
-    utils.PLAYINFOGET(param,utils.getMediaInfo+songInfo.id+'/play-info',res=>{
-      console.log('bannees---vip---音频-------:',res)
+    const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
+    if (songInfo.feeType == true) {
+      let param = {}
+      utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
+        if (res.data && res.statusCode == 200) {
+          app.globalData.songInfo.src = res.data.play_32.url
+          wx.setStorage({
+            key: 'songInfo',
+            data: app.globalData.songInfo
+          })
+          that.setData({
+            songInfo: app.globalData.songInfo,
+            canplay: canplay,
+            existed: options.collect == 'false' ? false : true,
+            noPlay: options.noPlay || null,
+            abumInfoName: options.abumInfoName || null,
+          })
+          // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+          wx.setStorageSync('abumInfoName', options.abumInfoName)
+          if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+          if (options.noPlay !== 'true') wx.showLoading({
+            title: '加载中...',
+            mask: true
+          })
+          // console.log('bannees-vip---音频----300---:')
 
-      if(res.data && res.statusCode == 200){
-        console.log('bannees-vip---音频----200---:')
+          // 监听歌曲播放状态，比如进度，时间
+          tool.playAlrc(that, app);
+          that.queryProcessBarWidth()
+          app.playing(that)
 
-        app.globalData.songInfo.src = res.data.play_32.url
-        wx.setStorage({ key: 'songInfo', data: app.globalData.songInfo })   
-        that.setData({
-          songInfo: app.globalData.songInfo,
-          canplay: canplay,
-          existed:options.collect == 'false'?false:true,
-          noPlay: options.noPlay || null,
-           abumInfoName: options.abumInfoName || null,
-        })
-  
-        // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-      wx.setStorageSync('abumInfoName', options.abumInfoName)
-      if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-      if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
-      console.log('bannees-vip---音频----300---:')
-
-      // 监听歌曲播放状态，比如进度，时间
-       tool.playAlrc(that, app);
-       that.queryProcessBarWidth()
-       app.playing(that)
-
-      }else{
-      }
-    } )
-
-    //  that.getVipMediaUrl(songInfo.id).then((res) => {
-    //     console.log('vip音频---------------',res)
-      
-    //   })
-     
-    }else{
+        } else {}
+      })
+    } else {
       that.setData({
         songInfo: songInfo,
         canplay: canplay,
-        existed:options.collect == 'false'?false:true,
+        existed: options.collect == 'false' ? false : true,
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
       })
 
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-    wx.setStorageSync('abumInfoName', this.data.abumInfoName)
-    // if (options.noPlay !== 'true' ||  this.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-    // if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
-     // 监听歌曲播放状态，比如进度，时间
-    tool.playAlrc(that, app);
-    that.queryProcessBarWidth()
+      wx.setStorageSync('abumInfoName', this.data.abumInfoName)
+      if (options.noPlay !== 'true' ||  this.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+      if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
+      // 监听歌曲播放状态，比如进度，时间
+      tool.playAlrc(that, app);
+      that.queryProcessBarWidth()
+      app.playing(that)
     }
-    
+
     // this.setData({
     //   playing:wx.getStorageSync('playing')
     // })
 
-   
+
   },
-    getVipMediaUrl(trackid){
-    console.log('-------trackid:',trackid)
-  
+  getVipMediaUrl(trackid) {
+    console.log('-------trackid:', trackid)
 
-    
-    
 
-    
+
+
+
+
   },
   onShow: function () {
-    
+
 
   },
   imgOnLoad() {
-    this.setData({ showImg: true })
+    this.setData({
+      showImg: true
+    })
   },
   play() {
     let that = this
     // 从统一播放界面切回来，根据playing判断播放状态options.noPlay为true代表从minibar过来的
     const playing = wx.getStorageSync('playing')
     if (playing || this.data.noPlay !== 'true') app.playing(that)
-   
+
   },
-  albumClick(e){
-    console.log('专辑点击:',e)
+  albumClick(e) {
+    // console.log('专辑点击:',e)
     let id = e.currentTarget.dataset.song.albumId
-    console.log('专辑id:',id)
+    // console.log('专辑id:',id)
     const src = e.currentTarget.dataset.song.src
     const title = e.currentTarget.dataset.song.title
-    wx.setStorageSync('img', src) 
+    wx.setStorageSync('img', src)
     wx.navigateTo({
-      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+      url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
     })
 
-   
+
   },
-  authorClick(e){
-    console.log('作者点击:',e)
+  authorClick(e) {
+    // console.log('作者点击:',e)
     let id = e.currentTarget.dataset.song.authorId
-    console.log('作者id:',id)
+    // console.log('作者id:',id)
 
     wx.navigateTo({
-      url: '/pages/author/author?authorId='+id,
+      url: '/pages/author/author?authorId=' + id,
     })
 
   },
   btnsPlay(e) {
     const type = e.currentTarget.dataset.name
-    console.log('type:',type)
-      switch (type) {
-        case 'pre':
-         
-            console.log('上一首')
-          this.pre()
-        
-          break;
-        case 'toggle':
-         this.toggle()
-          
-          break;
-          case 'next':
-            
-              console.log('下一首')
-              this.next()
-            
-          
-            break;
-          case 'like':
-            if(wx.getStorageSync('USERINFO')){
-              if(this.data.existed){
-                console.log('取消收藏')
-                this.cancelCollectAlbum()
-              }else{
-                console.log('添加收藏')
-                this.collectAlbum()
-              }
-            }else{
-              wx.showToast({
-                title: '请登录后操作',
-                icon:'none'
-              })
-                // wx.switchTab({
-                //   url: 'pages/personalCenter/personalCenter'
-                // })
-            }
-            break;
-            case 'more':
-          this.more()
-            break;
-      
-        default:
-          break;
-      }
+    // console.log('type:',type)
+    switch (type) {
+      case 'pre':
+
+        console.log('上一首')
+        this.pre()
+
+        break;
+      case 'toggle':
+        this.toggle()
+
+        break;
+      case 'next':
+
+        console.log('下一首')
+        this.next()
 
 
-      
-   
+        break;
+      case 'like':
+        if (wx.getStorageSync('USERINFO')) {
+          if (this.data.existed) {
+            console.log('取消收藏')
+            this.cancelCollectAlbum()
+          } else {
+            console.log('添加收藏')
+            this.collectAlbum()
+          }
+        } else {
+          wx.showToast({
+            title: '请登录后操作',
+            icon: 'none'
+          })
+          // wx.switchTab({
+          //   url: 'pages/personalCenter/personalCenter'
+          // })
+        }
+        break;
+      case 'more':
+        this.more()
+        break;
+
+      default:
+        break;
+    }
+
+
+
+
   },
-    //收藏专辑
-    collectAlbum(){
-      let param = {
-        id:app.globalData.songInfo.albumId
-      }
-      utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
-        console.log('收藏专辑:',res)
-        if(res.data.status == 200 && res.data.errmsg == 'ok'){
-          this.setData({
-            existed:true
-          })
-          if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
-            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-          }
-          
-          wx.showToast({
-            title: '专辑订阅成功',
-            icon:'none'
-          })
-         
-        }else{
-  
+  //收藏专辑
+  collectAlbum() {
+    let param = {
+      id: app.globalData.songInfo.albumId
+    }
+    utils.ALBUMSUBCRIBEPOST(param, utils.albumCollect, res => {
+      console.log('收藏专辑:', res)
+      if (res.data.status == 200 && res.data.errmsg == 'ok') {
+        this.setData({
+          existed: true
+        })
+        if (wx.getStorageSync('songInfo').albumId == app.globalData.abumInfoId) {
+          wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
         }
-      } )
-  
-    },
-    //取消收藏专辑
-    cancelCollectAlbum(){
-      let param = {
-        id:app.globalData.songInfo.albumId
-      }
-  
-      utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
-        console.log('取消收藏专辑:',res)
-        if(res.data.status == 200 && res.data.errmsg == 'ok'){
-          this.setData({
-            existed:false
-          })
-          if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
-            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-          }
-          
-          wx.showToast({
-            title: '专辑取消订阅成功',
-            icon:'none'
-          })
-         
-        }else{
-  
-        }
-      } )
-  
-    },
 
-     //收藏音频
-     collectAudio(){
-      let param = {
-        id:wx.getStorageSync('songInfo').id
+        wx.showToast({
+          title: '专辑订阅成功',
+          icon: 'none'
+        })
+
+      } else {
+
       }
-      utils.PLAYHISTORYGET(param,utils.audioCollect,res=>{
-        console.log('收藏音频:',res)
-        if(res.data.status == 200 && res.data.errmsg == 'ok'){
-          this.setData({
-            existed:true
-          })
-          wx.showToast({
-            title: '音频订阅成功',
-            icon:'none'
-          })
-         
-        }else{
-  
+    })
+
+  },
+  //取消收藏专辑
+  cancelCollectAlbum() {
+    let param = {
+      id: app.globalData.songInfo.albumId
+    }
+
+    utils.ALBUMSUBCRIBEPOST(param, utils.cancelAlbumCollect, res => {
+      console.log('取消收藏专辑:', res)
+      if (res.data.status == 200 && res.data.errmsg == 'ok') {
+        this.setData({
+          existed: false
+        })
+        if (wx.getStorageSync('songInfo').albumId == app.globalData.abumInfoId) {
+          wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
         }
-      } )
-    },
-    //取消音频收藏
-    cancelAudioCollect(){
-      let param = {
-        id:wx.getStorageSync('songInfo').id
+
+        wx.showToast({
+          title: '专辑取消订阅成功',
+          icon: 'none'
+        })
+
+      } else {
+
       }
-      utils.PLAYHISTORYGET(param,utils.audioCancelCollect,res=>{
-        console.log('取消音频收藏:',res)
-        if(res.data.status == 200 && res.data.errmsg == 'ok'){
-          this.setData({
-            existed:false
-          })
-          wx.showToast({
-            title: '音频取消订阅成功',
-            icon:'none'
-          })
-         
-        }else{
-  
-        }
-      } )
-    },
+    })
+
+  },
+
+  //收藏音频
+  collectAudio() {
+    let param = {
+      id: wx.getStorageSync('songInfo').id
+    }
+    utils.PLAYHISTORYGET(param, utils.audioCollect, res => {
+      console.log('收藏音频:', res)
+      if (res.data.status == 200 && res.data.errmsg == 'ok') {
+        this.setData({
+          existed: true
+        })
+        wx.showToast({
+          title: '音频订阅成功',
+          icon: 'none'
+        })
+
+      } else {
+
+      }
+    })
+  },
+  //取消音频收藏
+  cancelAudioCollect() {
+    let param = {
+      id: wx.getStorageSync('songInfo').id
+    }
+    utils.PLAYHISTORYGET(param, utils.audioCancelCollect, res => {
+      console.log('取消音频收藏:', res)
+      if (res.data.status == 200 && res.data.errmsg == 'ok') {
+        this.setData({
+          existed: false
+        })
+        wx.showToast({
+          title: '音频取消订阅成功',
+          icon: 'none'
+        })
+
+      } else {
+
+      }
+    })
+  },
   // 上一首
   pre() {
     let loopType = wx.getStorageSync('loopType')
-    if (loopType !== 'singleLoop') this.setData({ showImg: false })
+    if (loopType !== 'singleLoop') this.setData({
+      showImg: false
+    })
     const that = this
     app.cutplay(that, -1)
-   
+
   },
   // 下一首
   next() {
     let loopType = wx.getStorageSync('loopType')
-    if (loopType !== 'singleLoop') this.setData({ showImg: false })
+    if (loopType !== 'singleLoop') this.setData({
+      showImg: false
+    })
     const that = this
     app.cutplay(that, 1)
-   
+
   },
   // 切换播放模式
   loopType() {
@@ -364,12 +354,15 @@ let param = {
   // 判断循环模式
   checkLoop(type, list) {
     wx.setStorageSync('loopType', type)
-    wx.showToast({ title: this.data.typeName[type], icon: 'none' })
+    wx.showToast({
+      title: this.data.typeName[type],
+      icon: 'none'
+    })
     let loopList;
     // 列表循环
     if (type === 'listLoop') {
       let nativeList = wx.getStorageSync('nativeList') || []
-      loopList = nativeList        
+      loopList = nativeList
     } else if (type === 'singleLoop') {
       // 单曲循环
       loopList = [list[app.globalData.songInfo.episode]]
@@ -383,8 +376,8 @@ let param = {
   randomList(arr) {
     let len = arr.length;
     while (len) {
-        let i = Math.floor(Math.random() * len--);
-        [arr[i], arr[len]] = [arr[len], arr[i]];
+      let i = Math.floor(Math.random() * len--);
+      [arr[i], arr[len]] = [arr[len], arr[i]];
     }
     return arr;
   },
@@ -397,7 +390,7 @@ let param = {
   },
   // 播放列表
   more() {
-    setTimeout(()=> {
+    setTimeout(() => {
       this.setScrollTop()
     }, 100)
     let allPlay = wx.getStorageSync('allList')
@@ -430,12 +423,15 @@ let param = {
   },
   // 在播放列表里面点击播放歌曲
   async playSong(e) {
-    console.log('-=-=-=-=---=')
+    // console.log('-=-=-=-=---=')
     let that = this
     const songInfo = e.currentTarget.dataset.song
     app.globalData.songInfo = songInfo
     // 获取歌曲详情
-    let params = {mediaId: app.globalData.songInfo.id, contentType: 'story'}
+    let params = {
+      mediaId: app.globalData.songInfo.id,
+      contentType: 'story'
+    }
     await that.getMedia(params)
     that.setData({
       songInfo: songInfo,
@@ -443,10 +439,10 @@ let param = {
       playing: true
       // noTransform: ''
     })
-    if(that.data.songInfo.src){
+    if (that.data.songInfo.src) {
       app.playing(that)
 
-    }else{
+    } else {
 
     }
     wx.setStorage({
@@ -470,9 +466,9 @@ let param = {
     let offsetLeft = event.changedTouches[0].pageX
     let process = (offsetLeft - this.data._offsetLeft + this.data._posLeft) / this.data.barWidth
     if (process < 0) {
-        process = 0
+      process = 0
     } else if (process > 1) {
-        process = 1
+      process = 1
     }
     let percent = (process * 100).toFixed(3)
     let currentTime = process * tool.formatToSend(app.globalData.songInfo.dt)
@@ -489,7 +485,9 @@ let param = {
       position: this.data.currentTime
     })
     setTimeout(() => {
-      this.setData({isDrag: ''})
+      this.setData({
+        isDrag: ''
+      })
     }, 500)
   },
   // 查询processBar宽度
@@ -501,8 +499,7 @@ let param = {
         this.setData({
           barWidth: res[0][0].width
         })
-      } catch (err) {
-      }
+      } catch (err) {}
     })
   },
   // ******按钮点击态处理********/
@@ -514,18 +511,18 @@ let param = {
     })
   },
   btend() {
-    setTimeout(()=> {
+    setTimeout(() => {
       this.setData({
         btnCurrent: null
       })
     }, 150)
   },
-   // ******按钮点击态处理********/
-   
+  // ******按钮点击态处理********/
+
   // 根据分辨率判断显示哪种样式
   setStyle() {
     // 判断分辨率的比列
-    const windowWidth =  wx.getSystemInfoSync().screenWidth;
+    const windowWidth = wx.getSystemInfoSync().screenWidth;
     const windowHeight = wx.getSystemInfoSync().screenHeight;
     // 如果是小于1/2的情况
     if (windowHeight / windowWidth >= 0.41) {
@@ -551,7 +548,7 @@ let param = {
   setScrollTop() {
     let index = this.data.canplay.findIndex(n => Number(n.id) === Number(this.data.songInfo.id))
     let query = wx.createSelectorQuery();
-    query.select('.songList').boundingClientRect(rect=>{
+    query.select('.songList').boundingClientRect(rect => {
       let listHeight = rect.height;
       this.setData({
         scrolltop: index > 2 ? listHeight / this.data.canplay.length * (index - 2) : 0

@@ -102,8 +102,11 @@ Page({
   },
 
   clickHadle(e) {
-    console.log('播放全部专辑id', e.detail.typeid)
+    // console.log('播放全部专辑id', e.detail.typeid)
     let albumid = e.detail.typeid
+    let albumName = e.target.dataset.title
+    console.log(e)
+    wx.setStorageSync('abumInfoName', albumName)
     this.getAllList(albumid)
 
   },
@@ -112,14 +115,14 @@ Page({
   getAllList(albumid) {
     this.data.canplay = []
     // 假设allList是canplay，真实情况根据接口来
-    console.log('专辑id:', albumid)
+    // console.log('专辑id:', albumid)
     let param = {
       'limit': 15,
       'offset': 0,
       'sort': "asc"
     }
     utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
-      console.log('专辑列表所有数据:', res)
+      // console.log('专辑列表所有数据:', res)
       if (res.data && res.statusCode == 200) {
 
         for (let item of res.data.items) {
@@ -135,28 +138,22 @@ Page({
      
         wx.setStorageSync('canplay', this.data.canplay)
         wx.setStorageSync('allList', this.data.canplay)
+        wx.setStorageSync('nativeList', this.data.canplay)
         //minibar  播放
         app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
         app.globalData.songInfo = app.globalData.canplay[0]
-        this.initAudioManager(this.data.canplay)
-        // wx.setStorageSync('playing', true)
+        wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
+        
         console.log('playing:', wx.getStorageSync('playing'))
         this.selectComponent('#miniPlayer').setOnShow()
         this.selectComponent('#miniPlayer').watchPlay()
-        this.selectComponent('#miniPlayer').toggle()
+        // this.selectComponent('#miniPlayer').toggle()
       }
 
     })
   },
 
-  // 初始化 BackgroundAudioManager
-  initAudioManager(list) {
-    this.audioManager = wx.getBackgroundAudioManager()
-    this.audioManager.playInfo = {
-      playList: list
-    }
-  },
 
   // 播放时间格式化
   formatMusicTime(time) {
@@ -190,7 +187,7 @@ Page({
 
           })
         }
-        console.log('arr', mediaArr)
+        // console.log('arr', mediaArr)
         mediaArr.push(this.data.emptyObj)
 
         that.setData({
@@ -318,12 +315,12 @@ Page({
 
   onShow() {
     // 首页数据
-    console.log('index---onshow:')
+    // console.log('index---onshow:')
     app.log('index---onshow:')
 
     app.goAuthGetToken().then((res) => {
       app.log('res:', res)
-      console.log('=======---------------------res:', res)
+      // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()
       this.selectComponent('#miniPlayer').setOnShow()

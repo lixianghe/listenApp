@@ -46,7 +46,7 @@ Component({
    */
   methods: {
     playMedia(e){
-      console.log('播放:',e.currentTarget.dataset.typeid)
+      // console.log('播放:',e.currentTarget.dataset.typeid)
       let typeid = e.currentTarget.dataset.typeid
 
       this.triggerEvent('clickHadle', { typeid: typeid});

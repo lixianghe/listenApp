@@ -206,23 +206,21 @@ App({
   },
   // 根据歌曲url播放歌曲
   playing: function (seek, that) {
-    console.log('--------------playing')
     if (that == undefined) {
       that = seek
     }
     const songInfo = this.globalData.songInfo
-    console.log('--------------playing--------songInfo:',songInfo)
 
     // 如果是车载情况
-      this.carHandle(songInfo, seek)
-    let app = this
-    utils.initAudioManager(app, that, songInfo)
+    this.carHandle(songInfo, seek)
+    // let app = this
+    utils.initAudioManager(that, songInfo)
     this.globalData.playBeginAt = new Date().getTime();
      this.upLoadPlayinfo()
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
-    console.log('carHandle--songInfo.src:',songInfo.src)
+    console.log('carHandle--songInfo.src:',songInfo)
     if(songInfo.src){
       this.audioManager.src = songInfo.src
       this.audioManager.title = songInfo.title
@@ -277,17 +275,17 @@ App({
       var isLogin = wx.getStorageSync('USERINFO')
       var Token = wx.getStorageSync('TOKEN')
       var currentTime = new Date().getTime()
-      console.log('-------currentTime',currentTime)
+      // console.log('-------currentTime',currentTime)
       if(isLogin){
-        console.log('-------')
-        console.log('---==----',(currentTime < Token.deadline)) 
-        console.log('---++++----',Token.isLogin)
+        // console.log('-------')
+        // console.log('---==----',(currentTime < Token.deadline)) 
+        // console.log('---++++----',Token.isLogin)
         if (currentTime < Token.deadline && Token.isLogin ) {
           wx.setStorageSync('TOKEN', Token)
-          console.log('token:',Token)
+          // console.log('token:',Token)
           resolve(Token)
         } else {
-          console.log('----====---')
+          // console.log('----====---')
           that.getToken(resolve, reject)
         }
       }else{
@@ -316,13 +314,13 @@ App({
       ...param,
         sig
      }
-     console.log('sig:',sig)
-     console.log('params:',params)
+    //  console.log('sig:',sig)
+    //  console.log('params:',params)
      let header ={
       'xm-sign':encrypt(Date.now()),
       'content-type': 'application/x-www-form-urlencoded',
      }
-     console.log('header:',header)
+    //  console.log('header:',header)
       wx.request({
         url:utils.baseUrl + 'oauth2/secure_access_token',
       method:"POST",
@@ -380,7 +378,7 @@ App({
   },
   //全局上传播放行为
   upLoadPlayinfo:function(){
-    console.log('-----------------------songInfo:',this.globalData.songInfo)
+    // console.log('-----------------------songInfo:',this.globalData.songInfo)
     if(!this.globalData.songInfo.id || this.globalData.songInfo.id == undefined){
       return
     }
@@ -391,12 +389,12 @@ App({
       ended_at:new Date().getTime(),
       play_type:0,
     } 
-      console.log('播放行为数据:',playRecords)
+      // console.log('播放行为数据:',playRecords)
       let param = {
         track_records:JSON.stringify([playRecords])
       }
       utils.PLAYRECORDPOST(param,utils.upLoadPlayInfo,res=>{
-        console.log('上传播放信息:',res)
+        // console.log('上传播放信息:',res)
         if(res.statusCode == 200){
          
         }else{

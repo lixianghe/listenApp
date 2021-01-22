@@ -107,7 +107,7 @@ Page({
 
          app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
          app.globalData.songInfo = app.globalData.canplay[0]
-         this.initAudioManager(this.data.canplay)
+
          wx.setStorageSync('playing', true)
 
          console.log('playing:',wx.getStorageSync('playing'))

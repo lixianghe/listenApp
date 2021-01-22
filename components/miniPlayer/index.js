@@ -340,12 +340,12 @@ Component({
       that.listenPlaey()
       const playing = wx.getStorageSync('playing')
       const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
-      console.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
-      console.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
-      console.log('minibar----setonshow------isCollect:',isCollect)
+      // console.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
+      // console.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
+      // console.log('minibar----setonshow------isCollect:',isCollect)
       if(wx.getStorageSync('songInfo') && wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
         const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
-        console.log('minibar----setonshow------isCollect:',isCollect)
+        // console.log('minibar----setonshow------isCollect:',isCollect)
         that.setData({
           existed:isCollect
         })

@@ -9,9 +9,6 @@ const app = getApp()
 // const deviceId = util.getDeviceId()
 // GET请求
 function GET(param,url, callback) {
-  console.log('get')
-  console.log('参数', param)
-  console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
@@ -21,13 +18,11 @@ function GET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params', params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
 header['content-type'] = 'application/json' 
 
-  console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -35,7 +30,6 @@ header['content-type'] = 'application/json'
    method: 'GET',
    dataType: 'json',
    success: res=> {
-      console.log('请求成功：', res);
        callback(res)
     
    },
@@ -50,9 +44,9 @@ header['content-type'] = 'application/json'
 }
 // GET请求
 function PLAYINFOGET(param,url, callback) {
-  console.log('get')
-  console.log('参数', param)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('get')
+  // console.log('参数', param)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     access_token:  wx.getStorageSync('TOKEN').access_token,
     app_key: this.APP_KEY,
@@ -64,11 +58,11 @@ function PLAYINFOGET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
-  console.log('header', header)
+  // console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -76,7 +70,7 @@ header['xm-sign'] = encrypt(Date.now())
    method: 'GET',
    dataType: 'json',
    success: res=> {
-      console.log('请求成功：', res);
+      // console.log('请求成功：', res);
        callback(res)
     
    },
@@ -91,9 +85,9 @@ header['xm-sign'] = encrypt(Date.now())
 }
 // GET请求
 function LIKEGET(param,url, callback) {
-  console.log('get')
-  console.log('参数', param)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('get')
+  // console.log('参数', param)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
@@ -103,11 +97,11 @@ function LIKEGET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
-  console.log('header', header)
+  // console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -115,7 +109,7 @@ header['xm-sign'] = encrypt(Date.now())
    method: 'GET',
    dataType: 'json',
    success: res=> {
-      console.log('请求成功：', res);
+      // console.log('请求成功：', res);
        callback(res)
     
    },
@@ -130,9 +124,9 @@ header['xm-sign'] = encrypt(Date.now())
 }
 // GET请求
 function PLAYHISTORYGET(param,url, callback) {
-  console.log('PLAYHISTORYGET')
-  console.log('URL',  url)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('PLAYHISTORYGET')
+  // console.log('URL',  url)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -144,12 +138,12 @@ function PLAYHISTORYGET(param,url, callback) {
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
 
 
 let header = {}
  header['xm-sign'] = encrypt(Date.now())
- console.log('header', header)
+//  console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -157,12 +151,12 @@ let header = {}
    method: 'GET',
    dataType: 'json',
    success: res=> {
-       console.log( '请求成功:', res);
+      //  console.log( '请求成功:', res);
        callback(res)
     
    },
    fail: err => {
-       console.log('请求失败:', err);
+      //  console.log('请求失败:', err);
      
        callback(err)
      wx.hideLoading()
@@ -174,12 +168,12 @@ let header = {}
 
 // GET请求
 function MGET(param,url, callback) {
-  console.log('MGET')
-  console.log('参数', param)
-  console.log('请求URL', this.MbaseUrl + url)
+  // console.log('MGET')
+  // console.log('参数', param)
+  // console.log('请求URL', this.MbaseUrl + url)
   let header = {}
   header['xm-sign'] = encrypt(Date.now())
-  console.log('header', header)
+  // console.log('header', header)
  wx.request({
    url: this.MbaseUrl + url,
    data: param,
@@ -187,7 +181,7 @@ function MGET(param,url, callback) {
    method: 'GET',
    dataType: 'json',
    success: res=> {
-       console.log('请求成功：', res);
+      //  console.log('请求成功：', res);
        callback(res)
     
    },
@@ -202,10 +196,10 @@ function MGET(param,url, callback) {
 }
 // POST请求
 function PLAYRECORDPOST(param,url, callback) {
-  console.log('PLAYRECORDPOST')
-  console.log('参数', param)
-  console.log('URL',  url)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('PLAYRECORDPOST')
+  // console.log('参数', param)
+  // console.log('URL',  url)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -215,11 +209,11 @@ function PLAYRECORDPOST(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
 let header ={
  'content-type': 'application/x-www-form-urlencoded',
 }
- console.log('header', header)
+//  console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -227,7 +221,7 @@ let header ={
    method: 'POST',
    dataType: 'json',
    success: res=> {
-       console.log( '请求成功:', res);
+      //  console.log( '请求成功:', res);
        callback(res)
     
    },
@@ -242,10 +236,10 @@ let header ={
 }
 // POST请求
 function REFRESHTOKENPOST(param,url, callback) {
-  console.log('REFRESHTOKENPOST')
-  console.log('参数', param)
-  console.log('URL',  url)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('REFRESHTOKENPOST')
+  // console.log('参数', param)
+  // console.log('URL',  url)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
         client_id: this.APP_KEY,
         client_secret:this.APP_SECRET,
@@ -258,14 +252,14 @@ function REFRESHTOKENPOST(param,url, callback) {
 
       let sig = this.calcuSig(publicParams, this.APP_SECRET);
        let params = { ...publicParams, sig }
-       console.log('sig:',sig)
-       console.log('params:',params)
+      //  console.log('sig:',sig)
+      //  console.log('params:',params)
     
        let header ={
          'xm-sign':encrypt(Date.now()),
         'content-type': 'application/x-www-form-urlencoded',
        }
-       console.log('header:',header)
+      //  console.log('header:',header)
 
  wx.request({
    url: this.baseUrl + url,
@@ -274,7 +268,7 @@ function REFRESHTOKENPOST(param,url, callback) {
    method: 'POST',
    dataType: 'json',
    success: res=> {
-       console.log( '请求成功:', res);
+      //  console.log( '请求成功:', res);
        callback(res)
     
    },
@@ -291,10 +285,10 @@ function REFRESHTOKENPOST(param,url, callback) {
 }
 // POST请求
 function ALBUMSUBCRIBEPOST(param,url, callback) {
-  console.log('POST')
-  console.log('参数', param)
-  console.log('URL',  url)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('POST')
+  // console.log('参数', param)
+  // console.log('URL',  url)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
@@ -305,12 +299,12 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
   let header ={
     'xm-sign':encrypt(Date.now()),
    'content-type': 'application/x-www-form-urlencoded',
   }
-  console.log('header:',header)
+  // console.log('header:',header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -318,7 +312,7 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
    method: 'POST',
    dataType: 'json',
    success: res=> {
-       console.log( '请求成功:', res);
+      //  console.log( '请求成功:', res);
        callback(res)
     
    },
@@ -335,10 +329,10 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
 
 // POST请求
 function POST(param,url, callback) {
-  console.log('POST')
-  console.log('参数', param)
-  console.log('URL',  url)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('POST')
+  // console.log('参数', param)
+  // console.log('URL',  url)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
@@ -349,10 +343,10 @@ function POST(param,url, callback) {
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
 let header = {}
  header['xm-sign'] = encrypt(Date.now())
- console.log('header', header)
+//  console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -360,7 +354,7 @@ let header = {}
    method: 'POST',
    dataType: 'json',
    success: res=> {
-       console.log( '请求成功:', res);
+      //  console.log( '请求成功:', res);
        callback(res)
     
    },
@@ -430,16 +424,15 @@ function toggleplay(that, app) {
 
 
 // 初始化 BackgroundAudioManager
-function initAudioManager(app, that, songInfo) {
+function initAudioManager(that, songInfo) {
   let list = wx.getStorageSync('nativeList')
+  let index = list.findIndex(n => n.id == songInfo.id) || null
+  console.log('index------------------',index, list, songInfo)
   that.audioManager = wx.getBackgroundAudioManager()
   that.audioManager.playInfo = {
     playList: list,
     playState: {
-      // curIndex: app.globalData.songIndex,                                      //当前播放列表索引
-      // duration: app.globalData.songInfo.trial ? app.globalData.songInfo.trialDuration : app.globalData.songInfo.duration,                                  //总时长
-      // currentPosition: app.globalData.currentPosition,             //当前播放时间
-      // status: true,                                                   //当前播放状态 0暂停状态 1播放状态 2没有音乐播放
+      curIndex: index                             //当前播放列表索引
     },
     context: songInfo
   };
@@ -450,7 +443,7 @@ function initAudioManager(app, that, songInfo) {
 function EventListener(that){
   //播放事件
   that.audioManager.onPlay(() => {
-    console.log('-------------------------------onPlay-----------------------------------', that.audioManager)
+    console.log('-------------------------------onPlay-----------------------------------')
     
     wx.hideLoading()
     that.setData({ playing: true });
