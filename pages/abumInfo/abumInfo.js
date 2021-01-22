@@ -76,7 +76,6 @@ Page({
     // this.getNetWork(msg)
     // 暂存专辑全部歌曲
     this.setData({
-      src: wx.getStorageSync('img'),
       optionId: options.id,
       abumInfoName: options.title,
       routeType: options.routeType
@@ -238,15 +237,14 @@ this.setData({
              }
              this.setData({
               total:res.data.total,
-              canplay: _list
+              canplay: _list,
+              src:_list[0].coverImgUrl
   
              })
-             wx.setStorageSync('canplay', this.data.canplay)
-             wx.setStorageSync('allList', this.data.canplay)
+           
 
 
            }
-           resolve()
         })
       })
       // wx.setStorageSync('allList', allList)
@@ -291,20 +289,16 @@ this.setData({
       utils.GET(param,utils.albumDetails+albumid,res=>{
         console.log('专辑详情:',res)
          if(res.data && res.statusCode == 200){
-
            this.setData({
              total:res.data.include_track_count,
              existed:res.data.is_subscribe,
              src:res.data.cover.large.url,
              isVip:res.data.is_vip_free
   
-           })
-          
-         
-            //  this.selectComponent('#miniPlayer').setOnShow()
-          
+           })          
            
          }else{
+          console.log('专辑详情错误:',res)
 
          }
   
@@ -380,14 +374,21 @@ this.setData({
     // 点击歌曲的时候把歌曲信息存到globalData里面
     const songInfo = e.currentTarget.dataset.song
     app.globalData.songInfo = songInfo
-    wx.setStorage({ key: 'songInfo', data: songInfo })
+    wx.setStorageSync('songInfo', songInfo)
+    wx.setStorageSync('abumInfoName', songInfo.title)
+    wx.setStorageSync('canplay', this.data.canplay)
+    wx.setStorageSync('allList', this.data.canplay)
+    console.log('-------------:',wx.getStorageSync('abumInfoName'))
+
     this.setData({ currentId: songInfo.id })
 
     this.getNetWork(msg, this.toInfo)
   },
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId
-    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${app.globalData.songInfo.allTitle}&collect=${this.data.existed}` })
+    console.log('-------------:',wx.getStorageSync('abumInfoName'))
+
+    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}` })
   },
   // 改变current
   changeCurrent(currentId) {

@@ -59,8 +59,11 @@ module.exports = {
     ]
   },
   onLoad(options) {
+    console.log('-=-==-=-==-=-=options:',options)
     const app = getApp()
     // 拿到歌曲的id: options.id
+    console.log('-=-==-=-==-=-= app.globalData.songInfo:', app.globalData.songInfo)
+
     let getInfoParams = {mediaId: options.id || app.globalData.songInfo.id, contentType: 'story'}
     this.getMedia(getInfoParams).then(() => {
       this.play() 

@@ -4,7 +4,7 @@
   width: 100vw;
   height: 17.3vh;
   position: fixed;
-  bottom: 0;
+  bottom: 20vh;
   left: 0;
   box-sizing: border-box;
   display: flex;

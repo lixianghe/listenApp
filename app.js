@@ -214,7 +214,7 @@ App({
     console.log('--------------playing--------songInfo:',songInfo)
 
     // 如果是车载情况
-     this.carHandle(songInfo, seek)
+      this.carHandle(songInfo, seek)
     let app = this
     utils.initAudioManager(app, that, songInfo)
     this.globalData.playBeginAt = new Date().getTime();
@@ -222,14 +222,18 @@ App({
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
-    this.audioManager.src = songInfo.src
-    this.audioManager.title = songInfo.title
-    this.audioManager.coverImgUrl = songInfo.coverImgUrl
-    if (seek != undefined && typeof (seek) === 'number') {
-      wx.seekBackgroundAudio({
-        position: seek
-      })
+    console.log('carHandle--songInfo.src:',songInfo.src)
+    if(songInfo.src){
+      this.audioManager.src = songInfo.src
+      this.audioManager.title = songInfo.title
+      this.audioManager.coverImgUrl = songInfo.coverImgUrl
+      if (seek != undefined && typeof (seek) === 'number') {
+        wx.seekBackgroundAudio({
+          position: seek
+        })
+      }
     }
+  
   },
 
   // 根据分辨率判断显示哪种样式

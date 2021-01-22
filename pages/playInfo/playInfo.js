@@ -62,81 +62,86 @@ Page({
   },
    onLoad(options) {
     console.log('playinfo------options:',options)
-
+    console.log('playinfo------existed:',this.data.existed)
+    
     const that = this;
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
-    let abumInfoName = wx.getStorageSync('abumInfoName')
-    const songInfo = app.globalData.songInfo
-    console.log('songinfo:',app.globalData.songInfo)
+    const songInfo =app.globalData.songInfo?app.globalData.songInfo: wx.getStorageSync('songInfo') 
+    console.log('songinfo:',wx.getStorageSync('songInfo') )
     console.log('canplay:',canplay)
     if(songInfo.feeType == true){
       //vip
-     that.getVipMediaUrl(songInfo.id).then((res) => {
-        console.log('vip音频---------------',res)
-        if(res.data && res.statusCode == 200){
-          app.globalData.songInfo.src = res.data.play_32.url
-          wx.setStorage({ key: 'songInfo', data: app.globalData.songInfo })   
-          that.setData({
-            songInfo: app.globalData.songInfo,
-            canplay: canplay,
-            existed:options.collect == 'false'?false:true,
-            noPlay: options.noPlay || null,
-            abumInfoName: options.abumInfoName || null,
-          })
-    
-          // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-        wx.setStorageSync('abumInfoName', options.abumInfoName)
-        if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-        if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
-        // 监听歌曲播放状态，比如进度，时间
-    tool.playAlrc(that, app);
-    that.queryProcessBarWidth()
-    app.playing(that)
+  console.log('bannees---vip--------:')
+let param = {  
+}   
+    utils.PLAYINFOGET(param,utils.getMediaInfo+songInfo.id+'/play-info',res=>{
+      console.log('bannees---vip---音频-------:',res)
 
-        }else{
-        }
-      })
+      if(res.data && res.statusCode == 200){
+        console.log('bannees-vip---音频----200---:')
+
+        app.globalData.songInfo.src = res.data.play_32.url
+        wx.setStorage({ key: 'songInfo', data: app.globalData.songInfo })   
+        that.setData({
+          songInfo: app.globalData.songInfo,
+          canplay: canplay,
+          existed:options.collect == 'false'?false:true,
+          noPlay: options.noPlay || null,
+           abumInfoName: options.abumInfoName || null,
+        })
+  
+        // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+      wx.setStorageSync('abumInfoName', options.abumInfoName)
+      if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+      if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
+      console.log('bannees-vip---音频----300---:')
+
+      // 监听歌曲播放状态，比如进度，时间
+       tool.playAlrc(that, app);
+       that.queryProcessBarWidth()
+       app.playing(that)
+
+      }else{
+      }
+    } )
+
+    //  that.getVipMediaUrl(songInfo.id).then((res) => {
+    //     console.log('vip音频---------------',res)
+      
+    //   })
      
     }else{
       that.setData({
         songInfo: songInfo,
         canplay: canplay,
         existed:options.collect == 'false'?false:true,
-
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
       })
 
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-    wx.setStorageSync('abumInfoName', options.abumInfoName)
-    if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-    if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
+    wx.setStorageSync('abumInfoName', this.data.abumInfoName)
+    // if (options.noPlay !== 'true' ||  this.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+    // if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
      // 监听歌曲播放状态，比如进度，时间
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
     }
     
-    console.log('playinfo------existed:',this.data.existed)
+    // this.setData({
+    //   playing:wx.getStorageSync('playing')
+    // })
 
    
   },
     getVipMediaUrl(trackid){
     console.log('-------trackid:',trackid)
-    let param = {  
-    }   
-      return new Promise((resolve, reject) => {
-        utils.PLAYINFOGET(param,utils.getMediaInfo+trackid+'/play-info',res=>{
-          console.log('bannees音频-------:',res)
-          resolve(res)
+  
 
-        
-        } )
-
-
-      })
+    
     
 
     
@@ -144,7 +149,6 @@ Page({
   onShow: function () {
     
 
-    this.selectComponent('#miniPlayer').setOnShow()
   },
   imgOnLoad() {
     this.setData({ showImg: true })
@@ -244,7 +248,6 @@ Page({
           })
           if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
             wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-            this.selectComponent('#miniPlayer').setOnShow()
           }
           
           wx.showToast({
@@ -272,7 +275,6 @@ Page({
           })
           if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
             wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-            this.selectComponent('#miniPlayer').setOnShow()
           }
           
           wx.showToast({

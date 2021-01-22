@@ -40,26 +40,7 @@ Page({
 
   },
   onLoad(options) {
-    setTimeout(() => {
-      wx.checkSession({
-        success: (res) => {
-          if (JSON.stringify(wx.getStorageSync('username'))) {
-            wx.setTabBarItem({
-              index: 2,
-              text: wx.getStorageSync('username'),
-            })
-          }
-        },
-        fail: (res) => {
-          app.userInfo.token = ''
-          app.userInfo.vipStatus = '';
-          app.userInfo.expireTime = '';
-          wx.removeStorageSync('userInfo');
-          wx.removeStorageSync('username')
-        }
-      })
-
-    }, 800);
+  
     this.getCategoryAlbums()
   },
   onShow() {
@@ -182,23 +163,15 @@ Page({
 
   // 跳转到播放详情界面
   linkAbumInfo(e) {
-    console.log('专辑列表')
+    console.log('专辑列表:',e)
 
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
-    const title = e.currentTarget.dataset.allTitle
+    const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
     const routeType = e.currentTarget.dataset.contentype
-
-    if (!app.globalData.latelyListenId.includes(id)) {
-      app.globalData.latelyListenId.push(id)
-    }
-    let url
-    if (routeType === 'album' || routeType === 'fm') {
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}`
-    } else if (routeType === 'media') {
-      url = `../playInfo/playInfo?id=${id}`
-    }
+    console.log('title:',title)
+    let url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}`
 
     wx.navigateTo({
       url: url
