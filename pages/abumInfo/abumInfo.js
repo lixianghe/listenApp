@@ -417,23 +417,20 @@ this.setData({
   
   // 播放全部
   async playAll() {
-    let allList = wx.getStorageSync('allList') || []
-    wx.setStorageSync('nativeList', allList)
-    const msg = '网络异常，无法播放！'
+    wx.setStorageSync('songInfo', this.data.canplay[0])
+    wx.setStorageSync('allList', this.data.canplay)
+    wx.setStorageSync('canplay', this.data.canplay)
+    wx.setStorageSync('nativeList', this.data.canplay)
+    wx.setStorageSync('abumInfoName', this.data.abumInfoName)
     app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
     app.globalData.songInfo = app.globalData.canplay[0]
     app.globalData.abumInfoId = this.data.optionId
 
-    let params = {
-      mediaId: app.globalData.songInfo.id,
-      contentType: 'story'
-    }
     this.setData({
       currentId: app.globalData.songInfo.id,
       songInfo: app.globalData.songInfo,
     })
-    let that = this
-    if (getMedia) await getMedia(params, that)
+    app.playing(this)
     // this.getNetWork(msg, app.playing)
   },
   setPlaying(e) {

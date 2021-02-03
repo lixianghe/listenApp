@@ -6,7 +6,7 @@
     <image class="countpic" src="{{countpic}}"></image>
     <text class="countxt">{{datasource.count}}</text>
   </view>
-  <image wx:if="{{datasource.isHome}}"  src="../../images/play2.png"   data-typeid="{{datasource.id}}" catchtap="playMedia" class="play-img"></image>
+  <image wx:if="{{datasource.isHome}}"  src="{{ datasource.id == abumInfoId && playing ? playingIcon : stopIcon}}"   data-typeid="{{datasource.id}}" catchtap="playMedia" class="play-img"></image>
   <view wx:if="{{datasource.isCollect == true}}"
       class="like"
       style="background-image:url(/images/info_like.png)"

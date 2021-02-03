@@ -159,6 +159,7 @@ App({
       mediaId: song.id,
       contentType: 'story'
     }
+    console.log(params)
     await getMedia(params, that)
     loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
     this.globalData.playBeginAt = new Date().getTime();

@@ -38,7 +38,9 @@ Component({
     // backgroundColor: app.sysInfo.backgroundColor
     mainColor: app.globalData.mainColor,
     src: [],
-    flag: 0
+    flag: 0,
+    stopIcon: '../../images/play2.png',
+    playingIcon: '../../images/playing.gif'
   },
 
   /**
@@ -71,5 +73,9 @@ Component({
         src: this.data.likePic[this.data.flag]
       })
     }
+    this.setData({
+      abumInfoId: wx.getStorageSync('abumInfoId'),
+      playing: wx.getStorageSync('playing')
+    })
   }
 })

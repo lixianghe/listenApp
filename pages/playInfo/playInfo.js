@@ -79,6 +79,7 @@ Page({
             existed: options.collect == 'false' ? false : true,
             noPlay: options.noPlay || null,
             abumInfoName: options.abumInfoName || null,
+            playing: wx.getStorageSync('playing')
           })
           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
           // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
@@ -104,6 +105,7 @@ Page({
         existed: options.collect == 'false' ? false : true,
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
+        playing: wx.getStorageSync('playing')
       })
         wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首

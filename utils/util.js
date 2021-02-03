@@ -455,12 +455,31 @@ function EventListener(that){
     let miniPlayer = that.selectComponent('#miniPlayer')
     if (miniPlayer) miniPlayer.setData({ playing: true })
     wx.setStorageSync('playing', true)
+
+    // 控制首页专辑的播放gif
+    let pages = getCurrentPages()
+    let index = pages.filter(n => n.route == 'pages/index/index')[0]
+    if (!index) return
+    let abumInfoId = wx.getStorageSync('abumInfoId')
+    let story = index.selectComponent(`#story${abumInfoId}`)
+    if (story) story.setData({ playing: true })
+
   })
   //暂停事件
   that.audioManager.onPause(() => {
     console.log('触发播放暂停事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
+
+    // 控制首页专辑的播放gif
+    let pages = getCurrentPages()
+    let index = pages.filter(n => n.route == 'pages/index/index')[0]
+    if (!index) return
+    let abumInfoId = wx.getStorageSync('abumInfoId')
+    let story = index.selectComponent(`#story${abumInfoId}`)
+    console.log('story=====', index, abumInfoId, story)
+    if (story) story.setData({ playing: false })
+
   })
   //上一首事件
   that.audioManager.onPrev(() => {
