@@ -2,7 +2,7 @@
   "navigationBarTitleText": "最近播放",
   "usingComponents": {
     "noData": "/components/noData/index",
-    "story": "/components/story/index",
+    "categoryItem": "/components/categoryItem/index",
     "log": "/components/log/log"
   }
 }

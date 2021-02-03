@@ -64,14 +64,14 @@ Page({
 
   },
 
-  clickHadle(e){
-    console.log('播放全部专辑id',e.detail.typeid)
-    let albumid = e.detail.typeid
-    // wx.setStorageSync('playing', true)
+  // clickHadle(e){
+  //   console.log('播放全部专辑id',e.detail.typeid)
+  //   let albumid = e.detail.typeid
+  //   wx.setStorageSync('playing', true)
   
-    // this.getAllList(albumid)
+  //   this.getAllList(albumid)
   
-  },
+  // },
 
    // 获取所有的播放列表
    getAllList(albumid) {
@@ -127,7 +127,7 @@ Page({
     }
     let Url = 'iot/openapi-smart-device-api/announcers/'+this.data.authorId+'/albums'
     utils.PLAYHISTORYGET(param,Url,res=>{
-      app.log('作者专辑:',res)
+      console.log('作者专辑:',res)
       if(res.data.items.length > 0 && res.statusCode == 200){
         // item.title = item.mediaName                               // 歌曲名称
         // item.id = item.mediaId                                    // 歌曲Id
@@ -148,7 +148,7 @@ Page({
 
           laterArr.push({
             title:res.data.items[i].title,
-            id:res.data.items[i].announcer.id,
+            id:res.data.items[i].id,
             src:res.data.items[i].announcer.avatar_url,
             contentType:'album',
             isHome:true,

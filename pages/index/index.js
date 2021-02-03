@@ -315,11 +315,11 @@ Page({
 
   onShow() {
     // 首页数据
-    // console.log('index---onshow:')
-    app.log('index---onshow:')
+    console.log('index---onshow:')
+    // app.log('index---onshow:')
 
     app.goAuthGetToken().then((res) => {
-      app.log('res:', res)
+      console.log('res:', res)
       // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()

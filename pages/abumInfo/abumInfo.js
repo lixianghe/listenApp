@@ -66,7 +66,7 @@ Page({
   },
 
   async onLoad(options) {
-    // console.log('-------------abumInfo---onload:',options)
+    console.log('-------------abumInfo---onload:',options)
     var albumid = options.id
     this.data.optionId = albumid
     this.data.type = options.from
@@ -198,12 +198,17 @@ this.setData({
     } )
 
   },
-  //
+  close() {
+    this.setData({showModal: false})
+    wx.navigateBack({
+      
+    })
+  },
     // 获取所有的播放列表（首页item点击）
     getAllList(albumid, lazy = false) {
       return new Promise((resolve, reject) => {
         // 假设allList是canplay，真实情况根据接口来
-        // console.log('专辑id:',albumid)
+        console.log('专辑id:',albumid)
         let param={
           'limit': this.data.pageSize,
           'offset': this.data.offset,
@@ -211,15 +216,15 @@ this.setData({
         }
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
-          // console.log('专辑列表所有数据:',res)
-           if(res.data && res.statusCode == 200){
+           console.log('专辑列表所有数据:',res)
+           if(res.data.items.length > 0 && res.statusCode == 200){
                //非vip
                for (let item of res.data.items) {
                 _list.push({
                   title :item.title ,                            // 歌曲名称
                   id : item.id  ,                                  // 歌曲Id
                   dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
-                  coverImgUrl :item.image.url ,                         // 歌曲的封面
+                  coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
                   feeType:item.is_free ,
                   src:item.play_info.play_64.url,       
                   mediaType:item.announcer.nickname,
@@ -244,6 +249,11 @@ this.setData({
            
 
 
+           }else{
+            // this.setData({
+            //   showModal: true,
+            //   req:-1
+            // })
            }
         })
       })

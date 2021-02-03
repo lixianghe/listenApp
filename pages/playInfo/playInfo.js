@@ -80,6 +80,7 @@ Page({
             noPlay: options.noPlay || null,
             abumInfoName: options.abumInfoName || null,
           })
+          wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
           // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
           wx.setStorageSync('abumInfoName', options.abumInfoName)
           if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
@@ -104,7 +105,7 @@ Page({
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
       })
-
+        wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
       wx.setStorageSync('abumInfoName', this.data.abumInfoName)
       if (options.noPlay !== 'true' ||  this.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
@@ -113,6 +114,7 @@ Page({
       tool.playAlrc(that, app);
       that.queryProcessBarWidth()
       app.playing(that)
+
     }
 
     // this.setData({
@@ -121,24 +123,16 @@ Page({
 
 
   },
-  getVipMediaUrl(trackid) {
-    console.log('-------trackid:', trackid)
-
-
-
-
-
-
-  },
+ 
   onShow: function () {
 
 
   },
-  imgOnLoad() {
-    this.setData({
-      showImg: true
-    })
-  },
+  // imgOnLoad() {
+  //   this.setData({
+  //     showImg: true
+  //   })
+  // },
   play() {
     let that = this
     // 从统一播放界面切回来，根据playing判断播放状态options.noPlay为true代表从minibar过来的
@@ -319,20 +313,20 @@ Page({
   },
   // 上一首
   pre() {
-    let loopType = wx.getStorageSync('loopType')
-    if (loopType !== 'singleLoop') this.setData({
-      showImg: false
-    })
+    // let loopType = wx.getStorageSync('loopType')
+    // if (loopType !== 'singleLoop') this.setData({
+    //   showImg: false
+    // })
     const that = this
     app.cutplay(that, -1)
 
   },
   // 下一首
   next() {
-    let loopType = wx.getStorageSync('loopType')
-    if (loopType !== 'singleLoop') this.setData({
-      showImg: false
-    })
+    // let loopType = wx.getStorageSync('loopType')
+    // if (loopType !== 'singleLoop') this.setData({
+    //   showImg: false
+    // })
     const that = this
     app.cutplay(that, 1)
 

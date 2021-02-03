@@ -32,6 +32,8 @@ import utils from '../utils/util'
 
 module.exports = {
   data: {
+    emptyObj:{'title':'已经见底啦~~','src':'/images/album_img_default.png'},
+
     collectId:'',
     info: [],
     showModal: false,
@@ -58,37 +60,21 @@ module.exports = {
   onReady() {
 
   },
-  // 跳转到播放详情界面
-  linkAbumInfo (e) {
+   // 跳转到播放详情界面
+   linkAbumInfo(e) {
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
     const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
-    const routeType = e.currentTarget.dataset.contentype
-
-    let url
-    if (routeType === 'album') {
-
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}`
-    } else if (routeType === 'media') {
-      url = `../playInfo/playInfo?id=${id}`
-    }
-    
+    // const routeType = e.currentTarget.dataset.contentype
+ 
     wx.navigateTo({
-      url: url
+      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
     })
+
   },
-  // selectTap(e) {
-  //   const index = e.currentTarget.dataset.index
-  //   const name = e.currentTarget.dataset.name
-  //   this.setData({
-  //     currentTap: index,
-  //     retcode: 0
-  //   })
-  //   wx.showLoading({
-  //     title: '加载中',
-  //   })
-  // },
+  
+
   //获取我喜欢的数据
   _getLikeList(){
 
@@ -117,6 +103,7 @@ module.exports = {
             lastUpdate:res.data.items[i].last_updated_track_id
           })
         }
+        laterArr.push(this.data.emptyObj)
           this.setData({
             req: true,
             info:laterArr

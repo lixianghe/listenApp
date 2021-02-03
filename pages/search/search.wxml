@@ -34,7 +34,7 @@
             <image catchtap="deletaClick" src="../../images/delete.png" class="deleteimg"></image>
           </view>
           <view data-idx="{{index}}"  wx:key="laterkey" catchtap="latersearchItemClick" class="recentItem"
-          style="font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
+          style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
           wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
         </view>
 

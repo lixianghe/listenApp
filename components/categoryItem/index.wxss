@@ -1,0 +1,91 @@
+.halbumCard {
+  /* flex: 0 0 46.6vh; */
+  width: 52.8vh;
+  display: inline-block;
+  margin-right: 7.6vh;
+  /* margin-top: 15.7vh; */
+  height: 78.3vh;
+  overflow: hidden;
+  position: relative;
+}
+.halbumCard .image {
+  width: 52.8vh;
+  height: 49.8vh;
+  border-radius: 2vh;
+  vertical-align: bottom;
+}
+.halbumCard .albumTit {
+  margin-top: 2vh;
+  color: #ffffff;
+  font-size: 5.2vh;
+  box-sizing: content-box;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.halbumCard .vip {
+  /* background-color: #fa6500; */
+  border-radius: 0.89vh;
+  font-size: 4vh;
+  display: inline-block;
+  margin-right: 1.81vh;
+  width: 8vh;
+  text-align: center;
+  height: 5vh;
+  line-height: 5vh;
+}
+.halbumCard .like {
+  width: 11.03vh;
+  height: 11.03vh;
+  border-radius: 50%;
+  position: absolute;
+  left: 2.73vh;
+  bottom: 28.72vh;
+  background: rgba(0, 0, 0, 0.6) no-repeat center 0.3vh / 11vh 11vh
+}
+.halbumCard .conut {
+  position: absolute;
+  top: 0vh;
+  right: 0vh;
+  height: 8vh;
+  overflow: hidden;
+  line-height: 4.58vh;
+  background: rgba(0,0,0, 0.5);
+  border-top-right-radius: 2vh;
+  border-bottom-left-radius: 2vh;
+}
+.halbumCard .linerbg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 9.81vh;
+  border-radius: 2vh;
+  background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0));
+}
+.halbumCard .countpic {
+  width: 7vh;
+  height: 7vh;
+  margin-top: 0.8vh;
+  /* margin-right: 1.5vh; */
+  float: left;
+}
+.halbumCard .countxt {
+  font-size: 5vh;
+  color: #fff;
+  height: 8vh;
+  line-height: 8vh;
+  /* position: relative; */
+  /* top: -0.5vh; */
+  float: left;
+}
+.halbumCard .play-img{
+  position: absolute;
+  left: 3vh;
+  bottom: 31vh;
+  width: 13.6vh;
+  height: 13.6vh;
+ border-radius: 50%;
+  /* background: red; */
+ 
+}

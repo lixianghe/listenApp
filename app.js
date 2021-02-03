@@ -70,7 +70,7 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    wx.clearStorage()
+    // wx.clearStorage()
     // this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()

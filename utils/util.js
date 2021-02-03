@@ -18,10 +18,12 @@ function GET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
+  // console.log('params:',params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
 header['content-type'] = 'application/json' 
+// console.log('header:',header)
 
  wx.request({
    url: this.baseUrl + url,
@@ -432,7 +434,10 @@ function initAudioManager(that, songInfo) {
   that.audioManager.playInfo = {
     playList: list,
     playState: {
-      curIndex: index                             //当前播放列表索引
+      //  curIndex: app.globalData.songIndex,                                      //当前播放列表索引
+      // duration: app.globalData.songInfo.trial ? app.globalData.songInfo.trialDuration : app.globalData.songInfo.duration,                                  //总时长
+      // currentPosition: app.globalData.currentPosition,             //当前播放时间
+      // status: true,                                                   //当前播放状态 0暂停状态 1播放状态 2没有音乐播放
     },
     context: songInfo
   };

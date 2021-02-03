@@ -21,8 +21,9 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": false,
+    "useMultiFrameRuntime": true,
     "useApiHook": true,
+    "useApiHostProcess": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -33,14 +34,15 @@
     "useIsolateContext": true,
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
   "libVersion": "1.9.4",
-  "appid": "wx489e0165383e5913",
-  "projectname": "%E5%96%9C%E9%A9%AC%E6%8B%89%E9%9B%85",
+  "appid": "wx06ff5ead752c29e3",
+  "projectname": "listenApp",
   "debugOptions": {
     "hidedInDevtools": []
   },

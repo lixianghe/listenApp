@@ -47,6 +47,7 @@ Page({
       keyWord:this.data.recentSearch[idx]
     })
 
+    this.searchClick()
 
   },
   searchItemClick(e){
@@ -57,7 +58,7 @@ Page({
       keyWord:this.data.remindArr[idx].text
     })
 
-
+this.searchClick()
   },
   //获取热搜词
   getHotWords(){

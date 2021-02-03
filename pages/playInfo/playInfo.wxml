@@ -69,8 +69,8 @@
     </view>
   </view>
   <view class="playRight">
-    <image class="rightImg" bindload="imgOnLoad" style="display:{{showImg ? 'block' : 'none'}}" src="{{songInfo.coverImgUrl}}" />
-    <view class="image" wx:if="{{!showImg}}"></view>
+    <image class="rightImg"  style="display:block" src="{{songInfo.coverImgUrl}}" />
+    <!-- <view class="image" wx:if="{{!showImg}}"></view> -->
   </view>
 </view>
 <!-- 高于1/2的分辨率 -->

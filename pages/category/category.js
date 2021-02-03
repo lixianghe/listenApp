@@ -128,11 +128,11 @@ Page({
     str = str.replace(/\s/g, "")
     // console.log('str',str,str.length)
     var newStr
-    if(str.length<15){
+    if(str.length<18){
       newStr = str
 
     }else{
-      newStr = str.substring(0,15)+'...'
+      newStr = str.substring(0,18)+'...'
     }
     // console.log('newStr:',newStr)
     return newStr

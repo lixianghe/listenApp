@@ -99,4 +99,15 @@
 <selectWorks id="selectWorks" bindchangeWords="changeWords" selected="{{selected}}" pageSize="{{pageSize}}"> </selectWorks>
 <mini-player bindshowExisted ="showExisted" existed="{{existed}}" id="miniPlayer" songInfo="{{songInfo}}" bindcurrent="changeCurrent" bindsetPlaying="setPlaying"></mini-player>
 <bgConfirm id="bgConfirm" msg="{{msg}}" confirm="确定" cancel=""></bgConfirm>
+
+<view wx:if="{{showModal}}" class="model" bindtap="close"></view>
+<view wx:if="{{showModal}}" class="showInfo">
+  <view class="close" bindtap="close">
+    <image src="../../images/modal_close.png" />
+  </view>
+  <view class="info">
+    暂时还没有内容哦，请去收听其它的故事吧
+  </view>
+  <button bindtap="close">确定</button>
+</view>
 <log></log>
