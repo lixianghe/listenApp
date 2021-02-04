@@ -109,25 +109,6 @@ Page({
         title: '请登录后操作',
         icon:'none'
       })
-      // wx.showModal({
-      //   title: '登录提示',
-      //   content: '您尚未登录，请先登录以同步账号信息及收藏、已购、历史等记录',
-      //   confirmColor:'#dc5e4e',
-        
-      //   success (res) {
-      //     if (res.confirm) {
-      //       console.log('用户点击确定')
-      //       wx.switchTab({
-      //         url: '',
-      //       })
-      //     } else if (res.cancel) {
-      //       console.log('用户点击取消')
-      //     }
-      //   }
-      // })
-      
-
-
     }
 
   },
@@ -294,10 +275,10 @@ this.setData({
 
     //专辑详情
     getAlbumDetails(albumid){
-      // console.log('专辑id:',albumid)
+       console.log('专辑id:',albumid)
       let param={}
       utils.GET(param,utils.albumDetails+albumid,res=>{
-        // console.log('专辑详情:',res)
+         console.log('专辑详情:',res)
          if(res.data && res.statusCode == 200){
            this.setData({
              total:res.data.include_track_count,
@@ -422,10 +403,14 @@ this.setData({
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('nativeList', this.data.canplay)
     wx.setStorageSync('abumInfoName', this.data.abumInfoName)
+    // wx.setStorageSync('allList', this.data.canplay)
+    // wx.setStorageSync('canplay', this.data.canplay)
+    // let allList = wx.getStorageSync('allList') || []
+    // wx.setStorageSync('nativeList', allList)
+    // const msg = '网络异常，无法播放！'
     app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
     app.globalData.songInfo = app.globalData.canplay[0]
     app.globalData.abumInfoId = this.data.optionId
-
     this.setData({
       currentId: app.globalData.songInfo.id,
       songInfo: app.globalData.songInfo,

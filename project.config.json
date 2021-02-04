@@ -43,6 +43,7 @@
   "libVersion": "1.9.4",
   "appid": "wx06ff5ead752c29e3",
   "projectname": "listenApp",
+
   "debugOptions": {
     "hidedInDevtools": []
   },
