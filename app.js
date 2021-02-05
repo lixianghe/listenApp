@@ -297,14 +297,14 @@ App({
           that.getToken(resolve, reject)
         }
       }else{
-        if (currentTime < Token.deadline  ) {
-          wx.setStorageSync('TOKEN', Token)
-           console.log('token:',Token)
-          resolve(Token)
-        } else {
-           console.log('----====---')
+        // if (currentTime < Token.deadline  ) {
+        //   wx.setStorageSync('TOKEN', Token)
+        //    console.log('token:',Token)
+        //   resolve(Token)
+        // } else {
+        //    console.log('----====---')
           that.getToken(resolve, reject)
-        }
+        // }
       }
 
      })
