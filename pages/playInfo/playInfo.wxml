@@ -77,8 +77,8 @@
 <view class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:else>
   <view class="playLeft songDc">
     <view class="songDcTitle">
-      <image bindload="imgOnLoad" style="display:{{showImg ? 'block' : 'none'}}" src="{{songInfo.coverImgUrl}}" />
-      <view class="image" wx:if="{{!showImg}}"></view>
+      <image src="{{songInfo.coverImgUrl}}" />
+      <!-- <view class="image" wx:if="{{!showImg}}"></view> -->
       <view class="title" wx:if="{{songInfo.title}}">
         <text  style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
         <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
