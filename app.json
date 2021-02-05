@@ -21,6 +21,7 @@
     "navigationBarTitleText": "小程序模板",
     "navigationBarTextStyle": "white",
     "mossPkgName": "ximalayaxin"
+
   },
   "permission": {
     "scope.userLocation": {

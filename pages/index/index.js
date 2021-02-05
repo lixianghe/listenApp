@@ -89,7 +89,7 @@ Page({
       'scope': 0
     }
     utils.GET(param, utils.indexBanners, res => {
-      app.log('首页banners数据:', res)
+      console.log('首页banners数据:', res)
       if (res.data.banners.length > 0 && res.statusCode == 200) {
         this.setData({
           swiperArr: res.data.banners
@@ -193,7 +193,7 @@ Page({
       'limit': 20
     }
     utils.GET(param, utils.indexMediaArr, res => {
-      app.log('首页音频数据:', res)
+      console.log('首页音频数据:', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
 
         let mediaArr = []
@@ -338,11 +338,13 @@ Page({
 
   onShow() {
     // 首页数据
+
+    // console.log('index---onshow:')
     console.log('index---onshow:')
-    // app.log('index---onshow:')
 
     app.goAuthGetToken().then((res) => {
-      // console.log('res:', res)
+      console.log('-------token',wx.getStorageSync('TOKEN'))
+      console.log('------------res:', res)
       // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()

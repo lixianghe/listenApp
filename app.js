@@ -276,21 +276,31 @@ App({
       var isLogin = wx.getStorageSync('USERINFO')
       var Token = wx.getStorageSync('TOKEN')
       var currentTime = new Date().getTime()
-      // console.log('-------currentTime',currentTime)
+      console.log('-------token',Token)
+      console.log('-------currentTime',currentTime)
+      console.log('-------endTime',Token.deadline)
+
       if(isLogin){
-        // console.log('-------')
-        // console.log('---==----',(currentTime < Token.deadline)) 
-        // console.log('---++++----',Token.isLogin)
+        console.log('-------')
+        console.log('---==----',(currentTime < Token.deadline)) 
+        console.log('---++++----',Token.isLogin)
         if (currentTime < Token.deadline && Token.isLogin ) {
           wx.setStorageSync('TOKEN', Token)
-          // console.log('token:',Token)
+           console.log('token:',Token)
           resolve(Token)
         } else {
           // console.log('----====---')
           that.getToken(resolve, reject)
         }
       }else{
-        that.getToken(resolve, reject)
+        if (currentTime < Token.deadline  ) {
+          wx.setStorageSync('TOKEN', Token)
+           console.log('token:',Token)
+          resolve(Token)
+        } else {
+           console.log('----====---')
+          that.getToken(resolve, reject)
+        }
       }
 
      })
@@ -299,9 +309,9 @@ App({
       
    },
     getToken(resolve, reject){
-      // console.log("APP_KEY--",  utils.APP_KEY)
-      // console.log("deviceid--",  utils.getDeviceId())
-      //  console.log("nonce--",  utils.generateRandom())
+      console.log("APP_KEY--",  utils.APP_KEY)
+      console.log("deviceid--",  utils.getDeviceId())
+       console.log("nonce--",  utils.generateRandom())
   
      let param = {
       client_id: utils.APP_KEY,
@@ -329,12 +339,13 @@ App({
        header:header,
         success: res => {
           
-          this.log("access_token----success--", res)   
+          console.log("access_token----success--", res)   
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
           this.log("失效时间", res.data.deadline)   
           // canUseToken = res.data
-          resolve(res.data)
           wx.setStorageSync('TOKEN', res.data)
+          resolve(res.data)
+          
 
         },
         fail: err => {

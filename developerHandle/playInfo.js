@@ -78,7 +78,12 @@ module.exports = {
     let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
     app.globalData.songInfo = Object.assign({}, data)
     that.setData({ songInfo: data })
-    // console.log('播放信息：',data)
+     console.log('播放信息：',data)
     wx.setStorageSync('songInfo', data)
+
+
+
+  
+   
   }
 }
