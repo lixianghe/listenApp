@@ -188,15 +188,25 @@ module.exports = {
         console.log('授权openid:', res.data.openid)
         console.log('授权session_key:', res.data.session_key)
         this.data.openId = res.data.openid
-        let token = wx.getStorageSync('TOKEN')
-        token.access_token = res.data.access_token
-        wx.setStorageSync('TOKEN', token)
-
         wx.setStorageSync('OPENID', res.data.openid)
         wx.setStorageSync('SEEEIONKEY', res.data.session_key)
-        wx.setStorageSync('REFRESHTOKEN', res.data.refresh_token)
-        //  this.getUserInfo()
-         this.refreshToken()
+
+        if(res.data.access_token && res.data.access_token!=null){
+          let token = wx.getStorageSync('TOKEN')
+          token.access_token = res.data.access_token
+          wx.setStorageSync('TOKEN', token)
+        }
+        if(res.data.refresh_token && res.data.refresh_token!=null){
+           wx.setStorageSync('REFRESHTOKEN', res.data.refresh_token)
+           this.refreshToken()
+         }else{
+          this.getUserInfo()
+         }
+       
+
+       
+         this.getUserInfo()
+        //  this.refreshToken()
 
       } else {
         //  this.againGetAccessToken()
