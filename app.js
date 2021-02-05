@@ -276,9 +276,13 @@ App({
       var isLogin = wx.getStorageSync('USERINFO')
       var Token = wx.getStorageSync('TOKEN')
       var currentTime = new Date().getTime()
+      console.log('-------isLogin',isLogin)
       console.log('-------token',Token)
       console.log('-------currentTime',currentTime)
       console.log('-------endTime',Token.deadline)
+      if(!Token.access_token  || Token.access_token == null){
+        that.getToken(resolve, reject)
+      }
 
       if(isLogin){
         console.log('-------')
@@ -309,29 +313,31 @@ App({
       
    },
     getToken(resolve, reject){
-      console.log("APP_KEY--",  utils.APP_KEY)
-      console.log("deviceid--",  utils.getDeviceId())
-       console.log("nonce--",  utils.generateRandom())
-  
-     let param = {
-      client_id: utils.APP_KEY,
-      device_id: utils.getDeviceId(),
-      grant_type: "client_credentials",
-      nonce: utils.generateRandom(),
-      timestamp: +new Date(),
-     }
-     let sig = utils.calcuSig(param, utils.APP_SECRET);
-     let params = {
-      ...param,
-        sig
-     }
-    //  console.log('sig:',sig)
-    //  console.log('params:',params)
-     let header ={
-      'xm-sign':encrypt(Date.now()),
-      'content-type': 'application/x-www-form-urlencoded',
-     }
-    //  console.log('header:',header)
+      var that = this
+
+        console.log("APP_KEY--",  utils.APP_KEY)
+        console.log("deviceid--",  utils.getDeviceId())
+         console.log("nonce--",  utils.generateRandom())
+    
+       let param = {
+        client_id: utils.APP_KEY,
+        device_id: utils.getDeviceId(),
+        grant_type: "client_credentials",
+        nonce: utils.generateRandom(),
+        timestamp: +new Date(),
+       }
+       let sig = utils.calcuSig(param, utils.APP_SECRET);
+       let params = {
+        ...param,
+          sig
+       }
+      //  console.log('sig:',sig)
+      //  console.log('params:',params)
+       let header ={
+        'xm-sign':encrypt(Date.now()),
+        'content-type': 'application/x-www-form-urlencoded',
+       }
+      //  console.log('header:',header)
       wx.request({
         url:utils.baseUrl + 'oauth2/secure_access_token',
       method:"POST",
@@ -341,7 +347,7 @@ App({
           
           console.log("access_token----success--", res)   
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
-          this.log("失效时间", res.data.deadline)   
+          that.log("失效时间", res.data.deadline)   
           // canUseToken = res.data
           wx.setStorageSync('TOKEN', res.data)
           resolve(res.data)
@@ -354,6 +360,9 @@ App({
       })
     
   
+      
+    
+   
 
    },
  
