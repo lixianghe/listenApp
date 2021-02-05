@@ -383,6 +383,7 @@ this.setData({
     // console.log('音频点击',e)
     // 点击歌曲的时候把歌曲信息存到globalData里面
     const songInfo = e.currentTarget.dataset.song
+    console.log('app.globalData.songInfo----------', app.globalData.songInfo)
     app.globalData.songInfo = songInfo
     wx.setStorageSync('songInfo', songInfo)
     wx.setStorageSync('abumInfoName', songInfo.title)

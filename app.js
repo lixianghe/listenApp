@@ -221,7 +221,7 @@ App({
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
-    console.log('carHandle--songInfo.src:',songInfo)
+    // console.log('carHandle--songInfo.src:',songInfo)
     if(songInfo.src){
       this.audioManager.src = songInfo.src
       this.audioManager.title = songInfo.title

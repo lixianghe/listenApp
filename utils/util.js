@@ -429,7 +429,7 @@ function toggleplay(that, app) {
 function initAudioManager(that, songInfo) {
   let list = wx.getStorageSync('nativeList')
   let index = list.findIndex(n => n.id == songInfo.id) || null
-  console.log('index------------------',index, list, songInfo)
+  // console.log('index------------------',index, list, songInfo)
   that.audioManager = wx.getBackgroundAudioManager()
   that.audioManager.playInfo = {
     playList: list,
@@ -477,7 +477,7 @@ function EventListener(that){
     if (!index) return
     let abumInfoId = wx.getStorageSync('abumInfoId')
     let story = index.selectComponent(`#story${abumInfoId}`)
-    console.log('story=====', index, abumInfoId, story)
+    // console.log('story=====', index, abumInfoId, story)
     if (story) story.setData({ playing: false })
 
   })

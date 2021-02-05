@@ -143,13 +143,18 @@ Page({
       if (res.data && res.statusCode == 200) {
 
         for (let item of res.data.items) {
+          console.log(item)
           this.data.canplay.push({
             title: item.title, // 歌曲名称
             id: item.id, // 歌曲Id
             dt: this.formatMusicTime(item.duration), // 歌曲的时常
             coverImgUrl: item.image.url, // 歌曲的封面
             src: item.play_info.play_64.url,
-            feeType: item.is_vip_free
+            feeType: item.is_vip_free,
+            mediaType:item.announcer.nickname,
+            mediaAuthor:item.album.title,
+            authorId:item.announcer.id,
+            albumId:item.album_id
           })
         }
      
@@ -159,6 +164,7 @@ Page({
         //minibar  播放
         app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
         app.globalData.songInfo = app.globalData.canplay[0]
+        console.log('app.globalData.songInfo2', app.globalData.songInfo)
         wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
         
@@ -336,7 +342,7 @@ Page({
     // app.log('index---onshow:')
 
     app.goAuthGetToken().then((res) => {
-      console.log('res:', res)
+      // console.log('res:', res)
       // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()
