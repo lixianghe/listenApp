@@ -126,14 +126,23 @@ module.exports = {
 
       wx.login({
         success: (res) => {
-          console.log('res--code:', res)
-        
           this.data.code = res.code
-          console.log('code:', this.data.code)
+          console.log('第一次code:', this.data.code)
   
         },
         fail: (err) => {
           console.log('获取code失败：',err)
+          wx.login({
+            success: (res) => {      
+              this.data.code = res.code
+              console.log('第二次code:', this.data.code)
+      
+            },
+            fail: (err) => {
+              console.log('获取code失败：',err)
+            },
+      
+          })
         },
   
       })
