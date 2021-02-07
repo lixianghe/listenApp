@@ -276,21 +276,21 @@ App({
       var isLogin = wx.getStorageSync('USERINFO')
       var Token = wx.getStorageSync('TOKEN')
       var currentTime = new Date().getTime()
-      console.log('-------isLogin',isLogin)
-      console.log('-------token',Token)
-      console.log('-------currentTime',currentTime)
-      console.log('-------endTime',Token.deadline)
+      // console.log('-------isLogin',isLogin)
+      // console.log('-------token',Token)
+      // console.log('-------currentTime',currentTime)
+      // console.log('-------endTime',Token.deadline)
       if(!Token.access_token  || Token.access_token == null){
         that.getToken(resolve, reject)
       }
 
       if(isLogin){
-        console.log('-------')
-        console.log('---==----',(currentTime < Token.deadline)) 
-        console.log('---++++----',Token.isLogin)
+        // console.log('-------')
+        // console.log('---==----',(currentTime < Token.deadline)) 
+        // console.log('---++++----',Token.isLogin)
         if (currentTime < Token.deadline && Token.isLogin ) {
           wx.setStorageSync('TOKEN', Token)
-           console.log('token:',Token)
+          //  console.log('token:',Token)
           resolve(Token)
         } else {
           // console.log('----====---')
@@ -299,10 +299,10 @@ App({
       }else{
         if (currentTime < Token.deadline  ) {
           wx.setStorageSync('TOKEN', Token)
-           console.log('token:',Token)
+          //  console.log('token:',Token)
           resolve(Token)
         } else {
-           console.log('----====---')
+          //  console.log('----====---')
           that.getToken(resolve, reject)
         }
       }

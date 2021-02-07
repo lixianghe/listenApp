@@ -18,12 +18,12 @@ function GET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-   console.log('params:',params)
+  //  console.log('params:',params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
 header['content-type'] = 'application/json' 
- console.log('header:',header)
+//  console.log('header:',header)
 
  wx.request({
    url: this.baseUrl + url,

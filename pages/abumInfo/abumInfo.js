@@ -14,7 +14,7 @@ Page({
    mixins: [abumInfoMixin],
   data: {
     offset:0,
-    start:1,
+    start:0,
     end:null,
     sort:'asc',
     isVip:false,
@@ -228,7 +228,7 @@ this.setData({
   
              })
            
-
+            resolve()
 
            }else{
             // this.setData({
@@ -328,25 +328,26 @@ this.setData({
   },
   // 接受子组件传值
   async changeWords(e) {
+    console.log('e', e)
     // console.log('接受子组件传值-----:',e)
     // 请求新的歌曲列表
    
     if(e.detail.sort =='asc'){
       this.setData({
         
-        start:e.detail.start,
+        start:e.detail.start - 1,
         end:e.detail.end,
         sort:e.detail.sort,
-        offset:e.detail.start
+        offset:e.detail.start - 1
       })
     }else{
       // console.log('------=====:',parseInt( this.data.total/15))
       this.setData({
        
-        start:e.detail.start,
+        start:e.detail.start - 1,
         end:e.detail.end,
         sort:e.detail.sort,
-        offset:e.detail.end
+        offset:e.detail.end - 1
 
       })
       //  console.log('------=====:',this.data.pageNo*this.data.pageSize)
@@ -448,40 +449,12 @@ this.setData({
  
   // 列表滚动事件
   listScroll: tool.debounce(async function (res) {
-    // console.log()
-    // if(this.data.sort == 'asc'){
-    //   this.data.offset-=15
 
-    // }else{
-    //   this.data.offset+=15
-
-    // }
-    // console.log('offset:',this.data.offset)
-    // this.getAllList(this.data.optionId, 'down')
-    // setTimeout(() => {
-    //   this.setData({
-    //     showLoadEnd: false,
-    //   })
-    // }, 800)
 
   }, 50),
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
      console.log('滚到顶部')
-    // if(this.data.sort == 'asc'){
-    //   this.data.offset-=15
-
-    // }else{
-    //   this.data.offset+=15
-
-    // }
-    // console.log('offset:',this.data.offset)
-    // this.getAllList(this.data.optionId, 'down')
-    // setTimeout(() => {
-    //   this.setData({
-    //     showLoadEnd: false,
-    //   })
-    // }, 800)
 
   }, 2000),
   // 滚到底部

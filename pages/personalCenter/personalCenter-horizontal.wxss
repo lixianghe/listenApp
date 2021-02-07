@@ -1,9 +1,13 @@
+.h {
+  padding-right: 3vh;
+}
 .h .personalCenter {
   display: flex;
   overflow: auto;
   height: 83vh;
   box-sizing: content-box;
   align-items: center;
+  padding-right: 3vh;
 }
 .mine {
   flex: 0 0 72vh;

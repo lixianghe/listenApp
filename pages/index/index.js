@@ -89,7 +89,7 @@ Page({
       'scope': 0
     }
     utils.GET(param, utils.indexBanners, res => {
-      console.log('首页banners数据:', res)
+      // console.log('首页banners数据:', res)
       if (res.data.banners.length > 0 && res.statusCode == 200) {
         this.setData({
           swiperArr: res.data.banners
@@ -164,11 +164,11 @@ Page({
         //minibar  播放
         app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
         app.globalData.songInfo = app.globalData.canplay[0]
-        console.log('app.globalData.songInfo2', app.globalData.songInfo)
+        // console.log('app.globalData.songInfo2', app.globalData.songInfo)
         wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
         
-        console.log('playing:', wx.getStorageSync('playing'))
+        // console.log('playing:', wx.getStorageSync('playing'))
         this.selectComponent('#miniPlayer').setOnShow()
         this.selectComponent('#miniPlayer').watchPlay()
         // this.selectComponent('#miniPlayer').toggle()
@@ -193,7 +193,7 @@ Page({
       'limit': 20
     }
     utils.GET(param, utils.indexMediaArr, res => {
-      console.log('首页音频数据:', res)
+      // console.log('首页音频数据:', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
 
         let mediaArr = []
@@ -262,7 +262,7 @@ Page({
 
   // 跳转到播放界面
   linkAbumInfo(e) {
-    console.log('专辑列表:', e)
+    // console.log('专辑列表:', e)
 
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
@@ -340,11 +340,11 @@ Page({
     // 首页数据
 
     // console.log('index---onshow:')
-    console.log('index---onshow:')
+    // console.log('index---onshow:')
 
     app.goAuthGetToken().then((res) => {
-      console.log('-------token',wx.getStorageSync('TOKEN'))
-      console.log('------------res:', res)
+      // console.log('-------token',wx.getStorageSync('TOKEN'))
+      // console.log('------------res:', res)
       // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()
