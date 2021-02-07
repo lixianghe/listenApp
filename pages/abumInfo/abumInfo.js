@@ -114,9 +114,12 @@ Page({
   },
   showExisted(e){
 console.log('existed:',e.detail)
-this.setData({
-  existed:e.detail
-})
+if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
+  this.setData({
+    existed:e.detail
+  })
+}
+
   },
   //收藏专辑
   collectAlbum(){
@@ -129,8 +132,9 @@ this.setData({
         this.setData({
           existed:true
         })
+
         
-        if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+        if(wx.getStorageSync('songInfo').albumId ==  this.data.optionId){
           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
           this.selectComponent('#miniPlayer').setOnShow()
         }
@@ -161,7 +165,7 @@ this.setData({
         this.setData({
           existed:false
         })
-          if(wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+          if(wx.getStorageSync('songInfo').albumId ==  this.data.optionId){
             wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
             this.selectComponent('#miniPlayer').setOnShow()
           }
