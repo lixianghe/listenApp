@@ -18,6 +18,7 @@ const app = getApp()
 
 module.exports = {
   data: {
+    existed:false,
     showModal: false,               // 控制弹框
     content: '该内容为会员付费内容，您需要先成为会员后再购买此内容就可以收听精品内容啦',
     // 播放详情页面按钮配置
@@ -77,7 +78,15 @@ module.exports = {
     console.log('---------------111-------', canplay, params)
     let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
     app.globalData.songInfo = Object.assign({}, data)
-    that.setData({ songInfo: data })
+    console.log('缓存收藏：',wx.getStorageSync('ALBUMISCOLLECT'))
+
+    that.setData({ 
+      songInfo: data,
+      existed:wx.getStorageSync('ALBUMISCOLLECT')
+      
+
+     })
+     console.log('收藏：',this.data.existed)
      console.log('播放信息：',data)
     wx.setStorageSync('songInfo', data)
 
