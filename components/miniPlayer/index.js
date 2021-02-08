@@ -355,8 +355,7 @@ Component({
         playing: playing,
         canplay: canplay,
       })
-      
-      if (playing && app.globalData.songInfo) app.playing(that)
+      // if (playing && app.globalData.songInfo) app.playing(that)
       // 是否被收藏
       // let songInfo = wx.getStorageSync('songInfo')
       // isFavorite({mediaId: songInfo.id}, that)

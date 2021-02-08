@@ -29,6 +29,7 @@
 }
 .page .playLeft .title {
   font-size: 6.7vh;
+  display: flex;
 }
 .page .playLeft .title .title-name {
   display: block;
@@ -42,12 +43,13 @@
   background: rgba(255,255,255, 0.1);
   border-radius: 2vh;
 }.page .playLeft .title .song-author {
-  display: inline-block;
+  display: flex;
   margin-left: 10vh;
   height: 10vh;
   width: 45vh;
   background: rgba(255,255,255, 0.1);
   border-radius: 2vh;
+  align-items: center;
 }
 .page .playLeft .title .title-abumInfo {
   display: block;

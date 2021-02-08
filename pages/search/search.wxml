@@ -31,7 +31,7 @@
         <view  wx:if="{{recentSearch.length > 0}}" class="recentSearch" style="width: {{66 * times}}px">
           <view wx:if="{{info.length == 0}}" style="font-size: {{5.4 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">
             <text>最近搜索</text>
-            <image catchtap="deletaClick" src="../../images/delete.png" class="deleteimg"></image>
+            <image catchtap="deletaClick" src="../../images/delete.png" style="width: {{6.7 * times}}px;height:{{6.7*times}}px;margin-left:{{1.6*times}}px" class="deleteimg"></image>
           </view>
           <view data-idx="{{index}}"  wx:key="laterkey" catchtap="latersearchItemClick" class="recentItem"
           style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"

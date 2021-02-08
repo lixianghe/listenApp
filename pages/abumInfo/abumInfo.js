@@ -66,7 +66,7 @@ Page({
   },
 
   async onLoad(options) {
-    console.log('-------------abumInfo---onload:',options)
+    // console.log('-------------abumInfo---onload:',options)
     var albumid = options.id
     this.data.optionId = albumid
     this.data.type = options.from
@@ -113,7 +113,7 @@ Page({
 
   },
   showExisted(e){
-console.log('existed:',e.detail)
+// console.log('existed:',e.detail)
 if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   this.setData({
     existed:e.detail
@@ -127,7 +127,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       id:this.data.optionId
     }
     utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
-      console.log('收藏专辑:',res)
+      // console.log('收藏专辑:',res)
       if(res.data.status == 200 && res.data.errmsg == 'ok'){
         this.setData({
           existed:true
@@ -160,7 +160,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     }
 
     utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
-      console.log('取消收藏专辑:',res)
+      // console.log('取消收藏专辑:',res)
       if(res.data.status == 200 && res.data.errmsg == 'ok'){
         this.setData({
           existed:false
@@ -193,7 +193,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     getAllList(albumid, lazy = false) {
       return new Promise((resolve, reject) => {
         // 假设allList是canplay，真实情况根据接口来
-        console.log('专辑id:',albumid)
+        // console.log('专辑id:',albumid)
         let param={
           'limit': this.data.pageSize,
           'offset': this.data.offset,
@@ -201,7 +201,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
         }
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
-           console.log('专辑列表所有数据:',res)
+          //  console.log('专辑列表所有数据:',res)
            if(res.data.items.length > 0 && res.statusCode == 200){
                //非vip
                for (let item of res.data.items) {
@@ -279,10 +279,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
 
     //专辑详情
     getAlbumDetails(albumid){
-       console.log('专辑id:',albumid)
+      //  console.log('专辑id:',albumid)
       let param={}
       utils.GET(param,utils.albumDetails+albumid,res=>{
-         console.log('专辑详情:',res)
+        //  console.log('专辑详情:',res)
          if(res.data && res.statusCode == 200){
            this.setData({
              total:res.data.include_track_count,
@@ -383,6 +383,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   },
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId
+    wx.setStorageSync('abumInfoId', this.data.optionId)
     // console.log('-------------:',wx.getStorageSync('abumInfoName'))
 
     wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}` })
@@ -422,6 +423,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       songInfo: app.globalData.songInfo,
     })
     app.playing(this)
+    wx.setStorageSync('abumInfoId', this.data.optionId)
     // this.getNetWork(msg, app.playing)
   },
   setPlaying(e) {

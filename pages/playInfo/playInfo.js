@@ -69,10 +69,7 @@ Page({
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
         if (res.data && res.statusCode == 200) {
           app.globalData.songInfo.src = res.data.play_32.url
-          wx.setStorage({
-            key: 'songInfo',
-            data: app.globalData.songInfo
-          })
+          
           that.setData({
             songInfo: app.globalData.songInfo,
             canplay: canplay,
@@ -81,6 +78,7 @@ Page({
             abumInfoName: options.abumInfoName || null,
             playing: wx.getStorageSync('playing')
           })
+          let song = wx.getStorageSync('songInfo')
           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
           // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
           wx.setStorageSync('abumInfoName', options.abumInfoName)
@@ -95,6 +93,10 @@ Page({
           tool.playAlrc(that, app);
           that.queryProcessBarWidth()
           app.playing(that)
+          wx.setStorage({
+            key: 'songInfo',
+            data: songInfo
+          })
 
         } else {}
       })
@@ -107,6 +109,7 @@ Page({
         abumInfoName: options.abumInfoName || null,
         playing: wx.getStorageSync('playing')
       })
+      let song = wx.getStorageSync('songInfo')
         wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
       wx.setStorageSync('abumInfoName', this.data.abumInfoName)

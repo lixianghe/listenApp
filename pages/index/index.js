@@ -77,7 +77,14 @@ Page({
 
   },
   onLoad(options) {
-
+    app.goAuthGetToken().then((res) => {
+      // console.log('-------token',wx.getStorageSync('TOKEN'))
+      // console.log('------------res:', res)
+      // console.log('=======---------------------res:', res)
+      this._swiperData()
+      this._mediaArrData()
+      
+    });
   },
 
   //首页卡片数据
@@ -169,8 +176,9 @@ Page({
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
         
         // console.log('playing:', wx.getStorageSync('playing'))
-        this.selectComponent('#miniPlayer').setOnShow()
+        // this.selectComponent('#miniPlayer').setOnShow()
         this.selectComponent('#miniPlayer').watchPlay()
+        app.playing(this)
         // this.selectComponent('#miniPlayer').toggle()
       }
 
@@ -283,6 +291,16 @@ Page({
     wx.navigateTo({
       url: url
     })
+    // 先清除其他story播放状态
+    let abumInfoId = wx.getStorageSync('abumInfoId')
+    let oldStory = this.selectComponent(`#story${abumInfoId}`)
+    // console.log('oldStory---------------------------------------', oldStory.data)
+    // 清空上一专辑状态
+    if (oldStory) {
+      oldStory.setData({
+        playing: false
+      })
+    }
   },
   //轮播图的切换事件 
   swiperChange: function (e) {
@@ -342,16 +360,22 @@ Page({
     // console.log('index---onshow:')
     // console.log('index---onshow:')
 
-    app.goAuthGetToken().then((res) => {
-      // console.log('-------token',wx.getStorageSync('TOKEN'))
-      // console.log('------------res:', res)
-      // console.log('=======---------------------res:', res)
-      this._swiperData()
-      this._mediaArrData()
-      this.selectComponent('#miniPlayer').setOnShow()
-      this.selectComponent('#miniPlayer').watchPlay()
-    });
-
+    
+    this.selectComponent('#miniPlayer').setOnShow()
+    this.selectComponent('#miniPlayer').watchPlay()
+    // 获取播放卡片
+    let abumInfoId = wx.getStorageSync('abumInfoId')
+    let story = this.selectComponent(`#story${abumInfoId}`)
+    let playing = wx.getStorageSync('playing')
+    // 设置当前专辑状态
+    if (story) {
+      // console.log('story.data', story.data)
+      story.setData({
+        abumInfoId: abumInfoId,
+        playing: playing
+      })
+    }
+    
 
 
 

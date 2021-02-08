@@ -64,21 +64,21 @@ module.exports = {
     // 拿到歌曲的id: options.id
     // console.log('-=-==-=-==-=-= app.globalData.songInfo:', app.globalData.songInfo)
 
-    let getInfoParams = {mediaId: options.id || app.globalData.songInfo.id, contentType: 'story'}
-    this.getMedia(getInfoParams).then(() => {
-      this.play() 
-    })
+    // let getInfoParams = {mediaId: options.id || app.globalData.songInfo.id, contentType: 'story'}
+    // this.getMedia(getInfoParams).then(() => {
+    //   this.play() 
+    // })
   },
   
   async getMedia(params, that = this) {   
     const app = getApp()
     // 模拟请求数据    
     let canplay = wx.getStorageSync('canplay')
-    console.log('---------------111-------', canplay, params)
+    // console.log('---------------111-------', canplay, params)
     let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
     app.globalData.songInfo = Object.assign({}, data)
     that.setData({ songInfo: data })
-     console.log('播放信息：',data)
+    //  console.log('播放信息：',data)
     wx.setStorageSync('songInfo', data)
 
 

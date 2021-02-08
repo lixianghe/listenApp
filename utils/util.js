@@ -60,11 +60,11 @@ function PLAYINFOGET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-  console.log('params',   params)
+  // console.log('params',   params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
-   console.log('header', header)
+  //  console.log('header', header)
  wx.request({
    url: this.baseUrl + url,
    data: params,
@@ -89,7 +89,7 @@ header['xm-sign'] = encrypt(Date.now())
 function LIKEGET(param,url, callback) {
   // console.log('get')
   // console.log('参数', param)
-  console.log('请求URL', this.baseUrl + url)
+  // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
@@ -99,7 +99,7 @@ function LIKEGET(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-   console.log('params',   params)
+  //  console.log('params',   params)
  
 let header = {}
 header['xm-sign'] = encrypt(Date.now())
@@ -128,7 +128,7 @@ header['xm-sign'] = encrypt(Date.now())
 function PLAYHISTORYGET(param,url, callback) {
   // console.log('PLAYHISTORYGET')
   // console.log('URL',  url)
-   console.log('请求URL', this.baseUrl + url)
+  //  console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -140,7 +140,7 @@ function PLAYHISTORYGET(param,url, callback) {
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-   console.log('params',   params)
+  //  console.log('params',   params)
 
 
 let header = {}
@@ -172,7 +172,7 @@ let header = {}
 function MGET(param,url, callback) {
   // console.log('MGET')
   // console.log('参数', param)
-   console.log('请求URL', this.MbaseUrl + url)
+  //  console.log('请求URL', this.MbaseUrl + url)
   let header = {}
   header['xm-sign'] = encrypt(Date.now())
   // console.log('header', header)
@@ -201,7 +201,7 @@ function PLAYRECORDPOST(param,url, callback) {
   // console.log('PLAYRECORDPOST')
   // console.log('参数', param)
   // console.log('URL',  url)
-   console.log('请求URL', this.baseUrl + url)
+  //  console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -211,7 +211,7 @@ function PLAYRECORDPOST(param,url, callback) {
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-   console.log('params',   params)
+  //  console.log('params',   params)
 let header ={
  'content-type': 'application/x-www-form-urlencoded',
 }
@@ -241,7 +241,7 @@ function REFRESHTOKENPOST(param,url, callback) {
   // console.log('REFRESHTOKENPOST')
   // console.log('参数', param)
   // console.log('URL',  url)
-   console.log('请求URL', this.baseUrl + url)
+  //  console.log('请求URL', this.baseUrl + url)
   let publicParams = {
         client_id: this.APP_KEY,
         client_secret:this.APP_SECRET,
@@ -255,7 +255,7 @@ function REFRESHTOKENPOST(param,url, callback) {
       let sig = this.calcuSig(publicParams, this.APP_SECRET);
        let params = { ...publicParams, sig }
       //  console.log('sig:',sig)
-        console.log('params:',params)
+        // console.log('params:',params)
     
        let header ={
          'xm-sign':encrypt(Date.now()),
@@ -290,7 +290,7 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
   // console.log('POST')
   // console.log('参数', param)
   // console.log('URL',  url)
-   console.log('请求URL', this.baseUrl + url)
+  //  console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
@@ -301,7 +301,7 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
-   console.log('params',   params)
+  //  console.log('params',   params)
   let header ={
     'xm-sign':encrypt(Date.now()),
    'content-type': 'application/x-www-form-urlencoded',
@@ -428,17 +428,9 @@ function toggleplay(that, app) {
 // 初始化 BackgroundAudioManager
 function initAudioManager(that, songInfo) {
   let list = wx.getStorageSync('nativeList')
-  let index = list.findIndex(n => n.id == songInfo.id) || null
-  // console.log('index------------------',index, list, songInfo)
   that.audioManager = wx.getBackgroundAudioManager()
   that.audioManager.playInfo = {
     playList: list,
-    playState: {
-      //  curIndex: app.globalData.songIndex,                                      //当前播放列表索引
-      // duration: app.globalData.songInfo.trial ? app.globalData.songInfo.trialDuration : app.globalData.songInfo.duration,                                  //总时长
-      // currentPosition: app.globalData.currentPosition,             //当前播放时间
-      // status: true,                                                   //当前播放状态 0暂停状态 1播放状态 2没有音乐播放
-    },
     context: songInfo
   };
   EventListener(that)
@@ -484,12 +476,29 @@ function EventListener(that){
   //上一首事件
   that.audioManager.onPrev(() => {
     console.log('触发上一首事件');
-    that.pre()
+
+     // 如果是专辑详情点击的播放
+     let pages = getCurrentPages()
+     let abum = pages.filter(n => n.route == 'pages/abumInfo/abumInfo')[0]
+     if (abum) {
+       let minibar = abum.selectComponent('#miniPlayer')
+       minibar.pre()
+     } else {
+       that.pre()
+     }
   })
   //下一首事件
   that.audioManager.onNext(() => {
     console.log('触发onNext事件');
-    that.next();
+    // 如果是专辑详情点击的播放
+    let pages = getCurrentPages()
+    let abum = pages.filter(n => n.route == 'pages/abumInfo/abumInfo')[0]
+    if (abum) {
+      let minibar = abum.selectComponent('#miniPlayer')
+      minibar.next(true)
+    } else {
+      that.next(true)
+    }
   })
   //停止事件
   that.audioManager.onStop(() => {

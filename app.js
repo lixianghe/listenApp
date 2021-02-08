@@ -210,7 +210,7 @@ App({
     if (that == undefined) {
       that = seek
     }
-    const songInfo = this.globalData.songInfo
+    const songInfo = wx.getStorageSync('songInfo')
 
     // 如果是车载情况
     this.carHandle(songInfo, seek)
@@ -345,7 +345,7 @@ App({
        header:header,
         success: res => {
           
-          console.log("access_token----success--", res)   
+          // console.log("access_token----success--", res)   
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
           that.log("失效时间", res.data.deadline)   
           // canUseToken = res.data
