@@ -158,9 +158,9 @@ Component({
     },
      //收藏专辑
   collectAlbum(){
-    console.log('----------------minibar-----收藏专辑:',app.globalData.songInfo.albumId)
+    console.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
     let param = {
-      id:app.globalData.abumInfoId
+      id:wx.getStorageSync('songInfo').albumId
     }
     utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
       console.log('收藏专辑:',res)
@@ -185,7 +185,7 @@ Component({
   //取消收藏专辑
   cancelCollectAlbum(){
     let param = {
-      id:app.globalData.abumInfoId
+      id:wx.getStorageSync('songInfo').albumId
     }
 
     utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
@@ -291,7 +291,9 @@ Component({
       }
       let abumInfoName = wx.getStorageSync('abumInfoName')
       wx.navigateTo({
-        url: `../playInfo/playInfo?noPlay=true&abumInfoName=${abumInfoName}`
+        url: '../playInfo/playInfo?noPlay=true'+'&collect='+wx.getStorageSync('ALBUMISCOLLECT')+'&abumInfoName='+abumInfoName
+        // url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+        // url: `../playInfo/playInfo?noPlay=true&collect=${wx.getStorageSync('ALBUMISCOLLECT')}&abumInfoName=${abumInfoName}`
       })
     },
     // 监听音乐播放的状态

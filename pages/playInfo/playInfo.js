@@ -64,6 +64,7 @@ Page({
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
+    console.log('playInfo-------------------onload:',options)
     if (songInfo.feeType == true) {
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
@@ -122,10 +123,7 @@ Page({
 
     }
 
-    // this.setData({
-    //   playing:wx.getStorageSync('playing')
-    // })
-
+ 
 
   },
  
@@ -133,11 +131,7 @@ Page({
 
 
   },
-  // imgOnLoad() {
-  //   this.setData({
-  //     showImg: true
-  //   })
-  // },
+ 
   play() {
     let that = this
     // 从统一播放界面切回来，根据playing判断播放状态options.noPlay为true代表从minibar过来的

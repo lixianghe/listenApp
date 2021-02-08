@@ -112,6 +112,7 @@ Page({
     }
 
   },
+  
   showExisted(e){
 // console.log('existed:',e.detail)
 if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
