@@ -19,7 +19,7 @@
 <view class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:if="{{bigScreen}}">
   <view class="playLeft">
     <view class="title" wx:if="{{songInfo.title}}">
-      <text  style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
+      <text  style="overflow: hidden;height:10vh;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
       <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
     </view>
     <view   style="margin-top:7vh" class="title" wx:if="{{songInfo.title}}">
@@ -80,7 +80,7 @@
       <image src="{{songInfo.coverImgUrl}}" />
       <!-- <view class="image" wx:if="{{!showImg}}"></view> -->
       <view class="title" wx:if="{{songInfo.title}}">
-        <text  style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
+        <text  style="overflow: hidden;height:10vh;white-space: nowrap; text-overflow: ellipsis;" class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text>
         <!-- <text class="title-abumInfo" wx:if="{{abumInfoName}}">专辑：{{abumInfoName}}</text> -->
         <view catchtap="albumClick"  data-song="{{songInfo}}"  style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;" class="song-type">
           <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/leftauthor.png" class=""></image>

@@ -33,7 +33,7 @@
 }
 .page .playLeft .title .title-name {
   display: block;
-  width: 140vh;
+  width: 180vh;
 }
 .page .playLeft .title .song-type {
   display: inline-block;

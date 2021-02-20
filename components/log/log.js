@@ -26,7 +26,7 @@ Component({
   methods: {
     refreshLog(){
       //注释掉return,可以看log
-             return
+            //  return
       this.setData({
         log: app.logText
       })

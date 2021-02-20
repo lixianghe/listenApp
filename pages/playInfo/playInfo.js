@@ -123,7 +123,7 @@ Page({
 
     }
 
- 
+    app.globalData.abumInfoId = this.data.songInfo.albumId
 
   },
  
