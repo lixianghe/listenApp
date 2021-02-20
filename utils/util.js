@@ -417,9 +417,9 @@ function toggleplay(that, app) {
     app.stopmusic();
   } else {
     console.log("继续播放")
-    that.setData({
-      playing: true
-    });
+    // that.setData({
+    //   playing: true
+    // });
     app.playing(app.globalData.currentPosition, that);
   }
 }
@@ -462,7 +462,8 @@ function EventListener(that){
     console.log('触发播放暂停事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
-
+    let miniPlayer = that.selectComponent('#miniPlayer')
+    if (miniPlayer) miniPlayer.setData({ playing: false })
     // 控制首页专辑的播放gif
     let pages = getCurrentPages()
     let index = pages.filter(n => n.route == 'pages/index/index')[0]
@@ -471,6 +472,7 @@ function EventListener(that){
     let story = index.selectComponent(`#story${abumInfoId}`)
     // console.log('story=====', index, abumInfoId, story)
     if (story) story.setData({ playing: false })
+    
 
   })
   //上一首事件
