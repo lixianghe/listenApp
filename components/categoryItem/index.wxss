@@ -15,9 +15,9 @@
   vertical-align: bottom;
 }
 .halbumCard .albumTit {
-  margin-top: 2vh;
+  margin-top: 1.5vh;
   color: #ffffff;
-  font-size: 5.2vh;
+  font-size: 4.8vh;
   box-sizing: content-box;
   white-space: pre-wrap;
   overflow: hidden;

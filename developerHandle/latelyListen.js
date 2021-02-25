@@ -48,9 +48,13 @@ module.exports = {
       // }]
     },
     // 开发者注入模板页面数据
-    info: []
+    info: [{'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'熬婿'},
+    {'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'鬼谷子的智慧谋略'},
+    {'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'总有这样的歌只想一个人听'},
+    {'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'刘亦菲-开席了宋朝饭局'}]
   },
   onShow() {
+    console.log('------',this.data.info)
 
   },
   onLoad(options) {
@@ -79,7 +83,7 @@ module.exports = {
      
     }
     utils.PLAYHISTORYGET(param,utils.historyPlay,res=>{
-      app.log('最近收听:',res)
+      console.log('最近收听:',res)
       if(res.data.items.length > 0 && res.statusCode == 200){
         // item.title = item.mediaName                               // 歌曲名称
         // item.id = item.mediaId                                    // 歌曲Id
@@ -101,8 +105,10 @@ module.exports = {
             id:res.data.items[i].album.id,
             src:res.data.items[i].album.cover.middle.url,
             contentType:'album',
+            isVip:res.data.items[i].album.is_vip_free,
+
             // isHome: true,
-            isVip:wx.getStorageInfoSync('USERINFO').is_vip,
+            // isVip:wx.getStorageInfoSync('USERINFO').is_vip,
             perceent:(res.data.items[i].track.played_secs/res.data.items[i].track.duration)*100
 
           })

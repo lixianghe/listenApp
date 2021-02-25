@@ -68,9 +68,12 @@ Page({
     if (songInfo.feeType == true) {
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
+        console.log('res:',res)
         if (res.data && res.statusCode == 200) {
-          app.globalData.songInfo.src = res.data.play_32.url
-          
+        
+          app.globalData.songInfo.src = res.data.play_24_aac.url
+
+          console.log('app.globalData.songInfo.src:',app.globalData.songInfo.src)
           that.setData({
             songInfo: app.globalData.songInfo,
             canplay: canplay,
@@ -84,20 +87,21 @@ Page({
           // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
           wx.setStorageSync('abumInfoName', options.abumInfoName)
           if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-          if (options.noPlay !== 'true') wx.showLoading({
+          if (options.noPlay !== 'true') 
+          wx.showLoading({
             title: '加载中...',
             mask: true
           })
-          // console.log('bannees-vip---音频----300---:')
-
+           console.log('bannees-vip---音频----300---:')
+           wx.setStorage({
+            key: 'songInfo',
+            data: songInfo
+          })
           // 监听歌曲播放状态，比如进度，时间
           tool.playAlrc(that, app);
           that.queryProcessBarWidth()
           app.playing(that)
-          wx.setStorage({
-            key: 'songInfo',
-            data: songInfo
-          })
+        
 
         } else {}
       })

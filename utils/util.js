@@ -427,6 +427,9 @@ function toggleplay(that, app) {
 
 // 初始化 BackgroundAudioManager
 function initAudioManager(that, songInfo) {
+  console.log('util------initAudioManager:',that)
+  console.log('util------initAudioManager:',songInfo)
+
   let list = wx.getStorageSync('nativeList')
   that.audioManager = wx.getBackgroundAudioManager()
   that.audioManager.playInfo = {
