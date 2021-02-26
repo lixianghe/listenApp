@@ -33,7 +33,8 @@ App({
     useCarPlay: wx.canIUse('backgroundAudioManager.onUpdateAudio'),
     PIbigScreen: null,
     startTime:'00:00',
-    playBeginAt:''
+    playBeginAt:'',
+    abumInfoId:''
   },
   // 小程序颜色主题
   sysInfo: {
@@ -70,6 +71,7 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
+    this.log('onLaunch------abumInfoId:',this.globalData.abumInfoId)
     // wx.clearStorage()
     // this.goAuthGetToken()
     // 获取小程序颜色主题

@@ -651,6 +651,7 @@ module.exports = {
    audioSearch:'iot/openapi-smart-device-api/customized/search/tracks',
    //获取用户信息
    getUserInfo:'iot/openapi-smart-device-api/profile',
+   postInfoToService:'iot/openapi-smart-device-api/customized/wecar/mobile2token',
    //使⽤授权码获取access_token访问令牌
   fromCodeGetAccessToken:'iot/openapi-smart-device-api/customized/wecar/oauth2/v2/access_token',
   //上传播放行为

@@ -347,7 +347,7 @@ Component({
       app.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
       app.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
        app.log('minibar----setonshow------isCollect:',isCollect)
-      if(wx.getStorageSync('songInfo') && wx.getStorageSync('songInfo').albumId ==  app.globalData.abumInfoId){
+      if(wx.getStorageSync('songInfo') ){
            that.setData({
           existed:isCollect
         })

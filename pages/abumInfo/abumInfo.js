@@ -70,7 +70,7 @@ Page({
     var albumid = options.id
     this.data.optionId = albumid
     this.data.type = options.from
-    // app.globalData.abumInfoId = this.data.optionId
+     app.globalData.abumInfoId = this.data.optionId
     this.getAllList( this.data.optionId)
     // const msg = '网络异常，请检查网络！'
     // this.getNetWork(msg)
@@ -411,6 +411,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('nativeList', this.data.canplay)
     wx.setStorageSync('abumInfoName', this.data.abumInfoName)
+    wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+
+    
     // wx.setStorageSync('allList', this.data.canplay)
     // wx.setStorageSync('canplay', this.data.canplay)
     // let allList = wx.getStorageSync('allList') || []
@@ -424,6 +427,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       songInfo: app.globalData.songInfo,
     })
     app.playing(this)
+    this.selectComponent('#miniPlayer').setOnShow()
     wx.setStorageSync('abumInfoId', this.data.optionId)
     // this.getNetWork(msg, app.playing)
   },
