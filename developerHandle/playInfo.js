@@ -86,7 +86,7 @@ module.exports = {
       
 
      })
-     console.log('收藏：',this.data.existed)
+    //  console.log('收藏：',this.data.existed)
      console.log('播放信息：',data)
     wx.setStorageSync('songInfo', data)
 

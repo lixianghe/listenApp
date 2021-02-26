@@ -178,7 +178,7 @@ App({
       loopList = cutFlag ? [this.globalData.songInfo] : list
     } else {
       // 随机播放
-      loopList = this.randomList(list)
+      loopList = list
     }
     return loopList
   },
@@ -213,11 +213,12 @@ App({
       that = seek
     }
     const songInfo = wx.getStorageSync('songInfo')
-
+    // console.log('playingSong', songInfo)
     // 如果是车载情况
+    utils.initAudioManager(that, songInfo)
     this.carHandle(songInfo, seek)
     // let app = this
-    utils.initAudioManager(that, songInfo)
+    
     this.globalData.playBeginAt = new Date().getTime();
      this.upLoadPlayinfo()
   },

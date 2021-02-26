@@ -112,7 +112,7 @@ Page({
     // console.log('播放全部专辑id', e.detail.typeid)
     let albumid = e.detail.typeid
     let albumName = e.target.dataset.title
-    console.log(e)
+    // console.log(e)
     wx.setStorageSync('abumInfoName', albumName)
     this.getAllList(albumid)
     // 获取播放卡片
@@ -131,7 +131,7 @@ Page({
       playing: true
     })
     wx.setStorageSync('abumInfoId', albumid)
-    console.log('story--------', story, oldStory)
+    // console.log('story--------', story, oldStory)
 
   },
 
@@ -150,7 +150,7 @@ Page({
       if (res.data && res.statusCode == 200) {
 
         for (let item of res.data.items) {
-          console.log(item)
+          // console.log(item)
           this.data.canplay.push({
             title: item.title, // 歌曲名称
             id: item.id, // 歌曲Id
@@ -177,6 +177,7 @@ Page({
         
         // console.log('playing:', wx.getStorageSync('playing'))
         // this.selectComponent('#miniPlayer').setOnShow()
+        // console.log()
         this.selectComponent('#miniPlayer').watchPlay()
         app.playing(this)
         // this.selectComponent('#miniPlayer').toggle()

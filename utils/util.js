@@ -427,8 +427,8 @@ function toggleplay(that, app) {
 
 // 初始化 BackgroundAudioManager
 function initAudioManager(that, songInfo) {
-  console.log('util------initAudioManager:',that)
-  console.log('util------initAudioManager:',songInfo)
+  // console.log('util------initAudioManager:',that)
+  // console.log('util------initAudioManager:',songInfo)
 
   let list = wx.getStorageSync('nativeList')
   that.audioManager = wx.getBackgroundAudioManager()
@@ -484,8 +484,9 @@ function EventListener(that){
 
      // 如果是专辑详情点击的播放
      let pages = getCurrentPages()
-     let abum = pages.filter(n => n.route == 'pages/abumInfo/abumInfo')[0]
-     if (abum) {
+     let inAbum = pages[pages.length - 1].route == 'pages/abumInfo/abumInfo'
+     if (inAbum) {
+      let abum = pages.filter(n => n.route == 'pages/abumInfo/abumInfo')[0]
        let minibar = abum.selectComponent('#miniPlayer')
        minibar.pre()
      } else {
@@ -497,11 +498,15 @@ function EventListener(that){
     console.log('触发onNext事件');
     // 如果是专辑详情点击的播放
     let pages = getCurrentPages()
-    let abum = pages.filter(n => n.route == 'pages/abumInfo/abumInfo')[0]
-    if (abum) {
+    let inAbum = pages[pages.length - 1].route == 'pages/abumInfo/abumInfo'
+    
+    if (inAbum) {
+      console.log('走这里啦-------------------------------------------')
+      let abum = pages.filter(n => n.route == 'pages/abumInfo/abumInfo')[0]
       let minibar = abum.selectComponent('#miniPlayer')
       minibar.next(true)
     } else {
+      console.log('走那里啦-------------------------------------------')
       that.next(true)
     }
   })
