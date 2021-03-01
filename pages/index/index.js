@@ -5,7 +5,10 @@ import utils from '../../utils/util'
 Page({
   mixins: [require('../../developerHandle/index')],
   data: {
-    emptyObj:{'title':'已经见底啦~~','src':'/images/album_img_default.png'},
+    emptyObj: {
+      'title': '已经见底啦~~',
+      'src': '/images/album_img_default.png'
+    },
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
@@ -53,7 +56,8 @@ Page({
     reqS: true,
     reqL: false,
     canplay: [],
-    audioManager: null
+    audioManager: null,
+    vipAlbumAudioIdArr: [],
   },
   // 页面后台数据(不参与渲染)
   pageData: {
@@ -83,7 +87,7 @@ Page({
       // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()
-      
+
     });
   },
 
@@ -109,30 +113,101 @@ Page({
   },
 
   clickHadle(e) {
-    // console.log('播放全部专辑id', e.detail.typeid)
+    console.log('播放全部专辑', e)
+    console.log('播放全部专辑', e.currentTarget.dataset.isvip)
+
+    let isVip = e.currentTarget.dataset.isvip
     let albumid = e.detail.typeid
     let albumName = e.target.dataset.title
-    // console.log(e)
     wx.setStorageSync('abumInfoName', albumName)
-    this.getAllList(albumid)
-    // 获取播放卡片
-    let abumInfoId = wx.getStorageSync('abumInfoId')
-    let oldStory = this.selectComponent(`#story${abumInfoId}`)
-    let story = this.selectComponent(`#story${albumid}`)
-    // 清空上一专辑状态
-    if (oldStory) {
-      oldStory.setData({
-        playing: false
+    if (isVip) {
+      //Vip专辑
+      this.VipAlbumGetAudioId(albumid)
+    } else {
+      //非Vip专辑
+      this.getAllList(albumid)
+      // 获取播放卡片
+      let abumInfoId = wx.getStorageSync('abumInfoId')
+      let oldStory = this.selectComponent(`#story${abumInfoId}`)
+      let story = this.selectComponent(`#story${albumid}`)
+      // 清空上一专辑状态
+      if (oldStory) {
+        oldStory.setData({
+          playing: false
+        })
+      }
+      // 设置当前专辑状态
+      story.setData({
+        abumInfoId: albumid,
+        playing: true
       })
-    }
-    // 设置当前专辑状态
-    story.setData({
-      abumInfoId: albumid,
-      playing: true
-    })
-    wx.setStorageSync('abumInfoId', albumid)
-    // console.log('story--------', story, oldStory)
+      wx.setStorageSync('abumInfoId', albumid)
 
+    }
+  },
+
+  VipAlbumGetAudioId(albumid) {
+    var that = this
+    console.log('vip-----albumid:', albumid)
+    that.data.canplay = []
+
+    let param = {
+      'limit': 15,
+      'offset': 0,
+      'sort': "asc"
+    }
+    utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
+      console.log('专辑列表所有数据:', res)
+      if (res.data && res.statusCode == 200) {
+        for (let item of res.data.items) {
+          // console.log(item)
+          that.data.canplay.push({
+            title: item.title, // 歌曲名称
+            id: item.id, // 歌曲Id
+            dt: this.formatMusicTime(item.duration), // 歌曲的时常
+            coverImgUrl: item.image.url, // 歌曲的封面
+             src: '',
+            feeType: item.is_vip_free,
+            mediaType: item.announcer.nickname,
+            mediaAuthor: item.album.title,
+            authorId: item.announcer.id,
+            albumId: item.album_id
+          })
+
+
+        }
+        that.getVipAudioInfo().then((res) => {
+          console.log('------------------------:', res)
+          this.data.canplay = res
+          wx.setStorageSync('canplay', this.data.canplay)
+          wx.setStorageSync('allList', this.data.canplay)
+          wx.setStorageSync('nativeList', this.data.canplay)
+          //minibar  播放
+          app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
+          app.globalData.songInfo = app.globalData.canplay[0]
+          wx.setStorageSync('playing', true)
+          wx.setStorageSync('songInfo', app.globalData.canplay[0])
+          this.selectComponent('#miniPlayer').watchPlay()
+          app.playing(this)
+        })
+
+      }
+
+    })
+  },
+  //vip音频数据
+  getVipAudioInfo() {
+    var that = this
+    return new Promise(function (resolve, reject) {
+      for (let item of that.data.canplay) {
+        let param = {}
+        utils.PLAYINFOGET(param, utils.getMediaInfo + item.id + '/play-info', res => {
+          console.log('res:', res) 
+          item.src = res.data.play_24_aac.url
+          resolve(that.data.canplay)
+        })
+      }
+    })
   },
 
   // 获取所有的播放列表
@@ -158,29 +233,23 @@ Page({
             coverImgUrl: item.image.url, // 歌曲的封面
             src: item.play_info.play_64.url,
             feeType: item.is_vip_free,
-            mediaType:item.announcer.nickname,
-            mediaAuthor:item.album.title,
-            authorId:item.announcer.id,
-            albumId:item.album_id
+            mediaType: item.announcer.nickname,
+            mediaAuthor: item.album.title,
+            authorId: item.announcer.id,
+            albumId: item.album_id
           })
         }
-     
+
         wx.setStorageSync('canplay', this.data.canplay)
         wx.setStorageSync('allList', this.data.canplay)
         wx.setStorageSync('nativeList', this.data.canplay)
         //minibar  播放
         app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
         app.globalData.songInfo = app.globalData.canplay[0]
-        // console.log('app.globalData.songInfo2', app.globalData.songInfo)
         wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
-        
-        // console.log('playing:', wx.getStorageSync('playing'))
-        // this.selectComponent('#miniPlayer').setOnShow()
-        // console.log()
         this.selectComponent('#miniPlayer').watchPlay()
         app.playing(this)
-        // this.selectComponent('#miniPlayer').toggle()
       }
 
     })
@@ -209,8 +278,8 @@ Page({
         for (let item of res.data.items) {
           mediaArr.push({
             id: item.album.id,
-            allTitle:item.album.title,
-            title:that.cutStr(item.album.title) ,
+            allTitle: item.album.title,
+            title: that.cutStr(item.album.title),
             src: item.album.cover.middle.url,
             contentType: item.album.kind,
             count: utils.calculateCount(item.album.play_count),
@@ -234,15 +303,15 @@ Page({
 
   },
   //截取字符
-  cutStr(str){
+  cutStr(str) {
     str = str.replace(/\s/g, "")
     // console.log('str',str,str.length)
     var newStr
-    if(str.length<16){
+    if (str.length < 16) {
       newStr = str
 
-    }else{
-      newStr = str.substring(0,16)+'...'
+    } else {
+      newStr = str.substring(0, 16) + '...'
     }
     // console.log('newStr:',newStr)
     return newStr
@@ -329,7 +398,7 @@ Page({
   },
   // 最近播放
   tolatelyListen(e) {
-    if (!wx.getStorageSync('USERINFO')  || app.userInfo.islogin == false) {
+    if (!wx.getStorageSync('USERINFO') || app.userInfo.islogin == false) {
       wx.showToast({
         icon: 'none',
         title: '请登录后进行操作'
@@ -361,7 +430,7 @@ Page({
     // console.log('index---onshow:')
     // console.log('index---onshow:')
 
-    
+
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()
     // 获取播放卡片
@@ -376,7 +445,7 @@ Page({
         playing: playing
       })
     }
-    
+
 
 
 
