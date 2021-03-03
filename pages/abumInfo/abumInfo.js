@@ -192,26 +192,27 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   },
     // 获取所有的播放列表（首页item点击）
     getAllList(albumid, lazy = false) {
+      var that = this
       return new Promise((resolve, reject) => {
         // 假设allList是canplay，真实情况根据接口来
         // console.log('专辑id:',albumid)
         let param={
-          'limit': this.data.pageSize,
-          'offset': this.data.offset,
-          'sort': this.data.sort
+          'limit': that.data.pageSize,
+          'offset': that.data.offset,
+          'sort': that.data.sort
         }
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
-          //  console.log('专辑列表所有数据:',res)
+            console.log('专辑列表所有数据:',res)
            if(res.data.items.length > 0 && res.statusCode == 200){
                //非vip
                for (let item of res.data.items) {
                 _list.push({
-                  title :item.title ,                            // 歌曲名称
+                  title :that.cutStr(item.title) ,                            // 歌曲名称
                   id : item.id  ,                                  // 歌曲Id
-                  dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
+                  dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
                   coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
-                  feeType:item.is_free ,
+                  feeType:item.is_vip_free ,
                   src:item.play_info.play_64.url,       
                   mediaType:item.announcer.nickname,
                   mediaAuthor:item.album.title,
@@ -222,11 +223,11 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
             
              // 上拉和下拉的情况
              if (lazy == 'up'){
-              _list = this.data.canplay.concat(_list)
+              _list = that.data.canplay.concat(_list)
              } else if (lazy == 'down') {
-              _list = _list.concat(this.data.canplay)
+              _list = _list.concat(that.data.canplay)
              }
-             this.setData({
+             that.setData({
               total:res.data.total,
               canplay: _list,
               src:_list[0].coverImgUrl
@@ -245,6 +246,22 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       })
       // wx.setStorageSync('allList', allList)
     },
+
+    //截取字符
+  cutStr(str) {
+    str = str.replace(/\s/g, "")
+    // console.log('str',str,str.length)
+    var newStr
+    if (str.length < 22) {
+      newStr = str
+
+    } else {
+      newStr = str.substring(0, 22) + '...'
+    }
+    // console.log('newStr:',newStr)
+    return newStr
+
+  },
 
     async  getVipMediaUrl(trackid){
       // console.log('-------trackid:',trackid)
@@ -367,7 +384,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   // 点击歌曲名称跳转到歌曲详情
   goPlayInfo(e) {
     const msg = '网络异常，无法播放！'
-    // console.log('音频点击',e)
+   console.log('音频点击',e)
+   this.data.currentIndex = e.currentTarget.dataset.no
     // 点击歌曲的时候把歌曲信息存到globalData里面
     const songInfo = e.currentTarget.dataset.song
     console.log('app.globalData.songInfo----------', app.globalData.songInfo)
@@ -376,7 +394,6 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     wx.setStorageSync('abumInfoName', songInfo.title)
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('allList', this.data.canplay)
-    // console.log('-------------:',wx.getStorageSync('abumInfoName'))
 
     this.setData({ currentId: songInfo.id })
 
@@ -385,9 +402,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId
     wx.setStorageSync('abumInfoId', this.data.optionId)
-    // console.log('-------------:',wx.getStorageSync('abumInfoName'))
-
-    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}` })
+     console.log('-------------start:',this.data.start)
+     
+    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}` })
   },
   // 改变current
   changeCurrent(currentId) {

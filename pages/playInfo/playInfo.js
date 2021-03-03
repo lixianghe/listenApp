@@ -7,6 +7,8 @@ import utils from '../../utils/util'
 Page({
   mixins: [require('../../developerHandle/playInfo')],
   data: {
+    isVip:false,
+    currentIndex:0,
     existed: false,
     songInfo: {},
     playing: false,
@@ -47,7 +49,8 @@ Page({
     mainColor: btnConfig.colorOptions.mainColor,
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
-    screen: app.globalData.screen
+    screen: app.globalData.screen,
+    start:''
   },
   // 播放器实例
   audioManager: null,
@@ -63,9 +66,20 @@ Page({
     that.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
+    console.log('canplay:',canplay.length)
+    this.data.start = options.start
+    this.data.currentIndex = options.currentNub
+    console.log('-------------start:',this.data.start)
+    for (let i = 0; i < canplay.length; i++) {
+      canplay[i].num = parseInt(this.data.start)+i+1
+    }
+    wx.setStorageSync('allList', canplay)
+    // console.log('-------------canplay:',canplay)
+
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
     console.log('playInfo-------------------onload:',options)
     if (songInfo.feeType == true) {
+      this.data.isVip = true
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
         console.log('res:',res)
@@ -103,12 +117,15 @@ Page({
           app.playing(that)
         
 
-        } else {}
+        } else {
+
+        }
       })
     } else {
+      console.log('canplay:',canplay)
       that.setData({
         songInfo: songInfo,
-        canplay: canplay,
+         canplay: canplay,
         existed: options.collect == 'false' ? false : true,
         noPlay: options.noPlay || null,
         abumInfoName: options.abumInfoName || null,
@@ -129,6 +146,50 @@ Page({
 
     app.globalData.abumInfoId = this.data.songInfo.albumId
 
+  },
+
+  vipMediaPlay(mediaId){
+    let param = {}
+    utils.PLAYINFOGET(param, utils.getMediaInfo + mediaId + '/play-info', res => {
+      console.log('res:',res)
+      if (res.data && res.statusCode == 200) {
+      
+        app.globalData.songInfo.src = res.data.play_24_aac.url
+
+        console.log('app.globalData.songInfo.src:',app.globalData.songInfo.src)
+        this.setData({
+          songInfo: app.globalData.songInfo,
+          canplay: this.data.canplay,
+          existed: this.data.existed,
+          noPlay: this.data.noPlay ,
+          abumInfoName: this.data.abumInfoName ,
+          playing: wx.getStorageSync('playing')
+        })
+        let song = wx.getStorageSync('songInfo')
+        wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+        // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+         wx.setStorageSync('abumInfoName', this.data.abumInfoName)
+        // if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+        // if (options.noPlay !== 'true') 
+        wx.showLoading({
+          title: '加载中...',
+          mask: true
+        })
+         console.log('bannees-vip---音频----300---:')
+         wx.setStorage({
+          key: 'songInfo',
+          data: this.data.songInfo
+        })
+        // 监听歌曲播放状态，比如进度，时间
+        tool.playAlrc(this, app);
+        this.queryProcessBarWidth()
+        app.playing(this)
+      
+
+      } else {
+
+      }
+    })
   },
  
   onShow: function () {
@@ -167,8 +228,9 @@ Page({
 
   },
   btnsPlay(e) {
+    console.log('e:',e)
     const type = e.currentTarget.dataset.name
-    // console.log('type:',type)
+    console.log('type:',type)
     switch (type) {
       case 'pre':
 
@@ -316,22 +378,54 @@ Page({
   },
   // 上一首
   pre() {
-    // let loopType = wx.getStorageSync('loopType')
-    // if (loopType !== 'singleLoop') this.setData({
-    //   showImg: false
-    // })
+    
     const that = this
-    app.cutplay(that, -1)
+    if(that.data.isVip){
+      console.log('currentIndex:',this.data.currentIndex)
+      if(this.data.currentIndex == 0){
+        console.log('第一首了')
+
+      }else{
+        this.data.currentIndex--
+        let mediaId = this.data.canplay[this.data.currentIndex].id
+        app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
+
+        this.vipMediaPlay(mediaId)
+      }
+
+    }else{
+      app.cutplay(that, -1)
+    }
 
   },
   // 下一首
   next() {
-    // let loopType = wx.getStorageSync('loopType')
-    // if (loopType !== 'singleLoop') this.setData({
-    //   showImg: false
-    // })
+   
     const that = this
-    app.cutplay(that, 1)
+    console.log('下一首:',that)
+    if(that.data.isVip){
+      console.log('currentIndex:',this.data.currentIndex)
+ if(this.data.currentIndex == 14){
+  console.log('最后一首了')
+
+      }else{
+        this.data.currentIndex++
+        let mediaId = this.data.canplay[this.data.currentIndex].id
+        app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
+
+        this.vipMediaPlay(mediaId)
+
+
+
+
+        
+        
+      }
+
+    }else{
+      app.cutplay(that, 1)
+    }
+   
 
   },
   // 切换播放模式

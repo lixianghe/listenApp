@@ -151,7 +151,7 @@ Page({
             id:res.data.items[i].id,
             src:res.data.items[i].announcer.avatar_url,
             contentType:'album',
-            isHome:true,
+            isHome:false,
             
             count:utils.calculateCount( res.data.items[i].play_count),
             isVip:wx.getStorageInfoSync('USERINFO').is_vip,
@@ -183,8 +183,11 @@ Page({
   },
  
   close() {
-    this.setData({
-      showModal: false
+    wx.navigateBack({
+      
     })
+    // this.setData({
+    //   showModal: false
+    // })
   }
 })

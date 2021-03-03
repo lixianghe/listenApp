@@ -23,7 +23,7 @@
 .showInfo .close {
   float: right;
 }
-.showInfo .close image {
+.scloseimg {
   width: 10vh;
   height: 10vh;
   float: left;
@@ -36,7 +36,7 @@
   text-align: center;
   line-height: 7vh;
 }
-.showInfo button {
+.openbt {
   position: absolute;
   bottom: 8vh;
   background: #fd8b22;

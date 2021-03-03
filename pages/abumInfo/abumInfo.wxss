@@ -116,7 +116,7 @@
 }
 .page .left .songList .audition {
   margin-left: 2.5vh;
-  font-size: 4vh;
+  font-size: 5.5vh;
   color: #fa6501;
   padding: 0.5vh 1.5vh;
   border: 1px solid #fa6501;
@@ -232,7 +232,7 @@ page image {
   float: left;
 }
 .showInfo .info {
-  font-size: 4vh;
+  font-size: 5.5vh;
   margin-top: 14vh;
   width: 100%;
   padding: 0 2vh;

@@ -99,7 +99,7 @@
   float: left;
 }
 .showInfo .info {
-  font-size: 4vh;
+  font-size: 5.5vh;
   margin-top: 14vh;
   width: 100%;
   padding: 0 2vh;

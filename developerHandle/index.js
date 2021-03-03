@@ -54,8 +54,7 @@ module.exports = {
   //   }
 
   // },
-  onLoad(options) {
-    
+  onLoad(options) {    
   },
   onReady() {
 
