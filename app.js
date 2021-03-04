@@ -14,7 +14,7 @@ App({
     openid: '',
     appId: '60023',
     userId: '',
-    isTaiAccountChange: false,
+    isTaiUserChange: false,
     token: '',
     // 版本号
     version: '1.0.0',
@@ -71,8 +71,8 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    console.log('app---------------onLaunch:')
-    // this.isTaiAccountChange()
+    this.log('app---------------onLaunch:')
+    //  this.isTaiAccountChange()
     // this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
@@ -122,17 +122,21 @@ App({
   },
 
   isTaiAccountChange(){
-    console.log("function-----------------onTaiAccountStatusChange--")
+    
+    this.log("function-----------------appId--:",this.globalData.appId)
+    this.log("function-----------------onTaiAccountStatusChange--:",this.globalData.isTaiUserChange)
     if (wx.canIUse('onTaiAccountStatusChange')) {
       wx.onTaiAccountStatusChange(function (res) {
-        console.log("---onTaiAccountStatusChange--", res)
-        this.globalData.isTaiAccountChange = res.isLoginUser
+        this.log("---onTaiAccountStatusChange--", res)
+        this.globalData.isTaiUserChange = res.isLoginUser
       
       })
     } else {
-      console.log('不支持-----------------onTaiAccountStatusChange')
+      this.log('不支持-----------------onTaiAccountStatusChange')
 
     }
+    this.log("-----isTaiAccountChange--:",this.globalData.isTaiUserChange)
+
 
   },
 

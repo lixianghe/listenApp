@@ -23,7 +23,7 @@ import utils from '../utils/util'
 
 
 module.exports = {
-  data: {
+  data: { 
     iv: '',
     encryData: '',
     code: '',
@@ -52,21 +52,21 @@ module.exports = {
 
   onLoad(options) {
     var that = this
-   app.log('user-------------onload-----:')
-    // if (app.globalData.isTaiAccountChange) {
-    //   if (that.data.openId) {
-    //     app.log("---------getUserInfo")
-    //     that.getUserInfo()
-    //   } else {
-    //     app.log("-----fromCodeGetOpenid")
-    //     //请求接口
-    //     that.fromCodeGetOpenid()
-    //   }
+  //  app.log('user-------------onload-----:',app.globalData.isTaiAccountChange)
+  //   if (app.globalData.isTaiAccountChange) {
+  //     if (that.data.openId) {
+  //       app.log("---------getUserInfo")
+  //       that.getUserInfo()
+  //     } else {
+  //       app.log("-----fromCodeGetOpenid")
+  //       //请求接口
+  //       that.fromCodeGetOpenid()
+  //     }
 
-    // } else {
-    //   app.log("-----exit")
-    //   that.logoutTap()
-    // }
+  //   } else {
+  //     app.log("-----exit")
+  //     that.logoutTap()
+  //   }
 
     if (wx.canIUse('onTaiAccountStatusChange')) {
       wx.onTaiAccountStatusChange(function (res) {
@@ -78,6 +78,8 @@ module.exports = {
           } else {
             app.log('getPhoneNumber--------------------code:', that.data.code)
             //请求接口
+            
+            that.getCode()
             that.fromCodeGetOpenid()
           }
         } else { // 有登出，清除数据
@@ -88,9 +90,6 @@ module.exports = {
     } else {
       app.log('不支持-----------------onTaiAccountStatusChange')
     }
-
-
-
 
   },
   onShow() {
@@ -137,7 +136,6 @@ module.exports = {
 
     wx.login({
       success: (res) => {
-        app.log('第一次code:', res)
         this.data.code = res.code
         app.log('第一次code:', this.data.code)
 

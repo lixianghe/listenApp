@@ -302,7 +302,7 @@ Page({
 
       } else {
         wx.showToast({
-          title: '订阅失败，请重试',
+          title: '订阅失败，请重新登录',
           icon:'none'
         })
       }

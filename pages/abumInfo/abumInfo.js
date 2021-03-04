@@ -150,7 +150,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
        
       }else{
         wx.showToast({
-          title: '订阅失败，请重试',
+          title: '订阅失败，请重新登录',
           icon:'none'
         })
       }

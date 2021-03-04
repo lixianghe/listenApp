@@ -159,7 +159,7 @@ Component({
     },
      //收藏专辑
   collectAlbum(){
-    console.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
+    // console.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
     let param = {
       id:wx.getStorageSync('songInfo').albumId
     }
@@ -179,7 +179,7 @@ Component({
        
       }else{
         wx.showToast({
-          title: '订阅失败，请重试',
+          title: '订阅失败，请重新登录',
           icon:'none'
         })
       }
@@ -348,9 +348,9 @@ Component({
       that.listenPlaey()
       const playing = wx.getStorageSync('playing')
       const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
-      console.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
-      console.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
-       console.log('minibar----setonshow------isCollect:',isCollect)
+      // console.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
+      // console.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
+      //  console.log('minibar----setonshow------isCollect:',isCollect)
       if(wx.getStorageSync('songInfo') ){
            that.setData({
           existed:isCollect
