@@ -81,13 +81,13 @@ Component({
   },
   methods: {
     player(e) {
-      app.log(e)
+      console.log(e)
       
       const type = e.currentTarget.dataset.name
-      app.log('type:',type)
+      console.log('type:',type)
       switch (type) {
         case 'pre':     
-            app.log('上一首')
+            console.log('上一首')
             if(wx.getStorageSync('songInfo') == ''){
               wx.showToast({
                 title: '请添加音频',
@@ -109,7 +109,7 @@ Component({
          this.toggle()        
           break;
           case 'next':         
-              app.log('下一首')
+              console.log('下一首')
               if(wx.getStorageSync('songInfo') == ''){
                 wx.showToast({
                   title: '请添加音频',
@@ -120,8 +120,8 @@ Component({
               this.next()      
             break;
           case 'like':
-            app.log('like')
-
+            console.log('like')
+            console.log('USERINFO:',wx.getStorageSync('USERINFO'))
             if(wx.getStorageSync('USERINFO')){
               if(wx.getStorageSync('songInfo') == ''){
                 wx.showToast({
@@ -130,12 +130,13 @@ Component({
                 })
                 return
                }
+               console.log('existed:',this.data.existed)
 
               if(this.data.existed){
-                app.log('取消收藏')
+                console.log('取消收藏')
                 this.cancelCollectAlbum()
               }else{
-                app.log('添加收藏')
+                console.log('添加收藏')
                 this.collectAlbum()
               }
             }else{
@@ -158,12 +159,12 @@ Component({
     },
      //收藏专辑
   collectAlbum(){
-    app.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
+    console.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
     let param = {
       id:wx.getStorageSync('songInfo').albumId
     }
     utils.ALBUMSUBCRIBEPOST(param,utils.albumCollect,res=>{
-      app.log('收藏专辑:',res)
+      console.log('收藏专辑:',res)
       if(res.data.status == 200 && res.data.errmsg == 'ok'){
         this.setData({
           existed:true
@@ -177,7 +178,10 @@ Component({
         })
        
       }else{
-
+        wx.showToast({
+          title: '订阅失败，请重试',
+          icon:'none'
+        })
       }
     } )
 
@@ -189,7 +193,7 @@ Component({
     }
 
     utils.ALBUMSUBCRIBEPOST(param,utils.cancelAlbumCollect,res=>{
-      app.log('取消收藏专辑:',res)
+      console.log('取消收藏专辑:',res)
       if(res.data.status == 200 && res.data.errmsg == 'ok'){
         this.setData({
           existed:false
@@ -214,7 +218,7 @@ Component({
         id:wx.getStorageSync('songInfo').id
       }
       utils.PLAYHISTORYGET(param,utils.audioCollect,res=>{
-        app.log('收藏音频:',res)
+        console.log('收藏音频:',res)
         if(res.data.status == 200 && res.data.errmsg == 'ok'){
           this.setData({
             existed:true
@@ -236,7 +240,7 @@ Component({
         id:wx.getStorageSync('songInfo').id
       }
       utils.PLAYHISTORYGET(param,utils.audioCancelCollect,res=>{
-        app.log('取消音频收藏:',res)
+        console.log('取消音频收藏:',res)
         if(res.data.status == 200 && res.data.errmsg == 'ok'){
           this.setData({
             existed:false
@@ -277,7 +281,7 @@ Component({
     toggle() {
      
       this.triggerEvent('setPlaying', !this.data.playing)
-        app.log('-----------------',this.data.playing)
+        console.log('-----------------',this.data.playing)
         utils.toggleplay(this, app)
     },
     // 进入播放详情
@@ -300,7 +304,7 @@ Component({
     listenPlaey() {
       const that = this;
       // 每次从缓存中拿到当前歌曲的相关信息，还有播放列表
-      app.log('listenPlaey--------------songInfo:',app.globalData.songInfo)
+      console.log('listenPlaey--------------songInfo:',app.globalData.songInfo)
       if (app.globalData.songInfo && app.globalData.songInfo.title) {
         that.setData({
           songInfo: app.globalData.songInfo
@@ -328,11 +332,11 @@ Component({
     // 收藏和取消
     like() {
       
-       app.log(' 收藏和取消')
+       console.log(' 收藏和取消')
     },
     watchPlay() {
       app.globalData.songInfo = wx.getStorageSync('songInfo')
-      app.log('watchPlay-------------songInfo:',app.globalData.songInfo)
+      console.log('watchPlay-------------songInfo:',app.globalData.songInfo)
       this.setData({
         songInfo: app.globalData.songInfo 
       })
@@ -344,9 +348,9 @@ Component({
       that.listenPlaey()
       const playing = wx.getStorageSync('playing')
       const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
-      app.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
-      app.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
-       app.log('minibar----setonshow------isCollect:',isCollect)
+      console.log('minibar----songInfo------albumId:',wx.getStorageSync('songInfo').albumId)
+      console.log('minibar---- app.globalData------abumInfoId:',app.globalData.abumInfoId)
+       console.log('minibar----setonshow------isCollect:',isCollect)
       if(wx.getStorageSync('songInfo') ){
            that.setData({
           existed:isCollect

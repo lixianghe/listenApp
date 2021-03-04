@@ -14,7 +14,7 @@ App({
     openid: '',
     appId: '60023',
     userId: '',
-    haveLogin: false,
+    isTaiAccountChange: false,
     token: '',
     // 版本号
     version: '1.0.0',
@@ -71,8 +71,8 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    this.log('onLaunch------abumInfoId:',this.globalData.abumInfoId)
-    // wx.clearStorage()
+    console.log('app---------------onLaunch:')
+    // this.isTaiAccountChange()
     // this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
@@ -117,6 +117,21 @@ App({
         wx.setStorageSync('playing', playing)
       }
     
+    }
+
+  },
+
+  isTaiAccountChange(){
+    console.log("function-----------------onTaiAccountStatusChange--")
+    if (wx.canIUse('onTaiAccountStatusChange')) {
+      wx.onTaiAccountStatusChange(function (res) {
+        console.log("---onTaiAccountStatusChange--", res)
+        this.globalData.isTaiAccountChange = res.isLoginUser
+      
+      })
+    } else {
+      console.log('不支持-----------------onTaiAccountStatusChange')
+
     }
 
   },

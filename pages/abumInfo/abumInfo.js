@@ -149,7 +149,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
         })
        
       }else{
-
+        wx.showToast({
+          title: '订阅失败，请重试',
+          icon:'none'
+        })
       }
     } )
 
@@ -208,7 +211,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                //非vip
                for (let item of res.data.items) {
                 _list.push({
-                  title :that.cutStr(item.title) ,                            // 歌曲名称
+                  // title :item.title ,                            // 歌曲名称
+
+                   title :that.cutStr(item.title) ,                            // 歌曲名称
                   id : item.id  ,                                  // 歌曲Id
                   dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
                   coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
@@ -252,11 +257,11 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     str = str.replace(/\s/g, "")
     // console.log('str',str,str.length)
     var newStr
-    if (str.length < 22) {
+    if (str.length < 16) {
       newStr = str
 
     } else {
-      newStr = str.substring(0, 22) + '...'
+      newStr = str.substring(0, 16) + '...'
     }
     // console.log('newStr:',newStr)
     return newStr
