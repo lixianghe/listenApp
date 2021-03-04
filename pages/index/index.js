@@ -126,25 +126,24 @@ Page({
     } else {
       //非Vip专辑
       this.getAllList(albumid)
-     
+      // 获取播放卡片
+      let abumInfoId = wx.getStorageSync('abumInfoId')
+      let oldStory = this.selectComponent(`#story${abumInfoId}`)
+      let story = this.selectComponent(`#story${albumid}`)
+      // 清空上一专辑状态
+      if (oldStory) {
+        oldStory.setData({
+          playing: false
+        })
+      }
+      // 设置当前专辑状态
+      story.setData({
+        abumInfoId: albumid,
+        playing: true
+      })
+      wx.setStorageSync('abumInfoId', albumid)
 
     }
-     // 获取播放卡片
-     let abumInfoId = wx.getStorageSync('abumInfoId')
-     let oldStory = this.selectComponent(`#story${abumInfoId}`)
-     let story = this.selectComponent(`#story${albumid}`)
-     // 清空上一专辑状态
-     if (oldStory) {
-       oldStory.setData({
-         playing: false
-       })
-     }
-     // 设置当前专辑状态
-     story.setData({
-       abumInfoId: albumid,
-       playing: true
-     })
-     wx.setStorageSync('abumInfoId', albumid)
   },
 
   VipAlbumGetAudioId(albumid) {
@@ -362,16 +361,7 @@ Page({
     wx.navigateTo({
       url: url
     })
-    // 先清除其他story播放状态
-    let abumInfoId = wx.getStorageSync('abumInfoId')
-    let oldStory = this.selectComponent(`#story${abumInfoId}`)
-    // console.log('oldStory---------------------------------------', oldStory.data)
-    // 清空上一专辑状态
-    if (oldStory) {
-      oldStory.setData({
-        playing: false
-      })
-    }
+    
   },
   //轮播图的切换事件 
   swiperChange: function (e) {
@@ -455,5 +445,15 @@ Page({
 
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()
+    // 先清除其他story播放状态
+    let abumInfoId = wx.getStorageSync('abumInfoId')
+    let oldStory = this.selectComponent(`#story${abumInfoId}`)
+    // console.log('oldStory---------------------------------------', oldStory.data)
+    // 清空上一专辑状态
+    if (oldStory) {
+      oldStory.setData({
+        playing: false
+      })
+    }
   }
 })
