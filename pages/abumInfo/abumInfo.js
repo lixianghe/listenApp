@@ -66,7 +66,7 @@ Page({
   },
 
   async onLoad(options) {
-    // console.log('-------------abumInfo---onload:',options)
+     console.log('-------------abumInfo---onload:',options)
     var albumid = options.id
     this.data.optionId = albumid
     this.data.type = options.from

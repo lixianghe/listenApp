@@ -271,7 +271,7 @@ Page({
       'limit': 20
     }
     utils.GET(param, utils.indexMediaArr, res => {
-      // console.log('首页音频数据:', res)
+       console.log('首页音频数据:', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
 
         let mediaArr = []
