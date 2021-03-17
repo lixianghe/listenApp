@@ -27,6 +27,18 @@
       <view class="cardTit">{{ item.title }}</view>
     </view>
   </view>
+
+    <!-- 确认退出登录框 -->
+    <view wx:if="{{showChangeAccount}}" class="to-login-container {{colorStyle}}">
+    <view class="to-login-wrap" style="background-color: {{backgroundColor}};">
+      <view class="to-login-hd">您确定要退出登录吗？</view>
+      <view class="to-login-ft">
+        <button bindtap="confirm" class="btn btn-to-login">确定</button>
+        <button bindtap="cancel" class="btn btn-cancel">取消</button>
+      </view>
+    </view>
+</view>
+
   <mini-player   existed="{{existed}}" songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
 </view>
 <log></log>

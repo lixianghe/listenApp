@@ -52,25 +52,30 @@ module.exports = {
     // },
   },
   onShow() {
-
+    this._getLikeList()
   },
   onLoad(options) {
-    this._getLikeList()
+    
   },
   onReady() {
 
   },
-   // 跳转到播放详情界面
+   // 跳转到列表面
    linkAbumInfo(e) {
     let id = e.currentTarget.dataset.id
-    const src = e.currentTarget.dataset.src
-    const title = e.currentTarget.dataset.title
-    wx.setStorageSync('img', src)
-    // const routeType = e.currentTarget.dataset.contentype
+    if(id){
+      const src = e.currentTarget.dataset.src
+      const title = e.currentTarget.dataset.title
+      wx.setStorageSync('img', src)
+      // const routeType = e.currentTarget.dataset.contentype
+   
+      wx.navigateTo({
+        url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+      })
+    }else{
+
+    }
  
-    wx.navigateTo({
-      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
-    })
 
   },
   

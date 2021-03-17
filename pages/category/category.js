@@ -70,8 +70,15 @@ Page({
           reqS: true,
           'labels.show': true,
           'labels.data': categoryArr,
+         
 
         })
+        // wx.pageScrollTo({
+        //   scrollTop:0,
+        //   duration: 0,
+        // })
+      
+
       }
 
     })
@@ -114,7 +121,8 @@ Page({
         mediaArr.push(this.data.emptyObj)
         that.setData({
           reqL: true,
-          info: mediaArr
+          info: mediaArr,
+            scrollLeft:0
         })
       }
     })

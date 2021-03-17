@@ -36,7 +36,14 @@ header['content-type'] = 'application/json'
     
    },
    fail: err => {
-    // console.log('请求失败：', res);
+     console.log('请求失败：', err);
+    if(err.errMsg == 'request:fail '){
+      wx.showToast({
+        title: '网络错误请检查',
+        icon:'none'
+      })
+
+    }
     callback(err)
      wx.hideLoading()
    }
@@ -77,7 +84,14 @@ header['xm-sign'] = encrypt(Date.now())
     
    },
    fail: err => {
-    // console.log('请求失败：', res);
+    // console.log('请求失败：', err);
+    if(err.errMsg == 'request:fail '){
+      wx.showToast({
+        title: '网络错误请检查',
+        icon:'none'
+      })
+
+    }
     callback(err)
      wx.hideLoading()
    }
@@ -116,7 +130,14 @@ header['xm-sign'] = encrypt(Date.now())
     
    },
    fail: err => {
-    // console.log('请求失败：', res);
+     console.log('请求失败：', err);
+     if(err.errMsg == 'request:fail '){
+      wx.showToast({
+        title: '网络错误请检查',
+        icon:'none'
+      })
+
+    }
     callback(err)
      wx.hideLoading()
    }
@@ -158,8 +179,14 @@ let header = {}
     
    },
    fail: err => {
-      //  console.log('请求失败:', err);
-     
+        console.log('请求失败:', err);
+        if(err.errMsg == 'request:fail '){
+          wx.showToast({
+            title: '网络错误请检查',
+            icon:'none'
+          })
+    
+        }
        callback(err)
      wx.hideLoading()
    }
@@ -189,6 +216,13 @@ function MGET(param,url, callback) {
    },
    fail: err => {
     console.log('请求失败：', err);
+    if(err.errMsg == 'request:fail '){
+      wx.showToast({
+        title: '网络错误请检查',
+        icon:'none'
+      })
+
+    }
     callback(err)
     wx.hideLoading()
    }
@@ -229,6 +263,13 @@ let header ={
    },
    fail: err => {
       console.log('请求失败:', err);
+      if(err.errMsg == 'request:fail '){
+        wx.showToast({
+          title: '网络错误请检查',
+          icon:'none'
+        })
+  
+      }
        callback(err)
      wx.hideLoading()
    }
@@ -276,6 +317,13 @@ function REFRESHTOKENPOST(param,url, callback) {
    },
    fail: err => {
        console.log('请求失败:', err);
+       if(err.errMsg == 'request:fail '){
+        wx.showToast({
+          title: '网络错误请检查',
+          icon:'none'
+        })
+  
+      }
        callback(err)
     
     
@@ -320,6 +368,14 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
    },
    fail: err => {
        console.log('请求失败:', err);  
+       if(err.errMsg == 'request:fail '){
+        wx.showToast({
+          title: '网络错误请检查',
+          icon:'none'
+        })
+  
+      }
+
        callback(res)
      wx.hideLoading()
    }
@@ -361,7 +417,15 @@ let header = {}
     
    },
    fail: err => {
-       console.log('请求失败:', err);  
+       console.log('请求失败:', err); 
+       
+       if(err.errMsg == 'request:fail '){
+        wx.showToast({
+          title: '网络错误请检查',
+          icon:'none'
+        })
+  
+      }
        callback(res)
      wx.hideLoading()
    }

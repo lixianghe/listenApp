@@ -123,19 +123,19 @@ App({
 
   isTaiAccountChange(){
     
-    this.log("function-----------------appId--:",this.globalData.appId)
-    this.log("function-----------------onTaiAccountStatusChange--:",this.globalData.isTaiUserChange)
-    if (wx.canIUse('onTaiAccountStatusChange')) {
-      wx.onTaiAccountStatusChange(function (res) {
-        this.log("---onTaiAccountStatusChange--", res)
-        this.globalData.isTaiUserChange = res.isLoginUser
+    // this.log("function-----------------appId--:",this.globalData.appId)
+    // this.log("function-----------------onTaiAccountStatusChange--:",this.globalData.isTaiUserChange)
+    // if (wx.canIUse('onTaiAccountStatusChange')) {
+    //   wx.onTaiAccountStatusChange(function (res) {
+    //     this.log("---onTaiAccountStatusChange--", res)
+    //     this.globalData.isTaiUserChange = res.isLoginUser
       
-      })
-    } else {
-      this.log('不支持-----------------onTaiAccountStatusChange')
+    //   })
+    // } else {
+    //   this.log('不支持-----------------onTaiAccountStatusChange')
 
-    }
-    this.log("-----isTaiAccountChange--:",this.globalData.isTaiUserChange)
+    // }
+    // this.log("-----isTaiAccountChange--:",this.globalData.isTaiUserChange)
 
 
   },

@@ -217,7 +217,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                   id : item.id  ,                                  // 歌曲Id
                   dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
                   coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
-                  feeType:item.is_vip_free ,
+                  feeType:item.is_free ,
                   src:item.play_info.play_64.url,       
                   mediaType:item.announcer.nickname,
                   mediaAuthor:item.album.title,
@@ -390,19 +390,38 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   goPlayInfo(e) {
     const msg = '网络异常，无法播放！'
    console.log('音频点击',e)
-   this.data.currentIndex = e.currentTarget.dataset.no
+   
+   let isfree = e.currentTarget.dataset.song.feeType
+   console.log('是否免费',isfree)
+   if(!isfree){
+     //收费曲目
+     wx.showModal({
+      title: '无权限',
+      content: '暂无权限收听,请从喜马拉雅APP购买',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+    return
+   }else{
+    this.data.currentIndex = e.currentTarget.dataset.no
     // 点击歌曲的时候把歌曲信息存到globalData里面
     const songInfo = e.currentTarget.dataset.song
     console.log('app.globalData.songInfo----------', app.globalData.songInfo)
-    app.globalData.songInfo = songInfo
+      app.globalData.songInfo = songInfo
     wx.setStorageSync('songInfo', songInfo)
     wx.setStorageSync('abumInfoName', songInfo.title)
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('allList', this.data.canplay)
-
     this.setData({ currentId: songInfo.id })
-
     this.getNetWork(msg, this.toInfo)
+   }
+  
+  
   },
   toInfo() {
     app.globalData.abumInfoId = this.data.optionId

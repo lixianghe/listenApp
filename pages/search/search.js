@@ -147,7 +147,22 @@ Page({
     this.data.recentSearch.unshift(this.data.keyWord)
    
     this.data.info = []
-    this.albumsSearch()
+    switch (this.data.currentTap) {
+      case 0:
+        this.albumsSearch()
+
+        break;
+        case 1:
+          this.peopleSearch()
+
+        break;
+        case 2:
+          this.audioSearch()
+
+        break;
+    
+     
+    }
   },
   //搜索词存进缓存
   searchWordToCash(word) {

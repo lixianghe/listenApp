@@ -42,7 +42,9 @@
         <text wx:if="{{sort == 'asc' && (item.id !== currentId || !playing)}}">{{start + index + 1 }}</text>
         <text wx:if="{{sort == 'desc' && (item.id !== currentId || !playing)}}">{{start-index }}</text>
 
-        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:{{mainColor}};border: 1px solid {{mainColor}};width:16vh;text-align:center;line-height:7vh;height:7vh" wx:if="{{item.feeType }}">试听</text>
+        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:green;border: 1px solid green;width:16vh;text-align:center;line-height:7vh;height:7vh" wx:if="{{item.feeType }}">试听</text>
+
+        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:{{mainColor}};border: 1px solid {{mainColor}};width:16vh;text-align:center;line-height:7vh;height:7vh" wx:if="{{!item.feeType }}">付费</text>
         <!-- <text style="max-width:70%">{{item.title}}</text> -->
 
         <text style="max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{item.title}}</text>

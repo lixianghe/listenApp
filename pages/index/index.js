@@ -340,28 +340,35 @@ Page({
 
   // 跳转到播放界面
   linkAbumInfo(e) {
-    // console.log('专辑列表:', e)
+    
 
     let id = e.currentTarget.dataset.id
-    const src = e.currentTarget.dataset.src
-    const title = e.currentTarget.dataset.title
-    wx.setStorageSync('img', src)
-    const routeType = e.currentTarget.dataset.contentype
+   console.log('专辑id:', id)
+    if(id){
+      const src = e.currentTarget.dataset.src
+      const title = e.currentTarget.dataset.title
+      wx.setStorageSync('img', src)
+      const routeType = e.currentTarget.dataset.contentype
+  
+      if (!app.globalData.latelyListenId.includes(id)) {
+        app.globalData.latelyListenId.push(id)
+      }
+      wx.navigateTo({
+        url: `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
+      })
+    }else{
 
-    if (!app.globalData.latelyListenId.includes(id)) {
-      app.globalData.latelyListenId.push(id)
-    }
-    let url
-    if (routeType === 'album' || routeType === 'fm') {
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
-    } else if (routeType === 'media') {
-      url = `../playInfo/playInfo?id=${id}`
     }
 
-    wx.navigateTo({
-      url: url
-    })
     
+    // let url
+    // if (routeType === 'album' || routeType === 'fm') {
+    //   url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
+    // } else if (routeType === 'media') {
+    //   url = `../playInfo/playInfo?id=${id}`
+    // }
+
+   
   },
   //轮播图的切换事件 
   swiperChange: function (e) {
