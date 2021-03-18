@@ -218,6 +218,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                   dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
                   coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
                   feeType:item.is_free ,
+                  isVipFree:item.is_vip_free,
                   src:item.play_info.play_64.url,       
                   mediaType:item.announcer.nickname,
                   mediaAuthor:item.album.title,
@@ -390,10 +391,11 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   goPlayInfo(e) {
     const msg = '网络异常，无法播放！'
    console.log('音频点击',e)
-   
+  //  !item.feeType &&  item.isVipFree 
    let isfree = e.currentTarget.dataset.song.feeType
+   let isvipfree = e.currentTarget.dataset.song.isVipFree
    console.log('是否免费',isfree)
-   if(!isfree){
+   if(!isfree && isvipfree){
      //收费曲目
      wx.showModal({
       title: '无权限',

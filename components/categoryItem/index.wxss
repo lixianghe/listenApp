@@ -4,9 +4,10 @@
   display: inline-block;
   margin-right: 7.6vh;
   /* margin-top: 15.7vh; */
-  height: 78.3vh;
+  height: 65vh;
   overflow: hidden;
   position: relative;
+ 
 }
 .halbumCard .image {
   width: 52.8vh;
@@ -88,4 +89,13 @@
  border-radius: 50%;
   /* background: red; */
  
+}
+/* .halbumCard{
+  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+  
+} */
+
+.halbumCard[focus-select=true]{
+  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+  /* border: 1px solid #dc5e4e; */
 }

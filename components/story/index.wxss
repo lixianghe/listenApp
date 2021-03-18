@@ -4,7 +4,7 @@
   display: inline-block;
   margin-right: 7.6vh;
   /* margin-top: 15.7vh; */
-  height: 78.3vh;
+  height: 70.3vh;
   overflow: hidden;
   position: relative;
 }
@@ -15,9 +15,9 @@
   vertical-align: bottom;
 }
 .halbumCard .albumTit {
-  margin-top: 4.5vh;
+  margin-top: 3.5vh;
   color: #ffffff;
-  font-size: 6.2vh;
+  font-size: 6.0vh;
   box-sizing: content-box;
   white-space: pre-wrap;
   overflow: hidden;
@@ -82,10 +82,18 @@
 .halbumCard .play-img{
   position: absolute;
   left: 3vh;
-  bottom: 31vh;
+  bottom: 23vh;
   width: 13.6vh;
   height: 13.6vh;
  border-radius: 50%;
   /* background: red; */
  
+}
+.halbumCard{
+  border-bottom: 2px solid #dc5e4e;
+  /* box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e; */
+}
+.halbumCard[focus-select=true]{
+  border-bottom: 2px solid #dc5e4e;
+  /* box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e; */
 }

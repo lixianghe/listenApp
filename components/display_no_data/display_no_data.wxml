@@ -1,0 +1,24 @@
+<view class="container {{colorStyle}}" wx:if="{{code=='1'}}" style="background-color:{{backgroundColor}}">
+  <image class="icon icon-blank" src="{{'/images/'+colorStyle+'/no_data.png'}}"></image>
+  <view class="text">暂无数据</view>
+  <button wx:if="{{btnShow}}" class="btn" data-key="{{key}}" catchtap="btnClick">返回</button>
+</view>
+
+<view class="container {{colorStyle}}" wx:if="{{code=='2'}}" style="background-color:{{backgroundColor}}">
+  <image class="icon" src="{{'/images/'+colorStyle+'/wifi.png'}}"></image>
+  <view class="text">网络不好\n请稍后重试</view>
+  <button class="btn" data-key="{{key}}" catchtap="btnClick">重新加载</button>
+</view>
+
+<view class="container {{colorStyle}}" wx:if="{{code=='3'}}" style="background-color:{{backgroundColor}}">
+  <image class="icon" src="{{'/images/'+colorStyle+'/server.png'}}"></image>
+  <view class="text">服务器异常\n请稍后重试</view>
+  <button class="btn" data-key="{{key}}" catchtap="btnClick">重新加载</button>
+</view>
+
+<view class="container {{colorStyle}}" wx:if="{{code=='4'}}" style="background-color:{{backgroundColor}}">
+  <image class="icon" src="{{'/images/'+colorStyle+'/server.png'}}"></image>
+  <view class="text">请求超时\n请稍后重试</view>
+  <button class="btn" data-key="{{key}}" catchtap="btnClick">重新加载</button>
+</view>
+<log></log>

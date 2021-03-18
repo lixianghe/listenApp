@@ -70,8 +70,11 @@
   "usingComponents": {
     "mini-player": "/components/miniPlayer/index",
     "selectWorks": "/components/selectWorks/index",
-    "bgConfirm": "/components/bgConfirm/index"
+    "bgConfirm": "/components/bgConfirm/index",
+    "Nodata": "/components/display_no_data/display_no_data",
+    "log": "/components/log/log"
   },
+
   "requiredBackgroundModes": ["audio"],
   "sitemapLocation": "sitemap.json"
 }

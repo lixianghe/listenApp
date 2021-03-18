@@ -381,6 +381,12 @@ Page({
     //   }
   },
 
+  // 重新加载
+  refresh: function () {
+ console.log('重新加载')
+   
+  },
+
   //我的收藏
   like() {
     if (!wx.getStorageSync('USERINFO') || app.userInfo.islogin == false) {

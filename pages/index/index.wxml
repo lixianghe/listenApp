@@ -50,8 +50,8 @@
       </view> -->
       <!-- 页面盒子 -->
       <view class="storyBox">
-        <story id="story{{item.id}}" class="story" wx:if="{{info.length>0 && reqL}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
-        data-id="{{item.id}}" data-title="{{item.allTitle}}" data-src="{{item.src}}" data-isvip="{{item.isVip}}" data-contentype="{{item.contentType}}" catchclickHadle="clickHadle"  catchtap="linkAbumInfo"
+        <story id="story{{item.id}}"  data-focusindex='1' class="story" wx:if="{{info.length>0 && reqL}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
+        data-id="{{item.id}}" data-title="{{item.allTitle}}" data-src="{{item.src}}" data-isvip="{{item.isVip}}" data-contentype="{{item.contentType}}" catchclickHadle="clickHadle"  bindtap="linkAbumInfo"
         datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}"></story>
       </view>
       
@@ -68,4 +68,5 @@
   <bgConfirm id="bgConfirm" msg="{{confirm}}" confirm="确定" cancel=""></bgConfirm>
   <mini-player existed="{{existed}}"  id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
 </view>
-<log></log>
+<Nodata  code="{{retcode}}" bindrefresh="refresh"></Nodata>
+<log/>
