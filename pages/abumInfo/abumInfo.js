@@ -211,9 +211,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                //非vip
                for (let item of res.data.items) {
                 _list.push({
-                  // title :item.title ,                            // 歌曲名称
+                  title :item.title ,                            // 歌曲名称
 
-                   title :that.cutStr(item.title) ,                            // 歌曲名称
+                  //  title :that.cutStr(item.title) ,                            // 歌曲名称
                   id : item.id  ,                                  // 歌曲Id
                   dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
                   coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
@@ -468,6 +468,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     this.setData({
       currentId: app.globalData.songInfo.id,
       songInfo: app.globalData.songInfo,
+      scrollTop: 0
     })
     app.playing(this)
     this.selectComponent('#miniPlayer').setOnShow()

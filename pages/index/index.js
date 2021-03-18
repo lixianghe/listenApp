@@ -126,24 +126,25 @@ Page({
     } else {
       //非Vip专辑
       this.getAllList(albumid)
-      // 获取播放卡片
-      let abumInfoId = wx.getStorageSync('abumInfoId')
-      let oldStory = this.selectComponent(`#story${abumInfoId}`)
-      let story = this.selectComponent(`#story${albumid}`)
-      // 清空上一专辑状态
-      if (oldStory) {
-        oldStory.setData({
-          playing: false
-        })
-      }
-      // 设置当前专辑状态
-      story.setData({
-        abumInfoId: albumid,
-        playing: true
-      })
-      wx.setStorageSync('abumInfoId', albumid)
+     
 
     }
+     // 获取播放卡片
+     let abumInfoId = wx.getStorageSync('abumInfoId')
+     let oldStory = this.selectComponent(`#story${abumInfoId}`)
+     let story = this.selectComponent(`#story${albumid}`)
+     // 清空上一专辑状态
+     if (oldStory) {
+       oldStory.setData({
+         playing: false
+       })
+     }
+     // 设置当前专辑状态
+     story.setData({
+       abumInfoId: albumid,
+       playing: true
+     })
+     wx.setStorageSync('abumInfoId', albumid)
   },
 
   VipAlbumGetAudioId(albumid) {

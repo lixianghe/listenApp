@@ -98,7 +98,7 @@
   text-align: right;
   /* margin-left: -5vh; */
 }
-.page .left .songList view text:nth-child(2) {
+.page .left .songList view .songname {
   margin-left: 7.35vh;
   overflow: hidden;
   text-overflow: ellipsis;
