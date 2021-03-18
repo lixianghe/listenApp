@@ -90,12 +90,12 @@
   /* background: red; */
  
 }
-/* .halbumCard{
-  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+ .halbumCard{
   
-} */
+   border-bottom: 2px solid #dc5e4e;
+} 
 
 .halbumCard[focus-select=true]{
-  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
-  /* border: 1px solid #dc5e4e; */
-}
+  border-bottom: 2px solid #dc5e4e;
+} 
+  
