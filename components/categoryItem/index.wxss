@@ -92,7 +92,7 @@
 }
  .halbumCard{
   
-   border-bottom: 2px solid #dc5e4e;
+   /* border-bottom: 2px solid #dc5e4e; */
 } 
 
 .halbumCard[focus-select=true]{

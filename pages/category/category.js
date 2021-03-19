@@ -91,39 +91,43 @@ Page({
       title: '加载中...',
     })
     let params = {
-      'categoryId': categoryId,
-      'excludedAlbumIds': '',
-      'excludedOffset': 0,
-      'keywordId': 0,
-      'pageId': 1,
-      'pageSize': 100,
+      'metadata_attributes': '',
+      'only_paid': false,
+      'offset': 0,
+      'limit': 100,
+      'sort': 'asc',
+     
     }
     // let date = Date.parse(new Date())
     // console.log('时间:',date)
-    utils.MGET(params, utils.allAlbums, res => {
+    utils.CATEGORYDETAILSGET(params, 'iot/openapi-smart-device-api/v2/album-categories/'+categoryId+'/metadata-albums', res => {
       wx.hideLoading()
       console.log('分类下所有专辑:', res)
-      if (res.data.list.length > 0 && res.statusCode == 200) {
+      if (res.data.items.length > 0 && res.statusCode == 200) {
+       
         let mediaArr = []
-        for (let item of res.data.list) {
+        for (let item of res.data.items) {
+          // console.log('----------',item)
           mediaArr.push({
-            id: item.albumId,
+            id: item.id,
             allTitle:item.title,
             title:that.cutStr(item.title) ,
-            src: item.pic,
-            contentType: item.materialType,
-            count: utils.calculateCount(item.playsCount),
-            isVip: item.vipFreeType == 1 ? true : false
+            src: item.cover.middle.url,
+            contentType: item.kind,
+            count: utils.calculateCount(item.play_count),
+            isVip: item.is_vip_free
 
           })
         }
-        // console.log('arr',mediaArr)
+        //  console.log('arr',mediaArr)
         mediaArr.push(this.data.emptyObj)
         that.setData({
           reqL: true,
           info: mediaArr,
-            scrollLeft:0
+          scrollLeft:0
         })
+      }else{
+       
       }
     })
 

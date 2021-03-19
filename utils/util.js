@@ -194,12 +194,62 @@ let header = {}
 
 
 }
+// GET请求
+function CATEGORYDETAILSGET(param,url, callback) {
+  // console.log('CATEGORYDETAILSGET')
+  // console.log('URL',  url)
+  //  console.log('请求URL', this.baseUrl + url)
+  let publicParams = {
+    app_key: this.APP_KEY,
+    device_id: this.getDeviceId(),  
+   nonce: this.generateRandom(),
+   timestamp: +new Date(),
+   access_token:  wx.getStorageSync('TOKEN').access_token,
+    client_os_type: 3
+  };
+
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+    console.log('params',   params)
+
+
+let header = {}
+ header['xm-sign'] = encrypt(Date.now())
+//  console.log('header', header)
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: header,
+   method: 'GET',
+   dataType: 'json',
+   success: res=> {
+      //  console.log( '请求成功:', res);
+       callback(res)
+    
+   },
+   fail: err => {
+        console.log('请求失败:', err);
+        if(err.errMsg == 'request:fail '){
+          wx.showToast({
+            title: '网络错误请检查',
+            icon:'none'
+          })
+    
+        }
+       callback(err)
+     wx.hideLoading()
+   }
+ })
+
+
+}
+
 
 // GET请求
 function MGET(param,url, callback) {
   // console.log('MGET')
-  // console.log('参数', param)
-  //  console.log('请求URL', this.MbaseUrl + url)
+   console.log('参数', param)
+    console.log('请求URL', this.MbaseUrl + url)
   let header = {}
   header['xm-sign'] = encrypt(Date.now())
   // console.log('header', header)
@@ -764,6 +814,7 @@ module.exports = {
   GET:GET,
   MGET:MGET,
   PLAYINFOGET:PLAYINFOGET,
+  CATEGORYDETAILSGET:CATEGORYDETAILSGET,
   PLAYHISTORYGET:PLAYHISTORYGET,
   LIKEGET:LIKEGET,
   POST:POST,
