@@ -621,7 +621,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     }else{
       this.data.offset+=15
       this.data.start-=15
-    }    this.getAllList(this.data.optionId, 'down')
+    }    
+    this.getAllList(this.data.optionId, 'down')
     this.setData({
       showLoadTop: false,
       scrollTop: 0,
