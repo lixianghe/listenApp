@@ -178,10 +178,16 @@ App({
     // 获取歌曲的url
     let params = {
       mediaId: song.id,
-      contentType: 'story'
+      contentType: 'story',
+      isVipFree:song.isVipFree
     }
     console.log(params)
-    await getMedia(params, that)
+    if(params.isVipFree){
+      await getVipMedia(params, that)
+    }else{
+      await getMedia(params, that)
+    }
+    
     loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
     this.globalData.playBeginAt = new Date().getTime();
     // this.upLoadPlayinfo()

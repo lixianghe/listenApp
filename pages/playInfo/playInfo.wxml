@@ -160,7 +160,7 @@
         <view  bindtap="playSong" data-no='{{index}}' data-song="{{item}}" style="width: 100%;height: 6.6vh;line-height: 6.6vh;">
           <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
           <!-- <text wx:else>{{index + 1}}</text> -->
-          <text wx:else>{{item.num}}</text>
+          <text >{{item.num}}</text>
           <text style="width:80%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.title}}</text>
           <text class="audition" style="color:{{mainColor}};border: 1px solid {{mainColor}}" wx:if="{{item.feeType === '01'}}">试听</text>
           <text>{{item.dt}}</text>

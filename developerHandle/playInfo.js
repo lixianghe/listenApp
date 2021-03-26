@@ -61,38 +61,62 @@ module.exports = {
   },
   onLoad(options) {
     // console.log('-=-==-=-==-=-=options:',options)
-    const app = getApp()
-    // 拿到歌曲的id: options.id
-    // console.log('-=-==-=-==-=-= app.globalData.songInfo:', app.globalData.songInfo)
 
-    // let getInfoParams = {mediaId: options.id || app.globalData.songInfo.id, contentType: 'story'}
-    // this.getMedia(getInfoParams).then(() => {
-    //   this.play() 
-    // })
+  },
+
+  async getVipMedia(params, that = this){
+    const app = getApp()
+    let param = {}
+    utils.PLAYINFOGET(param, utils.getMediaInfo + params.mediaId + '/play-info', res => {
+      console.log('res:',res)
+      if (res.data && res.statusCode == 200) {
+         console.log('bannees-vip---音频----300---:')
+        
+         let canplay = wx.getStorageSync('canplay')
+ let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
+ data.src = res.data.play_24_aac.url
+ app.globalData.songInfo = Object.assign({}, data)
+ console.log('缓存收藏：',wx.getStorageSync('ALBUMISCOLLECT'))
+
+ that.setData({ 
+   songInfo: data,
+   existed:wx.getStorageSync('ALBUMISCOLLECT')
+  })
+ //  console.log('收藏：',this.data.existed)
+  console.log('播放信息：',data)
+ wx.setStorageSync('songInfo', data)
+    
+   
+      
+
+      } else {
+
+      }
+    })
   },
   
   async getMedia(params, that = this) {   
     const app = getApp()
-    // 模拟请求数据    
-    let canplay = wx.getStorageSync('canplay')
-    // console.log('---------------111-------', canplay, params)
-    let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
-    app.globalData.songInfo = Object.assign({}, data)
-    console.log('缓存收藏：',wx.getStorageSync('ALBUMISCOLLECT'))
+      //非vip
+ // 模拟请求数据    
+ let canplay = wx.getStorageSync('canplay')
+ let data = (canplay.filter(n => Number(n.id) === Number(params.mediaId)))[0]
+ app.globalData.songInfo = Object.assign({}, data)
+ console.log('缓存收藏：',wx.getStorageSync('ALBUMISCOLLECT'))
 
-    that.setData({ 
-      songInfo: data,
-      existed:wx.getStorageSync('ALBUMISCOLLECT')
-      
-
-     })
-    //  console.log('收藏：',this.data.existed)
-     console.log('播放信息：',data)
-    wx.setStorageSync('songInfo', data)
+ that.setData({ 
+   songInfo: data,
+   existed:wx.getStorageSync('ALBUMISCOLLECT')
+  })
+ //  console.log('收藏：',this.data.existed)
+  console.log('播放信息：',data)
+ wx.setStorageSync('songInfo', data)
+    }
+   
 
 
 
   
    
-  }
+  
 }

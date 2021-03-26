@@ -61,6 +61,7 @@ Page({
     })
   },
   onLoad(options) {
+    console.log('playinf-----options:',options)
     const that = this;
     // 根据分辨率设置样式
     that.setStyle()
@@ -151,11 +152,9 @@ Page({
   vipMediaPlay(mediaId){
     let param = {}
     utils.PLAYINFOGET(param, utils.getMediaInfo + mediaId + '/play-info', res => {
-      console.log('res:',res)
+      console.log('vip音频数据:',res)
       if (res.data && res.statusCode == 200) {
-      
         app.globalData.songInfo.src = res.data.play_24_aac.url
-
         console.log('app.globalData.songInfo.src:',app.globalData.songInfo.src)
         this.setData({
           songInfo: app.globalData.songInfo,

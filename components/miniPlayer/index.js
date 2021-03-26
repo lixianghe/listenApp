@@ -295,7 +295,7 @@ Component({
       }
       let abumInfoName = wx.getStorageSync('abumInfoName')
       wx.navigateTo({
-        url: '../playInfo/playInfo?noPlay=true'+'&collect='+wx.getStorageSync('ALBUMISCOLLECT')+'&abumInfoName='+abumInfoName
+        url: '../playInfo/playInfo?noPlay=true'+'&collect='+wx.getStorageSync('ALBUMISCOLLECT')+'&abumInfoName='+abumInfoName+'&start=0'
         // url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
         // url: `../playInfo/playInfo?noPlay=true&collect=${wx.getStorageSync('ALBUMISCOLLECT')}&abumInfoName=${abumInfoName}`
       })
