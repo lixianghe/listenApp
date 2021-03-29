@@ -2,7 +2,7 @@
 import btnConfig from './utils/pageOtpions/pageOtpions'
 import utils from './utils/util'
 import {encrypt} from './utils/xmSign/utils';
-import { data, getMedia } from './developerHandle/playInfo'
+import { data, getVipMedia,getMedia } from './developerHandle/playInfo'
 require('./utils/minixs')
 App({
   globalData: {
@@ -76,6 +76,8 @@ App({
     // this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
+    //图片压缩
+    this.initImgPress()
     // 判断playInfo页面样式，因为这里最快执行所以放在这
     this.setStyle()
     this.audioManager = wx.getBackgroundAudioManager()
@@ -121,6 +123,8 @@ App({
 
   },
 
+  
+
   isTaiAccountChange(){
     
     // this.log("function-----------------appId--:",this.globalData.appId)
@@ -139,7 +143,71 @@ App({
 
 
   },
-
+// 图片压缩 - 初始化
+  initImgPress: function () {
+      let canUseImgCompress = false;
+      let imgCompresDomain = "";
+      let that = this;
+      if (wx.canIUse("getMossApiSync") && wx.canIUse("getMossApi")) {
+        const ret = wx.getMossApiSync({
+          type: "image-compress",
+        });
+        if (typeof ret == null || ret == "" || ret == "undefined") {
+          //判断字符串是否为空，为空用getMossApi
+          wx.getMossApi({
+            type: "image-compress",
+            success(e) {
+              // this.log("getMossApi" + e.url);
+              canUseImgCompress = true;
+              imgCompresDomain = e.url;
+              that.globalData.canUseImgCompress = canUseImgCompress;
+              that.globalData.imgCompresDomain = imgCompresDomain;
+            },
+            fail() {
+              // this.log("getMossApi执行失败");
+              that.globalData.initImgTimer && clearTimeout(that.globalData.initImgTimer);
+              that.globalData.initImgTimer = setTimeout(() => {
+                that.initImgPress();
+              }, 30000);
+            },
+            complete() {
+              // this.log("getMossApi执行完成");
+            },
+          });
+        } else {
+          // this.log("getMossApiSync" + ret);
+          canUseImgCompress = true;
+          imgCompresDomain = ret;
+        }
+      }
+      this.globalData.canUseImgCompress = canUseImgCompress;
+      this.globalData.imgCompresDomain = imgCompresDomain;
+    },
+    // 图片压缩 - 执行函数
+    impressImg(imgUrl, w, h) {
+   
+      let impressImg = imgUrl;
+      const canUseImgCompress = this.globalData.canUseImgCompress;
+      const imgCompresDomain = this.globalData.imgCompresDomain;
+      if (canUseImgCompress) {
+        //可以使用压缩服务
+        if (imgCompresDomain.length > 0) {
+          //压缩域名获取成功
+          const encodeImgUrl = encodeURIComponent(imgUrl);
+          impressImg = `${imgCompresDomain}&w=${w ? w : 200}&h=${h ? h : 200}&url=${encodeImgUrl}`;
+        } else {
+          //压缩域名获取失败
+          impressImg = "";
+          // this.log(imgCompresDomain + "压缩域名获取失败");
+          this.initImgPress();
+        }
+      } else {
+        //不可以使用压缩服务，显示默认图
+        impressImg = imgUrl;
+      }
+  // console.log('压缩图片:',impressImg)
+  return impressImg
+},
   // 保存用户信息
   setUserInfo(userInfo) {
     this.userInfo = userInfo
@@ -238,7 +306,7 @@ App({
       that = seek
     }
     const songInfo = wx.getStorageSync('songInfo')
-    // console.log('playingSong', songInfo)
+     console.log('playingSong', songInfo)
     // 如果是车载情况
     utils.initAudioManager(that, songInfo)
     this.carHandle(songInfo, seek)

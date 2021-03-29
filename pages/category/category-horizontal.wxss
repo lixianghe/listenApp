@@ -65,16 +65,16 @@
   vertical-align: top;
 }
 .h .albumCard {
-  width: 41.81vh;
+  width: 52.8.81vh;
   display: inline-block;
   margin-right: 7.6vh;
   height: 68.6vh;
   overflow: hidden;
-  margin-top: 14.7vh;
+  margin-top: 2.7vh;
 }
 .h .imgB {
-  width: 41.81vh;
-  height: 41.81vh;
+  width: 52.81vh;
+  height:49.81vh;
   border-radius: 2vh;
 }
 .albumTitB {

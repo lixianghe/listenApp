@@ -17,7 +17,7 @@
       </view>
 
 </scroll-view>
-  <scroll-view class="index" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920" bindscrolltolower="getLayoutData" bindscroll="scrollhandle">
+  <scroll-view class="index" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"  bindscrolltolower="moredata" bindscroll="scrollhandle" scroll-with-animation>
     <!-- 快捷入口 -->
     <!-- <view class="quickEntry" wx:if="{{lalyLtn.show}}">
       <view class="quickEntrybox" style="height: 30.73vh"  wx:if="{{lalyLtn.data.length > 1}}" wx:for="{{lalyLtn.data}}" wx:key="index"  bindtap="tolatelyListen" data-page="{{item.name}}" data-index="{{index}}">
@@ -40,13 +40,13 @@
       </view>
       
     </view>
-    <!-- 加载中盒子 -->
-    <!-- <view class="albumCard" wx:if="{{!reqL}}" wx:for="{{3}}" wx:key="index">
+    <!-- 加载中盒子骨架屏 -->
+    <view class="albumCard" wx:if="{{!reqL}}" wx:for="{{8}}" wx:key="index">
       <view class="imgB bone"></view>
       <view class="albumTitB">
         <view class="tb bone"></view>
       </view>
-    </view> -->
+    </view>
   </scroll-view>
 
   <bgConfirm id="bgConfirm" msg="{{confirm}}" confirm="确定" cancel=""></bgConfirm>

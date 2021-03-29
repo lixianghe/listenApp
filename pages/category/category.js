@@ -9,14 +9,17 @@ Page({
   // 开发者注入模板标签数据
 
   data: {
+    total:0,
+    info:[],
     emptyObj:{'title':'已经见底啦~~','src':'/images/album_img_default.png'},
-
+     categoryId:'',
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
     mainColor: app.globalData.mainColor,
     confirm: '',
     currentTap: 0,
+    pageNub:0,
     scrollLeft: 0,
     isFixed: false,
     reqS: false,
@@ -51,20 +54,26 @@ Page({
   },
   getCategoryAlbums() {
     let param = {
-      'limit': 100
+      'limit': 50
     }
     utils.GET(param, utils.categoryFroups, res => {
       console.log('所有分类:', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
         let categoryArr = []
         for (let i = 0; i < res.data.items.length; i++) {
-          let obj = Object()
-          obj.id = res.data.items[i].id
-          obj.name = res.data.items[i].category_name
-
-          categoryArr.push(obj)
+          if(res.data.items[i].id != 95){
+            //因为95(播客)类型的没有数据就不要此分类
+            let obj = Object()
+            obj.id = res.data.items[i].id
+            obj.name = res.data.items[i].category_name
+  
+            categoryArr.push(obj)
+          }
+         
 
         }
+
+        this.data.categoryId = categoryArr[0].id
         this.getALLAlbums(categoryArr[0].id)
         this.setData({
           reqS: true,
@@ -84,8 +93,16 @@ Page({
     })
 
   },
+  moredata(){
+    console.log('获取更多数据')
+    this.data.pageNub+=10
+    
+     this.getALLAlbums(this.data.categoryId)
+
+  },
   //分类下所有专辑
   getALLAlbums(categoryId) {
+    console.log('categoryId:',categoryId)
     var that = this
     wx.showLoading({
       title: '加载中...',
@@ -93,8 +110,8 @@ Page({
     let params = {
       'metadata_attributes': '',
       'only_paid': false,
-      'offset': 0,
-      'limit': 100,
+      'offset': that.data.pageNub,
+      'limit': 10,
       'sort': 'asc',
      
     }
@@ -103,16 +120,17 @@ Page({
     utils.CATEGORYDETAILSGET(params, 'iot/openapi-smart-device-api/v2/album-categories/'+categoryId+'/metadata-albums', res => {
       wx.hideLoading()
       console.log('分类下所有专辑:', res)
-      if (res.data.items.length > 0 && res.statusCode == 200) {
-       
-        let mediaArr = []
+      if (res.data.items.length > 0 && res.statusCode == 200) {  
+        // let mediaArr = []
+        that.data.total = res.data.total
+        console.log('专辑总数:', that.data.total)
         for (let item of res.data.items) {
           // console.log('----------',item)
-          mediaArr.push({
+          that.data.info.push({
             id: item.id,
             allTitle:item.title,
             title:that.cutStr(item.title) ,
-            src: item.cover.middle.url,
+            src:app.impressImg(item.cover.middle.url,100,100) ,
             contentType: item.kind,
             count: utils.calculateCount(item.play_count),
             isVip: item.is_vip_free
@@ -120,11 +138,14 @@ Page({
           })
         }
         //  console.log('arr',mediaArr)
-        mediaArr.push(this.data.emptyObj)
+        if(that.data.total == that.data.info.length){
+         that.data.info.push(this.data.emptyObj)
+
+        }
         that.setData({
           reqL: true,
-          info: mediaArr,
-          scrollLeft:0
+          info: that.data.info,
+          // scrollLeft:0
         })
       }else{
        
@@ -163,8 +184,13 @@ Page({
       this.data.lastTime = nowTime;
       console.log('lastTime:', this.data.lastTime)
       this.setData({
-        currentTap: e.currentTarget.dataset.index
+        currentTap: e.currentTarget.dataset.index,
+        info:[],
+      //  scrollLeft:0
       })
+     
+      this.data.categoryId =e.currentTarget.dataset.groupid
+
       this.getALLAlbums(e.currentTarget.dataset.groupid)
     } else {
       console.log('小于间隔秒数')

@@ -306,12 +306,12 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       //  console.log('专辑id:',albumid)
       let param={}
       utils.GET(param,utils.albumDetails+albumid,res=>{
-        //  console.log('专辑详情:',res)
+         console.log('专辑详情:',res)
          if(res.data && res.statusCode == 200){
            this.setData({
              total:res.data.include_track_count,
              existed:res.data.is_subscribe,
-             src:res.data.cover.large.url,
+             src:app.impressImg(res.data.cover.large.url,100,100),
              isVip:res.data.is_vip_free
   
            })          
@@ -449,19 +449,35 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   
   // 播放全部
   async playAll() {
+    console.log('播放全部')
+    if( this.data.canplay[0].isVipFree){
+      //vip的
+      let param = {}
+      utils.PLAYINFOGET(param, utils.getMediaInfo + this.data.canplay[0].id + '/play-info', res => {
+        console.log('res:', res)
+        if (res.data && res.statusCode == 200) {
+          console.log('bannees-vip---音频----300---:')
+          this.data.canplay[0].src = res.data.play_24_aac.url
+          this.vipAndFreePlay()
+        } else {
+  
+        }
+      })
+
+    }else{
+     this.vipAndFreePlay()
+    }
+   
+   
+  },
+
+  vipAndFreePlay(){
     wx.setStorageSync('songInfo', this.data.canplay[0])
     wx.setStorageSync('allList', this.data.canplay)
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('nativeList', this.data.canplay)
     wx.setStorageSync('abumInfoName', this.data.abumInfoName)
     wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-
-    
-    // wx.setStorageSync('allList', this.data.canplay)
-    // wx.setStorageSync('canplay', this.data.canplay)
-    // let allList = wx.getStorageSync('allList') || []
-    // wx.setStorageSync('nativeList', allList)
-    // const msg = '网络异常，无法播放！'
     app.globalData.canplay = JSON.parse(JSON.stringify(this.data.canplay))
     app.globalData.songInfo = app.globalData.canplay[0]
     app.globalData.abumInfoId = this.data.optionId
@@ -473,8 +489,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     app.playing(this)
     this.selectComponent('#miniPlayer').setOnShow()
     wx.setStorageSync('abumInfoId', this.data.optionId)
-    // this.getNetWork(msg, app.playing)
   },
+
   setPlaying(e) {
     this.setData({
       playing: e.detail,

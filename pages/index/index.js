@@ -40,16 +40,7 @@ Page({
     // 开发者注入模板标签数据
     labels: {
       show: true,
-      // data: [{
-      //   "name": "推荐",
-      //   "id": 1
-      // }, {
-      //   "name": "精品",
-      //   "id": 2
-      // }, {
-      //   "name": "潮流",
-      //   "id": 3
-      // }]
+     
     },
     countPic: '/images/media_num.png',
     // 频道列表，内容列表数据标志变量
@@ -95,13 +86,17 @@ Page({
   _swiperData() {
     let param = {
       'banner_content_type': 2,
-      'count': 10,
+      'count': 8,
       'is_paid': 1,
       'scope': 0
     }
     utils.GET(param, utils.indexBanners, res => {
-      // console.log('首页banners数据:', res)
+       console.log('首页banners数据:', res)
       if (res.data.banners.length > 0 && res.statusCode == 200) {
+        res.data.banners.forEach(item => {
+          item.banner_cover_url = app.impressImg(item.banner_cover_url,175,70)
+          
+        });
         this.setData({
           swiperArr: res.data.banners
         })
@@ -114,7 +109,7 @@ Page({
 
   clickHadle(e) {
     console.log('播放全部专辑', e)
-    console.log('播放全部专辑', e.currentTarget.dataset.isvip)
+    // console.log('播放全部专辑', e.currentTarget.dataset.isvip)
 
     let isVip = e.currentTarget.dataset.isvip
     let albumid = e.detail.typeid
@@ -281,7 +276,8 @@ Page({
             id: item.album.id,
             allTitle: item.album.title,
             title: that.cutStr(item.album.title),
-            src: item.album.cover.middle.url,
+            
+            src: app.impressImg(item.album.cover.middle.url,100,100),
             contentType: item.album.kind,
             count: utils.calculateCount(item.album.play_count),
             isVip: item.album.is_vip_free,
