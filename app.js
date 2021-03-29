@@ -308,7 +308,8 @@ App({
     const songInfo = wx.getStorageSync('songInfo')
      console.log('playingSong', songInfo)
     // 如果是车载情况
-    utils.initAudioManager(that, songInfo)
+    console.log('percent--------------', this.globalData.percent)
+    // utils.initAudioManager(that, songInfo)
     this.carHandle(songInfo, seek)
     // let app = this
     

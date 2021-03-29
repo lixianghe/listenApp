@@ -63,6 +63,7 @@ Page({
   onLoad(options) {
     console.log('playinf-----options:',options)
     const that = this;
+    utils.initAudioManager(that)
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
