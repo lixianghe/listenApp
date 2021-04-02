@@ -62,26 +62,27 @@ Page({
   },
   onLoad(options) {
     console.log('playinf-----options:',options)
-    const that = this;
-    utils.initAudioManager(that)
+    var that = this;
+   
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
     console.log('canplay:',canplay.length)
-    this.data.start = options.start
-    this.data.currentIndex = options.currentNub
-    console.log('-------------start:',this.data.start)
+    that.data.start = options.start
+    that.data.currentIndex = options.currentNub
+    console.log('-------------start:',that.data.start)
     for (let i = 0; i < canplay.length; i++) {
-      canplay[i].num = parseInt(this.data.start)+i+1
+      canplay[i].num = parseInt(that.data.start)+i+1
     }
     wx.setStorageSync('allList', canplay)
     // console.log('-------------canplay:',canplay)
 
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
+    utils.initAudioManager(that,songInfo)
     console.log('playInfo-------------------onload:',options)
     if (songInfo.feeType == true) {
-      this.data.isVip = true
+      that.data.isVip = true
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
         console.log('res:',res)
@@ -117,6 +118,7 @@ Page({
           tool.playAlrc(that, app);
           that.queryProcessBarWidth()
           app.playing(that)
+          wx.hideLoading()
         
 
         } else {
@@ -136,17 +138,18 @@ Page({
       let song = wx.getStorageSync('songInfo')
         wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-      wx.setStorageSync('abumInfoName', this.data.abumInfoName)
-      if (options.noPlay !== 'true' ||  this.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+      wx.setStorageSync('abumInfoName', that.data.abumInfoName)
+      if (options.noPlay !== 'true' ||  that.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
       if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
       // 监听歌曲播放状态，比如进度，时间
       tool.playAlrc(that, app);
       that.queryProcessBarWidth()
       app.playing(that)
+      wx.hideLoading()
 
     }
 
-    app.globalData.abumInfoId = this.data.songInfo.albumId
+    app.globalData.abumInfoId = that.data.songInfo.albumId
 
   },
 
@@ -211,9 +214,12 @@ Page({
     const src = e.currentTarget.dataset.song.src
     const title = e.currentTarget.dataset.song.title
     wx.setStorageSync('img', src)
-    wx.navigateTo({
-      url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+    wx.navigateBack({
+      delta: 0,
     })
+    // wx.navigateTo({
+    //   url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+    // })
 
 
   },

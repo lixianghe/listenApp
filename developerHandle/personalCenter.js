@@ -97,7 +97,7 @@ module.exports = {
   },
   onShow() {
     var that = this
-    that.getCode()
+    // that.getCode()
     console.log('personcenter----------onshow')
     that.data.openId = wx.setStorageSync('OPENID')
     let currentTime = new Date().getTime()
@@ -182,18 +182,7 @@ module.exports = {
       wx.showLoading({
         title: '登录中...',
       })
-      if(this.data.code){
-        console.log('--openId', this.data.openId)
-        if (that.data.openId) {
-          that.getUserInfo()
-        } else {
-          console.log('getPhoneNumber--------------------code:', that.data.code)
-          //请求接口
-          that.fromCodeGetOpenid()
-          // })
-  
-        }
-      }else{
+    
         wx.login({
           success: (res) => {
             this.data.code = res.code
@@ -216,7 +205,7 @@ module.exports = {
           },
         })
     
-      }
+      
   
 
 
@@ -256,7 +245,9 @@ module.exports = {
         }
 
 
-      } else {}
+      } else {
+        // this.postInfoToService()
+      }
     })
 
   },

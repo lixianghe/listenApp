@@ -44,10 +44,10 @@ Page({
   },
   onLoad(options) {
   
-    this.getCategoryAlbums()
+   
   },
   onShow() {
-
+    this.getCategoryAlbums()
 
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()

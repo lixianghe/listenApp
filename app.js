@@ -452,7 +452,10 @@ App({
 
         },
         fail: err => {
+          console.log('err:',err)
           reject(err.data)
+          utils.registerNetworkListener()
+
         }
       })
     

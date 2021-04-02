@@ -66,16 +66,26 @@ Page({
   },
 
   async onLoad(options) {
-     console.log('-------------abumInfo---onload:',options)
+    var that = this
+     app.log('-------------abumInfo---onload:',options)
+
     var albumid = options.id
-    this.data.optionId = albumid
-    this.data.type = options.from
-     app.globalData.abumInfoId = this.data.optionId
-    this.getAllList( this.data.optionId)
+    that.data.optionId = albumid
+    that.data.type = options.from
+     app.globalData.abumInfoId = that.data.optionId
+     if(options.type == 2){
+      //随行推荐页面进来的
+ app.goAuthGetToken().then((res) => {
+      console.log('随行推荐页面进来的------------res:', res)
+      that.getAllList( that.data.optionId)
+   });
+  }else{
+    that.getAllList( that.data.optionId)
+  }
     // const msg = '网络异常，请检查网络！'
     // this.getNetWork(msg)
     // 暂存专辑全部歌曲
-    this.setData({
+    that.setData({
       optionId: options.id,
       abumInfoName: options.title,
       routeType: options.routeType
@@ -84,10 +94,10 @@ Page({
       title: options.title,
     })
     // 设置样式
-    this.setStyle()
+    that.setStyle()
     // 获取十首歌得高度
     setTimeout(() => {
-      this.getTenHeight()
+      that.getTenHeight()
     }, 500)
     scrollTopNo = 0
   },
@@ -212,7 +222,6 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                for (let item of res.data.items) {
                 _list.push({
                   title :item.title ,                            // 歌曲名称
-
                   //  title :that.cutStr(item.title) ,                            // 歌曲名称
                   id : item.id  ,                                  // 歌曲Id
                   dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
@@ -233,16 +242,33 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
              } else if (lazy == 'down') {
               _list = _list.concat(that.data.canplay)
              }
+             if(_list.length == res.data.total){
+               wx.showToast({
+                 title: '到底了',
+                 icon:'none'
+               })
+               
+            }
+          
              that.setData({
               total:res.data.total,
               canplay: _list,
               src:_list[0].coverImgUrl
   
              })
-           
+            
             resolve()
 
            }else{
+            console.log('------length------:',that.data.total)
+            console.log('------------:',res.data.total)
+            if(that.data.total == res.data.total){
+              wx.showToast({
+                title: '到底了',
+                icon:'none'
+              })
+              
+           }
             // this.setData({
             //   showModal: true,
             //   req:-1
@@ -526,6 +552,11 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
      console.log('滚到顶部')
+     wx.showToast({
+      title: '到顶了',
+      icon:'none'
+    })
+    
 
   }, 2000),
   // 滚到底部

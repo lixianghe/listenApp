@@ -38,7 +38,8 @@
           wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
         </view>
 
-        <view class="remind" style="width: {{328 * times}}px">
+        <!-- style="width: {{328 * times}}px" -->
+        <view class="remind" >
           <view wx:if="{{info.length == 0}}" style="font-size: {{5.2 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">推荐搜索</view>
           <view wx:if="{{info.length == 0}}" class="remindresultView">
            <view catchtap="searchItemClick" item='item' style="width: {{46 * times}}px;height: {{15 * times}}px"  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">

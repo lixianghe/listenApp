@@ -37,13 +37,14 @@ header['content-type'] = 'application/json'
    },
    fail: err => {
      console.log('请求失败：', err);
-    if(err.errMsg == 'request:fail '){
-      wx.showToast({
-        title: '网络错误请检查',
-        icon:'none'
-      })
+     this.registerNetworkListener()
+    // if(err.errMsg == 'request:fail '){
+    //   wx.showToast({
+    //     title: '网络错误请检查',
+    //     icon:'none'
+    //   })
 
-    }
+    // }
     callback(err)
      wx.hideLoading()
    }
@@ -483,6 +484,28 @@ let header = {}
 
 
 }
+ // 网络监听
+ function registerNetworkListener(){
+  wx.getNetworkType({
+    success(res) {
+      console.log('network---res:',res)
+      const networkType = res.networkType;
+      if(networkType == "none"){
+        wx.showToast({
+          title: '网络错误请检查',
+          icon:'none'
+        })
+      }
+    }
+  });
+  // wx.onNetworkStatusChange(function (res) {
+  //   app.globalData.isNetConnected = res.isConnected;
+  //   if (app.globalData.isNetConnected && wx.canIUse('getMossApi')) {
+  //     app.getImgPressDomain();
+  //   }
+  // });
+}
+
 
 function formatNumber(n) {
   n = n.toString()
@@ -540,9 +563,9 @@ function toggleplay(that, app) {
 
 
 // 初始化 BackgroundAudioManager
-function initAudioManager(that) {
-  // console.log('util------initAudioManager:',that)
-  // console.log('util------initAudioManager:',songInfo)
+function initAudioManager(that,songInfo) {
+  console.log('util------initAudioManager:',that)
+  console.log('util------initAudioManager:',songInfo)
 
   let list = wx.getStorageSync('nativeList')
   list.forEach(n => {
@@ -793,7 +816,7 @@ module.exports = {
 
 
 
-
+ registerNetworkListener:registerNetworkListener,
   formatToSend: formatToSend,
   formatduration: formatduration,
   playAlrc: playAlrc,
