@@ -68,12 +68,11 @@ Page({
   async onLoad(options) {
     var that = this
      app.log('-------------abumInfo---onload:',options)
-
     var albumid = options.id
     that.data.optionId = albumid
     that.data.type = options.from
      app.globalData.abumInfoId = that.data.optionId
-     if(options.type == 2){
+     if(options.type == 3){
       //随行推荐页面进来的
  app.goAuthGetToken().then((res) => {
       console.log('随行推荐页面进来的------------res:', res)
