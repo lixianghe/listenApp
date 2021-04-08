@@ -97,7 +97,7 @@ module.exports = {
   },
   onShow() {
     var that = this
-    // that.getCode()
+    //  that.getCode()
     console.log('personcenter----------onshow')
     that.data.openId = wx.setStorageSync('OPENID')
     let currentTime = new Date().getTime()
@@ -145,17 +145,7 @@ module.exports = {
       },
       fail: (err) => {
         console.log('获取code失败：', err)
-        // wx.login({
-        //   success: (res) => {
-        //     this.data.code = res.code
-        //     console.log('第二次code:', this.data.code)
-
-        //   },
-        //   fail: (err) => {
-        //     console.log('获取code失败：', err)
-        //   },
-
-        // })
+       
       },
 
     })

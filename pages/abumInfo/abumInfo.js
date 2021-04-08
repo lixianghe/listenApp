@@ -76,7 +76,9 @@ Page({
       //随行推荐页面进来的
  app.goAuthGetToken().then((res) => {
       console.log('随行推荐页面进来的------------res:', res)
-      that.getAllList( that.data.optionId)
+      that.getAllList( that.data.optionId).then(()=> {
+        this.playAll()
+      })
    });
   }else{
     that.getAllList( that.data.optionId)

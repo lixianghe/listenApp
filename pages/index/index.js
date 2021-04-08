@@ -106,7 +106,8 @@ Page({
 
 
   },
-
+  
+//播放全部专辑
   clickHadle(e) {
     console.log('播放全部专辑', e)
     // console.log('播放全部专辑', e.currentTarget.dataset.isvip)
@@ -114,7 +115,10 @@ Page({
     let isVip = e.currentTarget.dataset.isvip
     let albumid = e.detail.typeid
     let albumName = e.target.dataset.title
+    let collect = e.target.dataset.collect
+    wx.setStorageSync('ALBUMISCOLLECT', collect)
     wx.setStorageSync('abumInfoName', albumName)
+
     if (isVip) {
       //Vip专辑
       this.VipAlbumGetAudioId(albumid)
@@ -281,7 +285,8 @@ Page({
             contentType: item.album.kind,
             count: utils.calculateCount(item.album.play_count),
             isVip: item.album.is_vip_free,
-            isHome: true
+            isHome: true,
+            collect:item.album.is_subscribe
 
           })
         }
