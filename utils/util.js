@@ -563,7 +563,7 @@ function toggleplay(that, app) {
 
 
 // 初始化 BackgroundAudioManager
-function initAudioManager(that,songInfo) {
+function initAudioManager(app, that,songInfo) {
   console.log('util------initAudioManager:',that)
   console.log('util------initAudioManager:',songInfo)
 
@@ -571,27 +571,28 @@ function initAudioManager(that,songInfo) {
   list.forEach(n => {
     n.dataUrl = n.src
   })
-  that.audioManager = wx.getBackgroundAudioManager()
-  that.audioManager.playInfo = {
+  // app.audioManager = wx.getBackgroundAudioManager()
+  app.audioManager.playInfo = {
     playList: list
   };
-  EventListener(that)
+  // EventListener(that)
 }
 
 // 监听播放，上一首，下一首
-function EventListener(that){
+function EventListener(app, that){
   //播放事件
-  that.audioManager.onPlay(() => {
+  app.audioManager.onPlay(() => {
     console.log('-------------------------------onPlay-----------------------------------')
     
     wx.hideLoading()
     that.setData({ playing: true });
-    let miniPlayer = that.selectComponent('#miniPlayer')
+    const pages = getCurrentPages()
+    let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
     if (miniPlayer) miniPlayer.setData({ playing: true })
     wx.setStorageSync('playing', true)
 
     // 控制首页专辑的播放gif
-    let pages = getCurrentPages()
+    // let pages = getCurrentPages()
     let index = pages.filter(n => n.route == 'pages/index/index')[0]
     if (!index) return
     let abumInfoId = wx.getStorageSync('abumInfoId')
@@ -600,14 +601,15 @@ function EventListener(that){
 
   })
   //暂停事件
-  that.audioManager.onPause(() => {
+  app.audioManager.onPause(() => {
     console.log('触发播放暂停事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
-    let miniPlayer = that.selectComponent('#miniPlayer')
+    const pages = getCurrentPages()
+    let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
     if (miniPlayer) miniPlayer.setData({ playing: false })
     // 控制首页专辑的播放gif
-    let pages = getCurrentPages()
+    // let pages = getCurrentPages()
     let index = pages.filter(n => n.route == 'pages/index/index')[0]
     if (!index) return
     let abumInfoId = wx.getStorageSync('abumInfoId')
@@ -618,7 +620,7 @@ function EventListener(that){
 
   })
   //上一首事件
-  that.audioManager.onPrev(() => {
+  app.audioManager.onPrev(() => {
     console.log('触发上一首事件');
 
      // 如果是专辑详情点击的播放
@@ -631,7 +633,7 @@ function EventListener(that){
     }
   })
   //下一首事件
-  that.audioManager.onNext(() => {
+  app.audioManager.onNext(() => {
     console.log('触发onNext事件');
     // 如果是专辑详情点击的播放
     const pages = getCurrentPages()
@@ -643,19 +645,19 @@ function EventListener(that){
     }
   })
   //停止事件
-  that.audioManager.onStop(() => {
+  app.audioManager.onStop(() => {
     console.log('触发停止事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
   })
   //播放错误事件
-  that.audioManager.onError(() => {
+  app.audioManager.onError(() => {
     console.log('触发播放错误事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
   })
   //播放完成事件
-  that.audioManager.onEnded(() => {
+  app.audioManager.onEnded(() => {
     console.log('触发播放完成事件');
   })
 }

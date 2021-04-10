@@ -61,8 +61,9 @@ Page({
     })
   },
   onLoad(options) {
+    const that = this
+    utils.EventListener(app, that)
     console.log('playinf-----options:',options)
-    var that = this;
    
     // 根据分辨率设置样式
     that.setStyle()
@@ -79,7 +80,7 @@ Page({
     // console.log('-------------canplay:',canplay)
 
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
-    utils.initAudioManager(that,songInfo)
+    // utils.initAudioManager(that,songInfo)
     console.log('playInfo-------------------onload:',options)
     if (songInfo.feeType == true) {
       that.data.isVip = true
@@ -117,7 +118,8 @@ Page({
           // 监听歌曲播放状态，比如进度，时间
           tool.playAlrc(that, app);
           that.queryProcessBarWidth()
-          app.playing(that)
+          console.log('option----------------', options)
+          if (options.noPlay != 'true') app.playing(that)
           wx.hideLoading()
         
 
@@ -144,7 +146,8 @@ Page({
       // 监听歌曲播放状态，比如进度，时间
       tool.playAlrc(that, app);
       that.queryProcessBarWidth()
-      app.playing(that)
+      console.log('option----------------', options)
+      if (options.noPlay != 'true') app.playing(that)
       wx.hideLoading()
 
     }

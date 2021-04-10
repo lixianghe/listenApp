@@ -309,7 +309,7 @@ App({
      console.log('playingSong', songInfo)
     // 如果是车载情况
     console.log('percent--------------', this.globalData.percent)
-    // utils.initAudioManager(that, songInfo)
+    utils.initAudioManager(this, that, songInfo)
     this.carHandle(songInfo, seek)
     // let app = this
     
