@@ -61,10 +61,19 @@ Page({
     })
   },
   onLoad(options) {
+    const playing = wx.getStorageSync('playing')
+    if (!playing) {
+      this.setData({
+        playtime: app.globalData.playtime,
+        percent: app.globalData.percent || 0,
+      })
+    }
     const that = this
     utils.EventListener(app, that)
     console.log('playinf-----options:',options)
-   
+    // 监听歌曲播放状态，比如进度，时间
+    tool.playAlrc(that, app);
+    that.queryProcessBarWidth()
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
@@ -82,7 +91,7 @@ Page({
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
     // utils.initAudioManager(that,songInfo)
     console.log('playInfo-------------------onload:',options)
-    if (songInfo.feeType == true) {
+    if (songInfo.feeType == true && options.sameSong != 'true' && options.noPlay != 'true') {
       that.data.isVip = true
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
@@ -91,7 +100,7 @@ Page({
         
           app.globalData.songInfo.src = res.data.play_24_aac.url
 
-          console.log('app.globalData.songInfo.src:',app.globalData.songInfo.src)
+          console.log('app.globalData.songInfo:',app.globalData.songInfo)
           that.setData({
             songInfo: app.globalData.songInfo,
             canplay: canplay,
@@ -100,9 +109,10 @@ Page({
             abumInfoName: options.abumInfoName || null,
             playing: wx.getStorageSync('playing')
           })
-          let song = wx.getStorageSync('songInfo')
+          // let song = wx.getStorageSync('songInfo')
           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
           // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+          const abumInfoName = wx.getStorageSync('abumInfoName')
           wx.setStorageSync('abumInfoName', options.abumInfoName)
           if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
           if (options.noPlay !== 'true') 
@@ -111,13 +121,12 @@ Page({
             mask: true
           })
            console.log('bannees-vip---音频----300---:')
-           wx.setStorage({
-            key: 'songInfo',
-            data: songInfo
-          })
-          // 监听歌曲播放状态，比如进度，时间
-          tool.playAlrc(that, app);
-          that.queryProcessBarWidth()
+           wx.setStorageSync('songInfo', songInfo)
+          //  wx.setStorage({
+          //   key: 'songInfo',
+          //   data: songInfo
+          // })
+          
           console.log('option----------------', options)
           if (options.noPlay != 'true') app.playing(that)
           wx.hideLoading()
@@ -140,12 +149,11 @@ Page({
       let song = wx.getStorageSync('songInfo')
         wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+      const abumInfoName = wx.getStorageSync('abumInfoName')
       wx.setStorageSync('abumInfoName', that.data.abumInfoName)
-      if (options.noPlay !== 'true' ||  that.data.abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
+      if (options.noPlay !== 'true' ||  abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
       if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
-      // 监听歌曲播放状态，比如进度，时间
-      tool.playAlrc(that, app);
-      that.queryProcessBarWidth()
+      wx.setStorageSync('songInfo', songInfo)
       console.log('option----------------', options)
       if (options.noPlay != 'true') app.playing(that)
       wx.hideLoading()
@@ -155,6 +163,57 @@ Page({
     app.globalData.abumInfoId = that.data.songInfo.albumId
 
   },
+
+
+
+  playMedia(songInfo) {
+    const that = this
+    if (songInfo.feeType == true) {
+      that.data.isVip = true
+      let param = {}
+      utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
+        console.log('res:',res)
+        if (res.data && res.statusCode == 200) {
+        
+          app.globalData.songInfo.src = res.data.play_24_aac.url
+
+          that.setData({
+            songInfo: app.globalData.songInfo
+          })
+          wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+          // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+
+          wx.showLoading({
+            title: '加载中...',
+            mask: true
+          })
+           console.log('bannees-vip---音频----300---:')
+          wx.setStorageSync('songInfo', songInfo)
+          app.playing(that)
+          wx.hideLoading()
+        
+
+        } else {
+
+        }
+      })
+    } else {
+      that.setData({
+        songInfo: songInfo,
+      })
+      wx.setStorage({
+        key: 'songInfo',
+        data: songInfo
+      })
+        wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+      app.playing(that)
+      wx.hideLoading()
+
+    }
+  },
+
+
+
 
   vipMediaPlay(mediaId){
     let param = {}
@@ -182,13 +241,12 @@ Page({
           mask: true
         })
          console.log('bannees-vip---音频----300---:')
-         wx.setStorage({
-          key: 'songInfo',
-          data: this.data.songInfo
-        })
-        // 监听歌曲播放状态，比如进度，时间
-        tool.playAlrc(this, app);
-        this.queryProcessBarWidth()
+        //  wx.setStorage({
+        //   key: 'songInfo',
+        //   data: this.data.songInfo
+        // })
+        wx.setStorageSync('songInfo', this.data.songInfo)
+        
         app.playing(this)
       
 
@@ -417,14 +475,21 @@ Page({
     console.log('下一首:',that)
     if(that.data.isVip){
       console.log('currentIndex:',this.data.currentIndex)
- if(this.data.currentIndex == 14){
-  console.log('最后一首了')
+      if(this.data.currentIndex == 14){
+      console.log('最后一首了')
 
       }else{
         this.data.currentIndex++
         let mediaId = this.data.canplay[this.data.currentIndex].id
         app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
-
+        // console.log('nextfee--------------', app.globalData.songInfo)
+        if (!app.globalData.songInfo.feeType && app.globalData.songInfo.isVipFree) {
+          wx.showToast({
+            title: '暂无权限收听,请从喜马拉雅APP购买',
+            icon: 'none'
+          })
+          return false
+        }
         this.vipMediaPlay(mediaId)
 
 
@@ -530,27 +595,9 @@ Page({
     let that = this
     const songInfo = e.currentTarget.dataset.song
     app.globalData.songInfo = songInfo
-    // 获取歌曲详情
-    let params = {
-      mediaId: app.globalData.songInfo.id,
-      contentType: 'story'
-    }
-    await that.getMedia(params)
+    this.playMedia(songInfo)
     that.setData({
-      songInfo: songInfo,
       currentId: app.globalData.songInfo.id,
-      playing: true
-      // noTransform: ''
-    })
-    if (that.data.songInfo.src) {
-      app.playing(that)
-
-    } else {
-
-    }
-    wx.setStorage({
-      key: "songInfo",
-      data: app.globalData.songInfo
     })
     this.closeList()
 

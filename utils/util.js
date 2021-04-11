@@ -535,6 +535,7 @@ function playAlrc(that, app) {
     app.globalData.percent = time
     app.globalData.currentPosition = app.audioManager.currentTime
     app.globalData.playtime = playtime ? formatduration(playtime * 1000) : '00:00'
+    // console.log('音乐监听-------------' + app.globalData.currentPosition + '-----------------' + app.globalData.playtime)
     if (!that.data.isDrag) {
       that.setData({
         playtime: playtime ? formatduration(playtime * 1000) : '00:00',
@@ -553,7 +554,7 @@ function toggleplay(that, app) {
     });
     app.stopmusic();
   } else {
-    console.log("继续播放")
+    console.log("继续播放", app.globalData.currentPosition)
     // that.setData({
     //   playing: true
     // });
@@ -564,8 +565,8 @@ function toggleplay(that, app) {
 
 // 初始化 BackgroundAudioManager
 function initAudioManager(app, that,songInfo) {
-  console.log('util------initAudioManager:',that)
-  console.log('util------initAudioManager:',songInfo)
+  // console.log('util------initAudioManager:',that)
+  // console.log('util------initAudioManager:',songInfo)
 
   let list = wx.getStorageSync('nativeList')
   list.forEach(n => {

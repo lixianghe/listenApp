@@ -437,9 +437,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     })
     return
    }else{
+    const sameSong = app.globalData.songInfo.id == e.currentTarget.dataset.song.id
     this.data.currentIndex = e.currentTarget.dataset.no
     // 点击歌曲的时候把歌曲信息存到globalData里面
-    const songInfo = e.currentTarget.dataset.song
+    const songInfo = sameSong ? app.globalData.songInfo : e.currentTarget.dataset.song
     console.log('app.globalData.songInfo----------', app.globalData.songInfo)
       app.globalData.songInfo = songInfo
     wx.setStorageSync('songInfo', songInfo)
@@ -447,17 +448,18 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('allList', this.data.canplay)
     this.setData({ currentId: songInfo.id })
-    this.getNetWork(msg, this.toInfo)
+    this.getNetWork(msg, this.toInfo(sameSong))
    }
   
   
   },
-  toInfo() {
+  toInfo(sameSong) {
+    // console.log('sameSong', sameSong)
     app.globalData.abumInfoId = this.data.optionId
     wx.setStorageSync('abumInfoId', this.data.optionId)
      console.log('-------------start:',this.data.start)
      
-    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}` })
+    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}&sameSong=${sameSong}` })
   },
   // 改变current
   changeCurrent(currentId) {

@@ -238,7 +238,17 @@ App({
     //歌曲切换 停止当前音乐
     this.globalData.playing = false;
     let song = allList[index] || allList[0]
-    wx.pauseBackgroundAudio();
+    // wx.pauseBackgroundAudio();
+    // 下一首是vip的情况
+    if (!song.feeType && song.isVipFree) {
+      wx.showToast({
+        title: '暂无权限收听,请从喜马拉雅APP购买',
+        icon: 'none'
+      })
+      return false
+    }
+
+
     that.setData({
       currentId: Number(song.id),       // 当前播放的歌曲id
       currentIndex: index
@@ -249,15 +259,20 @@ App({
       contentType: 'story',
       isVipFree:song.isVipFree
     }
-    console.log(params)
+    console.log('song-----------params------------', song)
+
+    
+
     if(params.isVipFree){
       await getVipMedia(params, that)
     }else{
       await getMedia(params, that)
     }
     
-    loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
-    this.globalData.playBeginAt = new Date().getTime();
+    setTimeout(() => {
+      loopType === 'singleLoop' ? this.playing(0, that) : this.playing(that)
+      this.globalData.playBeginAt = new Date().getTime();
+    }, 200)
     // this.upLoadPlayinfo()
   },
   // 根据循环模式设置播放列表
