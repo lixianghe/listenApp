@@ -47,6 +47,9 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    aa() {
+
+    },
     playMedia(e){
       // console.log('播放:',e.currentTarget.dataset.typeid)
       let typeid = e.currentTarget.dataset.typeid

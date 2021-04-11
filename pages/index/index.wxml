@@ -7,17 +7,17 @@
     <block data-item="{{item}}" wx:for="{{swiperArr}}" wx:key="id">
     <swiper-item  class="swiper-item">
 
-      <image data-item="{{item}}" catchtap="bannerClick" src="{{item.banner_cover_url}}" class="swipe-image" />
+      <image data-item="{{item}}" catchtap="bannerClick" data-focusindex="3" src="{{item.banner_cover_url}}" class="swipe-image" />
     </swiper-item>
     </block>
   
    </swiper>
 
- <view catchtap="like" class="left">
+ <view catchtap="like" class="left" data-focusindex="3">
     <image src="/images/icon_collect.png" class="left-icon"></image>
  <text class="left-text">我的收藏</text>
  </view>
- <view catchtap="tolatelyListen" class="right">
+ <view catchtap="tolatelyListen" class="right" data-focusindex="3">
   <image src="/images/zjst.png" class="left-icon"></image>
  <view class="left-text">最近播放</view>
  </view>
@@ -52,7 +52,7 @@
       <view class="storyBox">
         <story  class="storyitem" id="story{{item.id}}"  data-focusindex='1'  wx:if="{{info.length>0 && reqL}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
         data-id="{{item.id}}" data-collect="{{item.collect}}" data-title="{{item.allTitle}}" data-src="{{item.src}}" data-isvip="{{item.isVip}}" data-contentype="{{item.contentType}}" catchclickHadle="clickHadle"  bindtap="linkAbumInfo"
-        datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}"></story>
+        datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}" data-disablefocus="true"></story>
       </view>
       
     </view>

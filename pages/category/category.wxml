@@ -36,7 +36,7 @@
       <view style="margin-top:0vh" class="storyBox">
         <categoryItem class="cateitem"  wx:if="{{info.length>0 && reqL}}" wx:for="{{info}}" wx:key="index" data-no="{{index}}"
         data-id="{{item.id}}" data-title="{{item.allTitle}}" data-src="{{item.src}}" data-contentype="{{item.contentType}}" bindtap="linkAbumInfo"
-        datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}"></categoryItem>
+        datasource="{{item}}" countpic="{{countPic}}" className="{{screen}}" data-disablefocus="true"></categoryItem>
       </view>
       
     </view>

@@ -1,5 +1,5 @@
-<view data-focusindex='2'  class="{{className}}albumCard" style="width: {{picWidth}}">
-  <image class="image" src="{{datasource.src}}"></image>
+<view   class="{{className}}albumCard" style="width: {{picWidth}}">
+  <image data-focusindex='2' bindtap="aa" class="image" src="{{datasource.src}}"></image>
   <view class="linerbg">
   </view>
   <view class="conut" wx:if="{{datasource.count}}">
