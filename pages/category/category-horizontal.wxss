@@ -134,16 +134,26 @@
   height: 9.81vh;
   margin-left: 6.12vh;
 }
+.cateitem{
+  width: 52.8vh;
+
+ 
+}
+ 
 .title[focus-select=true]{
   border: 2px solid #dc5e4e;
 }
 
+/* .halbumCard[focus-select=true]{
+  border-bottom: 2px solid #dc5e4e;
+}  */
+
 .cateitem[focus-select=true]{
-  /* box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e; */
-  /* border-bottom: 2px solid #dc5e4e; */
+  border-bottom: 2px solid #dc5e4e;
  
+
 }
- 
+
 
 
 

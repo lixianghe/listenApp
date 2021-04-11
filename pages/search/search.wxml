@@ -1,6 +1,6 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100vh;">
   <scroll-view class="searchContent" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData"
-  style="padding: {{2.5 * times}}px {{9 * times}}px; height: {{82 * times}}px;">
+  style="padding: {{2.5 * times}}px {{9 * times}}px; height: {{82 * times}}px;overflow-y:hidden;">
     <view class="mianContent"
     style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
        <view class="search" style="width: {{126 * times}}px; height: {{11 * times}}px;left: {{9 * times}}px;top:{{4.3 * times}}px">
@@ -26,8 +26,8 @@
       </view>
 
 
-      <!-- 没有搜索的情况 -->
-      <view class="noSearch" wx:if="{{info.length == 0}}" style="margin-top: {{19 * times}}px;">
+      <!-- 搜索类目 -->
+      <view class="noSearch" wx:if="{{pageState == 1}}" style="margin-top: {{19 * times}}px;">
         <view  wx:if="{{recentSearch.length > 0}}" class="recentSearch" style="width: {{66 * times}}px">
           <view wx:if="{{info.length == 0}}" style="font-size: {{5.4 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">
             <text>最近搜索</text>
@@ -51,9 +51,9 @@
       </view>
 
 
-      <!-- 页面盒子 -->
+      <!-- 页面数据 -->
       <view 
-        wx:if="{{info.length>0}}"
+      wx:if="{{pageState == 2}}"
         wx:for="{{info}}"
         wx:key="index"
         data-id="{{item.id}}"
@@ -79,7 +79,7 @@
   </view>
 </view>
 
-<!-- 加入没有数据 -->
-<!-- <view class="noData" style="top: {{50 * times}}px" wx:if="{{!info.length && keyWord}}">暂无内容</view> -->
+<!-- 空数据 -->
+<view class="noData" style="top: {{50 * times}}px"  wx:if="{{pageState == 3}}">暂无搜索内容</view>
 
 

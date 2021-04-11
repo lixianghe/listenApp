@@ -78,7 +78,9 @@ module.exports = {
  
 
   },
+
   
+ 
 
   //获取我喜欢的数据
   _getLikeList(){
@@ -108,6 +110,17 @@ module.exports = {
             lastUpdate:res.data.items[i].last_updated_track_id
           })
         }
+
+        var  id = wx.getStorageSync('songInfo').albumId
+        var isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+        for (let i = 0; i < laterArr.length; i++) {
+          if(laterArr[i].id == id){
+            laterArr[i].isCollect = isCollect
+           
+          }
+          
+        }
+
         laterArr.push(this.data.emptyObj)
           this.setData({
             req: true,

@@ -9,12 +9,15 @@ const app = getApp()
 // const deviceId = util.getDeviceId()
 // GET请求
 function GET(param,url, callback) {
+  console.log('版本号:',this.version)
+
+
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
     client_os_type: 3,
     access_token:  wx.getStorageSync('TOKEN').access_token,
-    pack_id:'com.app.wechat',
+    pack_id:'com.app.globalData.wechat',
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
@@ -56,6 +59,7 @@ header['content-type'] = 'application/json'
 function PLAYINFOGET(param,url, callback) {
   // console.log('get')
   // console.log('参数', param)
+  console.log('版本号:',this.version)
    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     access_token:  wx.getStorageSync('TOKEN').access_token,
@@ -64,7 +68,7 @@ function PLAYINFOGET(param,url, callback) {
     device_id: this.getDeviceId(),
     device_type: 'web',
     mac:this.getDeviceId(), 
-    pack_id:'com.app.wechat',
+    pack_id:'com.app.globalData.wechat',
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
@@ -104,13 +108,16 @@ header['xm-sign'] = encrypt(Date.now())
 function LIKEGET(param,url, callback) {
   // console.log('get')
   // console.log('参数', param)
-  // console.log('请求URL', this.baseUrl + url)
+  console.log('版本号:',this.version)
+
+
+   console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
     client_os_type: 3,
     access_token:  wx.getStorageSync('TOKEN').access_token,
-    pack_id:'com.app.wechat',
+    pack_id:'com.app.globalData.wechat',
   };
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
@@ -150,7 +157,10 @@ header['xm-sign'] = encrypt(Date.now())
 function PLAYHISTORYGET(param,url, callback) {
   // console.log('PLAYHISTORYGET')
   // console.log('URL',  url)
-  //  console.log('请求URL', this.baseUrl + url)
+  console.log('版本号:',this.version)
+
+
+    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -199,7 +209,10 @@ let header = {}
 function CATEGORYDETAILSGET(param,url, callback) {
   // console.log('CATEGORYDETAILSGET')
   // console.log('URL',  url)
-  //  console.log('请求URL', this.baseUrl + url)
+  console.log('版本号:',this.version)
+
+
+    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -250,6 +263,9 @@ let header = {}
 function MGET(param,url, callback) {
   // console.log('MGET')
    console.log('参数', param)
+   console.log('版本号:',this.version)
+
+
     console.log('请求URL', this.MbaseUrl + url)
   let header = {}
   header['xm-sign'] = encrypt(Date.now())
@@ -286,7 +302,10 @@ function PLAYRECORDPOST(param,url, callback) {
   // console.log('PLAYRECORDPOST')
   // console.log('参数', param)
   // console.log('URL',  url)
-  //  console.log('请求URL', this.baseUrl + url)
+  console.log('版本号:',this.version)
+
+
+    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -333,7 +352,11 @@ function REFRESHTOKENPOST(param,url, callback) {
   // console.log('REFRESHTOKENPOST')
   // console.log('参数', param)
   // console.log('URL',  url)
-  //  console.log('请求URL', this.baseUrl + url)
+  console.log('版本号:',this.version)
+
+
+   console.log('请求URL', this.baseUrl + url)
+  
   let publicParams = {
         client_id: this.APP_KEY,
         client_secret:this.APP_SECRET,
@@ -389,13 +412,16 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
   // console.log('POST')
   // console.log('参数', param)
   // console.log('URL',  url)
-  //  console.log('请求URL', this.baseUrl + url)
+  console.log('版本号:',this.version)
+
+
+   console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
     client_os_type: 3,
     access_token:  wx.getStorageSync('TOKEN').access_token,
-    pack_id:'com.app.wechat',
+    pack_id:'com.app.globalData.wechat',
   };
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
@@ -441,13 +467,15 @@ function POST(param,url, callback) {
   // console.log('POST')
   // console.log('参数', param)
   // console.log('URL',  url)
+  console.log('版本号:',this.version)
+
    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),
     client_os_type: 3,
     access_token:  wx.getStorageSync('TOKEN').access_token,
-    pack_id:'com.app.wechat',
+    pack_id:'com.app.globalData.wechat',
   };
 
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
@@ -501,7 +529,7 @@ let header = {}
   // wx.onNetworkStatusChange(function (res) {
   //   app.globalData.isNetConnected = res.isConnected;
   //   if (app.globalData.isNetConnected && wx.canIUse('getMossApi')) {
-  //     app.getImgPressDomain();
+  //     app.globalData.getImgPressDomain();
   //   }
   // });
 }
@@ -529,7 +557,7 @@ function formatToSend(dt) {
 function playAlrc(that, app) {
   var time = 0, playtime = 0;
   app.audioManager.onTimeUpdate((res) => {
-    // console.log('----------------------------音乐播放：',app.audioManager) 
+    // console.log('----------------------------音乐播放：',app.globalData.audioManager) 
     time = app.audioManager.currentTime / app.audioManager.duration * 100
     playtime = app.audioManager.currentTime
     app.globalData.percent = time
@@ -572,7 +600,6 @@ function initAudioManager(app, that,songInfo) {
   list.forEach(n => {
     n.dataUrl = n.src
   })
-  // app.audioManager = wx.getBackgroundAudioManager()
   app.audioManager.playInfo = {
     playList: list
   };
@@ -757,7 +784,7 @@ function generateUUID() {
 
 module.exports = {
 
-
+  version:'7.0.27',
  baseUrl : 'https://api.ximalaya.com/',
  MbaseUrl : 'https://m.ximalaya.com/',
    appId : 60023,

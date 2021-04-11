@@ -67,7 +67,7 @@ Page({
 
   async onLoad(options) {
     var that = this
-     app.log('-------------abumInfo---onload:',options)
+     console.log('-------------abumInfo---onload:',options)
     var albumid = options.id
     that.data.optionId = albumid
     that.data.type = options.from
@@ -125,7 +125,7 @@ Page({
   },
   
   showExisted(e){
-// console.log('existed:',e.detail)
+ console.log('abuminfo--------showExisted:',e.detail)
 if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   this.setData({
     existed:e.detail
@@ -210,6 +210,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       return new Promise((resolve, reject) => {
         // 假设allList是canplay，真实情况根据接口来
         // console.log('专辑id:',albumid)
+        wx.showLoading({
+          title: '加载中...',
+        })
         let param={
           'limit': that.data.pageSize,
           'offset': that.data.offset,
@@ -218,6 +221,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
             console.log('专辑列表所有数据:',res)
+            wx.hideLoading()
            if(res.data.items.length > 0 && res.statusCode == 200){
                //非vip
                for (let item of res.data.items) {
@@ -230,8 +234,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                   feeType:item.is_free ,
                   isVipFree:item.is_vip_free,
                   src:item.play_info.play_64.url,       
-                  mediaType:item.announcer.nickname,
-                  mediaAuthor:item.album.title,
+                  mediaType:item.album.kind,
+                  mediaAuthor:item.announcer.nickname,
                   authorId:item.announcer.id,
                   albumId:item.album_id
                  })
@@ -444,7 +448,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     console.log('app.globalData.songInfo----------', app.globalData.songInfo)
       app.globalData.songInfo = songInfo
     wx.setStorageSync('songInfo', songInfo)
-    wx.setStorageSync('abumInfoName', songInfo.title)
+    wx.setStorageSync('abumInfoName', this.data.abumInfoName)
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('allList', this.data.canplay)
     this.setData({ currentId: songInfo.id })

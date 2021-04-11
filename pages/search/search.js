@@ -9,6 +9,7 @@ import utils from '../../utils/util'
 Page({
   //  mixins: [searchMixin],
   data: {
+    pageState:1,
     keyWord: '',
     screen: app.globalData.screen,
     noContent: '/images/nullContent.png',
@@ -130,8 +131,10 @@ Page({
     this.setData({
       keyWord: '',
       info: [],
-      currentTap: 0
+      currentTap: 0,
+      pageState:1
     })
+    
     this.getLaterSearchWord()
   },
   search(e) {
@@ -191,14 +194,14 @@ Page({
       let arr = this.unique1(originarr)
       if (arr.length > 6) {
         this.setData({
-          recentSearch: arr.slice(0, 5)
+          recentSearch: arr.slice(0, 6)
         })
       } else {
         this.setData({
           recentSearch: arr
         })
       }
-      console.log('获取最近搜索词-----arr', arr)
+      console.log('获取最近搜索词-----recentSearch', this.data.recentSearch)
 
 
     } else {
@@ -253,6 +256,9 @@ Page({
   },
   //专辑搜索
   albumsSearch() {
+    wx.showLoading({
+      title: '搜索中...',
+    })
     let param = {
       'limit': 20,
       'offset': this.data.albumNub * 20,
@@ -260,6 +266,7 @@ Page({
       'sort': "hottest"
     }
     utils.GET(param, utils.albumSearch, res => {
+      wx.hideLoading()
       console.log('专辑搜索', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
         this.searchWordToCash(this.data.keyWord)
@@ -277,18 +284,20 @@ Page({
 
 
         this.setData({
-          info: this.data.info
+          info: this.data.info,
+          pageState:2
         })
         console.log('info:', this.data.info)
 
       }else{
         wx.showToast({
-          title: '暂无搜索结果请重试',
+          title: '暂无搜索结果',
           icon:'none'
         })
-        this.setData({
-          keyWord:''
-        })
+          this.setData({
+            pageState:3
+          })
+        
 
       }
 
@@ -298,6 +307,9 @@ Page({
   },
   //主播搜索
   peopleSearch() {
+    wx.showLoading({
+      title: '搜索中...',
+    })
     let param = {
       'limit': 20,
       'offset': this.data.peopleNub * 20,
@@ -306,6 +318,8 @@ Page({
     }
     utils.GET(param, utils.peopleSearch, res => {
       console.log('主播搜索', res)
+      wx.hideLoading()
+
       if (res.data.items.length > 0 && res.statusCode == 200) {
 
         for (let item of res.data.items) {
@@ -320,10 +334,20 @@ Page({
 
 
         this.setData({
-          info: this.data.info
+          info: this.data.info,
+          pageState:2
         })
         console.log('info:', this.data.info)
 
+      }else{
+        wx.showToast({
+          title: '暂无搜索结果',
+          icon:'none'
+        })
+          this.setData({
+            pageState:3
+          })
+        
       }
 
 
@@ -333,6 +357,9 @@ Page({
   },
   //声音搜索
   audioSearch() {
+    wx.showLoading({
+      title: '搜索中...',
+    })
     let param = {
       'limit': 20,
       'offset': this.data.audioNub * 20,
@@ -340,6 +367,8 @@ Page({
       'sort': "hottest"
     }
     utils.GET(param, utils.audioSearch, res => {
+      wx.hideLoading()
+
       console.log('声音搜索', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
         for (let item of res.data.items) {
@@ -350,10 +379,20 @@ Page({
           })
         }
         this.setData({
-          info: this.data.info
+          info: this.data.info,
+          pageState:2
         })
         console.log('info:', this.data.info)
 
+      }else{
+        wx.showToast({
+          title: '暂无搜索结果',
+          icon:'none'
+        })
+          this.setData({
+            pageState:3
+          })
+        
       }
 
 

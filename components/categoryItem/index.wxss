@@ -7,6 +7,8 @@
   height: 65vh;
   overflow: hidden;
   position: relative;
+  /* border-bottom: 2px solid #dc5e4e; */
+
  
 }
 .halbumCard .image {
@@ -23,6 +25,9 @@
   white-space: pre-wrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 .halbumCard .vip {
   /* background-color: #fa6500; */
@@ -90,12 +95,13 @@
   /* background: red; */
  
 }
- .halbumCard{
-  
-   /* border-bottom: 2px solid #dc5e4e; */
-} 
+
 
 .halbumCard[focus-select=true]{
   border-bottom: 2px solid #dc5e4e;
+} 
+
+.albumTit[focus-select=true]{
+  /* border-bottom: 2px solid #dc5e4e; */
 } 
   

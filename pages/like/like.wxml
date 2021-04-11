@@ -28,7 +28,7 @@
     </view>
 
   </scroll-view>
-  <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
+  <mini-player bindshowExisted ="showExisted" existed="{{existed}}" id="miniPlayer" songInfo="{{songInfo}}" bindcurrent="changeCurrent" bindsetPlaying="setPlaying"></mini-player>
 </view>
 
 <view wx:if="{{showModal}}" class="model" bindtap="close"></view>

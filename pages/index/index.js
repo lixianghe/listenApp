@@ -72,6 +72,7 @@ Page({
 
   },
   onLoad(options) {
+    console.log('----------------',app.globalData.version)
     app.goAuthGetToken().then((res) => {
       // console.log('-------token',wx.getStorageSync('TOKEN'))
       // console.log('------------res:', res)

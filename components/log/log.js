@@ -60,7 +60,7 @@ Component({
       })
     },
     clearLog() {
-      app.logText = 'v' + app.version + '\n';
+      app.logText = 'v------' + app.globalData.version + '\n';
       this.setData({
         log: app.logText
       })

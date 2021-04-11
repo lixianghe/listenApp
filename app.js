@@ -17,7 +17,7 @@ App({
     isTaiUserChange: false,
     token: '',
     // 版本号
-    version: '1.0.0',
+    version: '7.0.27',
     isNetConnected: true,
     indexData: [], // 静态首页数据
     latelyListenId: [], // 静态记录播放id
@@ -71,7 +71,7 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    this.log('app---------------onLaunch:')
+    this.log('app---------onLaunch---版本号:',this.globalData.version)
     //  this.isTaiAccountChange()
     // this.goAuthGetToken()
     // 获取小程序颜色主题
@@ -257,13 +257,26 @@ App({
     let params = {
       mediaId: song.id,
       contentType: 'story',
-      isVipFree:song.isVipFree
+      isVipFree:song.isVipFree,
+      isfree:song.feeType
     }
-    console.log('song-----------params------------', song)
 
-    
+    console.log('----------------------',params)
+    if(!params.isfree && params.isVipFree){
+  //收费曲目
+  wx.showModal({
+    title: '无权限',
+    content: '暂无权限收听,请从喜马拉雅APP购买',
+    success (res) {
+      if (res.confirm) {
+        console.log('用户点击确定')
+      } else if (res.cancel) {
+        console.log('用户点击取消')
+      }
+    }
+  })
+    }else if(params.isVipFree && params.isfree ){
 
-    if(params.isVipFree){
       await getVipMedia(params, that)
     }else{
       await getMedia(params, that)

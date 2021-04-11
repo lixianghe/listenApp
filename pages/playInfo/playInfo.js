@@ -74,6 +74,7 @@ Page({
     // 监听歌曲播放状态，比如进度，时间
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
+
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
@@ -86,12 +87,11 @@ Page({
       canplay[i].num = parseInt(that.data.start)+i+1
     }
     wx.setStorageSync('allList', canplay)
-    // console.log('-------------canplay:',canplay)
-
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
-    // utils.initAudioManager(that,songInfo)
+
     console.log('playInfo-------------------onload:',options)
     if (songInfo.feeType == true && options.sameSong != 'true' && options.noPlay != 'true') {
+
       that.data.isVip = true
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
@@ -161,6 +161,9 @@ Page({
     }
 
     app.globalData.abumInfoId = that.data.songInfo.albumId
+    // wx.setNavigationBarTitle({
+    //   title:this.data.songInfo.title,
+    // })
 
   },
 
@@ -273,17 +276,18 @@ Page({
     let id = e.currentTarget.dataset.song.albumId
     // console.log('专辑id:',id)
     const src = e.currentTarget.dataset.song.src
-    const title = e.currentTarget.dataset.song.title
+    const title = this.data.abumInfoName
     wx.setStorageSync('img', src)
-    wx.navigateBack({
-      delta: 0,
-    })
-    // wx.navigateTo({
-    //   url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+    // wx.navigateBack({
+    //   delta: 0,
     // })
+    wx.navigateTo({
+      url: '../abumInfo/abumInfo?id=' + id+'&title='+title  + '&routeType=album'
+    })
 
 
   },
+  // 作者点击
   authorClick(e) {
     // console.log('作者点击:',e)
     let id = e.currentTarget.dataset.song.authorId
@@ -297,6 +301,8 @@ Page({
   btnsPlay(e) {
     console.log('e:',e)
     const type = e.currentTarget.dataset.name
+   
+
     console.log('type:',type)
     switch (type) {
       case 'pre':
@@ -450,22 +456,47 @@ Page({
   pre() {
     
     const that = this
-    if(that.data.isVip){
       console.log('currentIndex:',this.data.currentIndex)
       if(this.data.currentIndex == 0){
         console.log('第一首了')
 
       }else{
         this.data.currentIndex--
+        let item = this.data.canplay[this.data.currentIndex]
+        let isfree = item.feeType
+       let isvipfree = item.isVipFree
+       console.log('item:',item)
+
+       console.log('isfree:',isfree)
+        console.log('isvipfree:',isvipfree)
+       if(!isfree && isvipfree){
+        this.data.currentIndex++
+
+          //收费曲目
+          wx.showModal({
+            title: '无权限',
+            content: '暂无权限收听,请从喜马拉雅APP购买',
+            success (res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+       }else if(isfree && isvipfree){
         let mediaId = this.data.canplay[this.data.currentIndex].id
         app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
 
         this.vipMediaPlay(mediaId)
+       }else{
+        app.cutplay(that, -1)
+
+       }
+      
       }
 
-    }else{
-      app.cutplay(that, -1)
-    }
+
 
   },
   // 下一首
@@ -473,13 +504,36 @@ Page({
    
     const that = this
     console.log('下一首:',that)
-    if(that.data.isVip){
       console.log('currentIndex:',this.data.currentIndex)
       if(this.data.currentIndex == 14){
       console.log('最后一首了')
 
       }else{
+
         this.data.currentIndex++
+        let item = this.data.canplay[this.data.currentIndex]
+        let isfree = item.feeType
+        let isvipfree = item.isVipFree
+       console.log('item:',item)
+        console.log('isfree:',isfree)
+        console.log('isvipfree:',isvipfree)
+
+        if(!isfree && isvipfree){
+          this.data.currentIndex--
+
+          //收费曲目
+          wx.showModal({
+            title: '无权限',
+            content: '暂无权限收听,请从喜马拉雅APP购买',
+            success (res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+       }else if(isfree && isvipfree){
         let mediaId = this.data.canplay[this.data.currentIndex].id
         app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
         // console.log('nextfee--------------', app.globalData.songInfo)
@@ -491,6 +545,11 @@ Page({
           return false
         }
         this.vipMediaPlay(mediaId)
+       }else{
+        app.cutplay(that, 1)
+
+       }
+      
 
 
 
@@ -499,9 +558,7 @@ Page({
         
       }
 
-    }else{
-      app.cutplay(that, 1)
-    }
+   
    
 
   },
