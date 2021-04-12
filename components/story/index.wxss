@@ -22,6 +22,9 @@
   white-space: pre-wrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 .halbumCard .vip {
   /* background-color: #fa6500; */
@@ -105,5 +108,5 @@
   height: 100%;
   border-radius: 2vh;
   vertical-align: bottom;
-  box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d;
+  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
 }

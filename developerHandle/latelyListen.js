@@ -30,6 +30,11 @@ import utils from '../utils/util'
 
 module.exports = {
   data: {
+    emptyObj: {
+      'title': '已经见底啦~~',
+      'src': '/images/album_img_default.png'
+    },
+
     showModal: false,
     req: false,
     countPic: '/images/media_num.png',
@@ -48,13 +53,38 @@ module.exports = {
       // }]
     },
     // 开发者注入模板页面数据
-    info: [{'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'熬婿'},
-    {'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'鬼谷子的智慧谋略'},
-    {'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'总有这样的歌只想一个人听'},
-    {'contentType':'album','id':'121212','perceent':'3.33223','src':'sdsdsds','title':'刘亦菲-开席了宋朝饭局'}]
+    info: [{
+        'contentType': 'album',
+        'id': '121212',
+        'perceent': '3.33223',
+        'src': 'sdsdsds',
+        'title': '熬婿'
+      },
+      {
+        'contentType': 'album',
+        'id': '121212',
+        'perceent': '3.33223',
+        'src': 'sdsdsds',
+        'title': '鬼谷子的智慧谋略'
+      },
+      {
+        'contentType': 'album',
+        'id': '121212',
+        'perceent': '3.33223',
+        'src': 'sdsdsds',
+        'title': '总有这样的歌只想一个人听'
+      },
+      {
+        'contentType': 'album',
+        'id': '121212',
+        'perceent': '3.33223',
+        'src': 'sdsdsds',
+        'title': '刘亦菲-开席了宋朝饭局'
+      }
+    ]
   },
   onShow() {
-    console.log('------',this.data.info)
+    console.log('------', this.data.info)
 
   },
   onLoad(options) {
@@ -65,81 +95,89 @@ module.exports = {
   },
   // 跳转到播放详情界面
   linkAbumInfo(e) {
+    console.log('-------latelylisten:', e)
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
     const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
     // const routeType = e.currentTarget.dataset.contentype
- 
-    wx.navigateTo({
-      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
-    })
+    if (id) {
+      wx.navigateTo({
+        url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+      })
+
+    } else {
+
+    }
+
 
   },
- 
+
   //最近收听
-  getLaterListen(){
+  getLaterListen() {
     let param = {
-     
+
     }
-    utils.PLAYHISTORYGET(param,utils.historyPlay,res=>{
-      console.log('最近收听:',res)
-      if(res.data.items.length > 0 && res.statusCode == 200){
+    utils.PLAYHISTORYGET(param, utils.historyPlay, res => {
+      console.log('最近收听:', res)
+      if (res.data.items.length > 0 && res.statusCode == 200) {
         // item.title = item.mediaName                               // 歌曲名称
         // item.id = item.mediaId                                    // 歌曲Id
         // item.src = item.coverUrl                                  // 歌曲的封面
         // item.contentType = 'album'                                // 类别（例如专辑或歌曲）
         // item.isVip = true                                         // 是否是会员
         let laterArr = []
-        for(let i = 0;i <res.data.items.length;i++ ){
-          console.log('---------',i)
-          if( !res.data.items[i].track ||res.data.items[i].track== null ||  res.data.items[i].track.played_secs== null){
-            res.data.items[i].track =new Object()
+        for (let i = 0; i < res.data.items.length; i++) {
+          console.log('---------', i)
+          if (!res.data.items[i].track || res.data.items[i].track == null || res.data.items[i].track.played_secs == null) {
+            res.data.items[i].track = new Object()
             res.data.items[i].track.played_secs = 0
-          }else{
+          } else {
             res.data.items[i].track.played_secs = res.data.items[i].track.played_secs
           }
 
           laterArr.push({
-            title:res.data.items[i].album.title,
-            id:res.data.items[i].album.id,
-            src:res.data.items[i].album.cover.middle.url,
-            contentType:'album',
-            isVip:res.data.items[i].album.is_vip_free,
+            title: res.data.items[i].album.title,
+            id: res.data.items[i].album.id,
+            src: res.data.items[i].album.cover.middle.url,
+            contentType: 'album',
+            isVip: res.data.items[i].album.is_vip_free,
 
             // isHome: true,
             // isVip:wx.getStorageInfoSync('USERINFO').is_vip,
-            perceent:(res.data.items[i].track.played_secs/res.data.items[i].track.duration)*100
+            perceent: (res.data.items[i].track.played_secs / res.data.items[i].track.duration) * 100
 
           })
         }
-          this.setData({
-            req: true,
-            info:laterArr
-          })
-          console.log('最近播放-------------info:',this.data.info)
-        
-       
+        laterArr.push(this.data.emptyObj)
 
-      }else{
+        this.setData({
+          req: true,
+          info: laterArr
+        })
+        console.log('最近播放-------------info:', this.data.info)
+
+
+
+      } else {
         this.setData({
           showModal: true,
-          req:-1
+          req: -1
         })
       }
 
     })
-    
+
 
   },
-  
-  
+
+
   close() {
     this.setData({
       showModal: false
     })
     wx.navigateBack({
-      
+
     })
   }
 }

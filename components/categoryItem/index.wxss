@@ -112,6 +112,6 @@
   height: 100%;
   border-radius: 2vh;
   vertical-align: bottom;
-  box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d;
+  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
 }
   

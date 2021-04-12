@@ -20,6 +20,7 @@ Page({
     confirm: '',
     currentTap: 0,
     pageNub:0,
+    scrollOneLeft:0,
     scrollLeft: 0,
     isFixed: false,
     reqS: false,
@@ -31,15 +32,16 @@ Page({
 
   },
   scrollhandle(e) {
-    if (e.detail.scrollLeft > 230) {
-      this.setData({
-        isFixed: true
-      })
-    } else {
-      this.setData({
-        isFixed: false
-      })
-    }
+    console.log('---------------')
+    // if (e.detail.scrollLeft > 230) {
+    //   this.setData({
+    //     isFixed: true
+    //   })
+    // } else {
+    //   this.setData({
+    //     isFixed: false
+    //   })
+    // }
 
   },
   onLoad(options) {

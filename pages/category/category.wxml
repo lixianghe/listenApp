@@ -1,7 +1,7 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
 
 
-<scroll-view  class="topscrollview" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920">
+<scroll-view  class="topscrollview" scroll-x="true" scroll-left="{{scrollOneLeft}}" lower-threshold="1920">
   <view class="label-box" wx:if="{{labels.show}}">
         <view class="label-view {{ isFixed ? 'fixeds' : 'absolutes' }}" wx:if="{{reqS}}">
           <view data-focusindex='1' class="title" wx:for="{{labels.data}}" wx:key="index" style="color: {{index === currentTap ? mainColor : '#bebebe'}}" 

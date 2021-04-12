@@ -5,21 +5,21 @@
     style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
        <view class="search" style="width: {{126 * times}}px; height: {{11 * times}}px;left: {{9 * times}}px;top:{{4.3 * times}}px">
         <image src="../../images/search.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
-        <input class="input" type="text" value="{{keyWord}}" bindinput="search" bindfocus="focus" bindblur="blur" placeholder="请输入进行搜索"
+        <input class="input" type="text" value="{{keyWord}}" bindinput="search" data-focusindex="1" bindfocus="focus" bindblur="blur" placeholder="请输入进行搜索"
         style="width: {{105 * times}}px; height: {{11 * times}}px;  font-size: {{4.9 * times}}px;"
-        data-focusindex="2"
+       
         bindtap="aa"/>
         <image wx:if="{{keyWord != ''}}" catchtap="clear" src="../../images/modal_close.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
 
       </view>
       <button class="cancel" wx:if="{{keyWord}}" bindtap="searchClick"
-      data-focusindex="2" 
+      data-focusindex="1" 
       style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{4.6 * times}}px;">搜索</button>
       
       <!-- <view wx:if="{{info.length == 0}}"  class="remindTitle">推荐搜索</view> -->
 
       <view class="label-view" wx:if="{{info.length>0}}" style="top: {{19.5 * times}}px; left: {{9 * times}}px; margin-bottom: {{4.89 * times}}px;  font-size: {{5.5 * times}}px;">
-        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" data-focusindex="3"  wx:key="index" data-index="{{index}}" bindtap="selectTap" 
+        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" data-focusindex="2"  wx:key="index" data-index="{{index}}" bindtap="selectTap" 
         style="margin-right: {{5 * times}}px; padding: {{1.2 * times}}px {{5.1 * times}}px; border-radius: {{5.5 * times}}px;background:{{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}};color:{{index === currentTap ? '#000' : '#bebebe'}}">
           <text>{{item.label}}</text>
         </view>
@@ -33,7 +33,7 @@
             <text>最近搜索</text>
             <image catchtap="deletaClick" src="../../images/delete.png" style="width: {{6.7 * times}}px;height:{{6.7*times}}px;margin-left:{{1.6*times}}px" class="deleteimg"></image>
           </view>
-          <view data-idx="{{index}}"  wx:key="laterkey" catchtap="latersearchItemClick" class="recentItem"
+          <view data-idx="{{index}}" data-focusindex="3"  wx:key="laterkey" bindtap="latersearchItemClick" class="recentItem"
           style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
           wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
         </view>
@@ -42,7 +42,7 @@
         <view class="remind" >
           <view wx:if="{{info.length == 0}}" style="font-size: {{5.2 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">推荐搜索</view>
           <view wx:if="{{info.length == 0}}" class="remindresultView">
-           <view catchtap="searchItemClick" item='item' style="width: {{46 * times}}px;height: {{15 * times}}px"  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">
+           <view data-focusindex="4" bindtap="searchItemClick" item='item' style="width: {{46 * times}}px;height: {{15 * times}}px"  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">
             <view style="font-size: {{4.8 * times}}px;" class="item-num"> {{item.num}}</view>
             <view style="font-size: {{4.8 * times}}px;margin-left: {{5 * times}}px;width: {{34 * times}}px;" class="item-text">{{item.text}}</view>
            </view>
@@ -65,7 +65,7 @@
         data-disablefocus="true"
         style="width: {{33.7 * times}}px; height: {{68.6 * times}}px; margin-top: {{31.5 * times}}px">
         <image class="image" src="{{item.coverImgUrl}}"
-        data-focusindex="4" 
+        data-focusindex="5" 
         style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
         <view class="albumTit" style=" margin-top: {{2 * times}}px; font-size: {{5.2 * times}}px;">
           <text>{{ item.title }}</text>

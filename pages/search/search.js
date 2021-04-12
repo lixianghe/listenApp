@@ -76,8 +76,12 @@ Page({
     let param = {
       limit: '9'
     }
+    wx.showLoading({
+      title: '加载中...',
+    })
     utils.GET(param, utils.hot, res => {
       console.log('----------热搜词', res)
+      wx.hideLoading()
       if (res.data.items.length > 0 && res.statusCode == 200) {
         for (let i = 0; i < res.data.items.length; i++) {
           this.data.remindArr.push({

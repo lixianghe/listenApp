@@ -17,7 +17,7 @@ App({
     isTaiUserChange: false,
     token: '',
     // 版本号
-    version: '7.0.27',
+    version: '7.0.28',
     isNetConnected: true,
     indexData: [], // 静态首页数据
     latelyListenId: [], // 静态记录播放id

@@ -218,6 +218,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
           'offset': that.data.offset,
           'sort': that.data.sort
         }
+        console.log('parram-------------:',param)
+        console.log('start:',this.data.start)
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
             console.log('专辑列表所有数据:',res)
@@ -240,13 +242,14 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                   albumId:item.album_id
                  })
                }
-            
+            console.log('lazy-------------:',lazy)
              // 上拉和下拉的情况
              if (lazy == 'up'){
               _list = that.data.canplay.concat(_list)
              } else if (lazy == 'down') {
               _list = _list.concat(that.data.canplay)
              }
+             console.log('_list-------------:',_list)
              if(_list.length == res.data.total){
                wx.showToast({
                  title: '到底了',
@@ -258,7 +261,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
              that.setData({
               total:res.data.total,
               canplay: _list,
-              src:_list[0].coverImgUrl
+              src:_list[0].coverImgUrl,
+              start:that.data.start
   
              })
             
@@ -412,6 +416,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       //  console.log('------=====:',this.data.pageNo*this.data.pageSize)
 
     }
+    this.data.canplay = []
     this.getAllList(this.data.optionId).then(()=> {
       this.setData({scrollTop: 0})
     })
@@ -558,11 +563,15 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   }, 50),
   // 滚到顶部
   listTop: tool.throttle(async function (res) {
+    //  this.data.offset = 0
+    // this.data.start = 0
+    // this.data.canplay = []
      console.log('滚到顶部')
      wx.showToast({
       title: '到顶了',
       icon:'none'
     })
+    // this.getAllList(this.data.optionId, 'down')
     
 
   }, 2000),
@@ -582,12 +591,15 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
    console.log('sort:',this.data.sort)
     if(this.data.sort == 'asc'){
       this.data.offset+=15
-
+     
     }else{
       this.data.offset-=15
+     
 
     }
+    
     console.log('offset:',this.data.offset)
+    console.log('start:',this.data.start)
     this.getAllList(this.data.optionId, 'up')
     setTimeout(() => {
       this.setData({
@@ -670,11 +682,12 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   async topHandle() {
     console.log('---下拉结束')
     if(this.data.sort == 'asc'){
+      
       this.data.offset-=15
       this.data.start-=15
     }else{
       this.data.offset+=15
-      this.data.start-=15
+      this.data.start+=15
     }    
     this.getAllList(this.data.optionId, 'down')
     this.setData({

@@ -648,14 +648,39 @@ Page({
   },
   // 在播放列表里面点击播放歌曲
   async playSong(e) {
-    // console.log('-=-=-=-=---=')
+     console.log('-=-=-=-=---=：',e)
     let that = this
     const songInfo = e.currentTarget.dataset.song
+    let isfree = songInfo.feeType
+    let isvipfree = songInfo.isVipFree
+    if(!isfree && isvipfree){
+      //收费曲目
+      wx.showModal({
+        title: '无权限',
+        content: '暂无权限收听,请从喜马拉雅APP购买',
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+   }else {
+   
     app.globalData.songInfo = songInfo
+
     this.playMedia(songInfo)
     that.setData({
       currentId: app.globalData.songInfo.id,
     })
+   }
+  
+
+
+
+
+   
     this.closeList()
 
   },

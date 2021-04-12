@@ -147,7 +147,7 @@
   padding: 50% 0;
   border-radius: 2vh;
   vertical-align: bottom;
-  box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d;
+  /* box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d; */
   z-index: 666;
 }
 .input[focus-select=true]:before {
@@ -156,7 +156,7 @@
   width: calc(100% - 140px);
   height: 100%;
   vertical-align: bottom;
-  box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d;
+  /* box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d; */
   z-index: 666;
 }
 button[focus-select=true]{
@@ -183,8 +183,7 @@ button[focus-select=true]{
 
 }
 .h .reminditem{
-/* <<<<<<< Updated upstream
-======= */
+
   /* margin-top: 3vh; */
   margin-right: 15vh;
   width: 55vh;
@@ -248,3 +247,14 @@ button[focus-select=true]{
   font-weight: 500;
   text-align: left;
 }
+.recentItem[focus-select=true]{
+  border-radius: 2vh;
+  vertical-align: bottom;
+  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+}
+.reminditem[focus-select=true]{
+  border-radius: 2vh;
+  vertical-align: bottom;
+  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+}
+

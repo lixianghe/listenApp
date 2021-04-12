@@ -7,17 +7,17 @@
     <block data-item="{{item}}" wx:for="{{swiperArr}}" wx:key="id">
     <swiper-item  class="swiper-item">
 
-      <image data-item="{{item}}" catchtap="bannerClick" data-focusindex="3" src="{{item.banner_cover_url}}" class="swipe-image" />
+      <image data-item="{{item}}" catchtap="bannerClick"  src="{{item.banner_cover_url}}" class="swipe-image" />
     </swiper-item>
     </block>
   
    </swiper>
 
- <view catchtap="like" class="left" data-focusindex="3">
+ <view catchtap="like" class="left" data-focusindex="1">
     <image src="/images/icon_collect.png" class="left-icon"></image>
  <text class="left-text">我的收藏</text>
  </view>
- <view catchtap="tolatelyListen" class="right" data-focusindex="3">
+ <view catchtap="tolatelyListen" class="right" data-focusindex="1">
   <image src="/images/zjst.png" class="left-icon"></image>
  <view class="left-text">最近播放</view>
  </view>
