@@ -1,5 +1,5 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100vh;">
-  <scroll-view class="searchContent" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData"
+  <scroll-view class="searchContent" scroll-y="false" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData"
   style="padding: {{2.5 * times}}px {{9 * times}}px; height: {{82 * times}}px;overflow-y:hidden;">
     <view class="mianContent"
     style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
@@ -51,8 +51,13 @@
       </view>
 
 
+     
+    <!-- 页面盒子 -->
+  </view>
+  
       <!-- 页面数据 -->
-      <view 
+      <view   style="margin-top:20vh;overflow-y:hidden;height:{{45 * times}}px" class="dataView">
+        <view 
       wx:if="{{pageState == 2}}"
         wx:for="{{info}}"
         wx:key="index"
@@ -63,7 +68,7 @@
         bindtap="linkAbumInfo"
         class="{{screen}}albumCard"
         data-disablefocus="true"
-        style="width: {{33.7 * times}}px; height: {{68.6 * times}}px; margin-top: {{31.5 * times}}px">
+        style="width: {{33.7 * times}}px; overflow-y:hidden; height: {{68.6 * times}}px; top: -32vh">
         <image class="image" src="{{item.coverImgUrl}}"
         data-focusindex="5" 
         style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
@@ -71,8 +76,8 @@
           <text>{{ item.title }}</text>
         </view>
       </view>
-    <!-- 页面盒子 -->
-  </view>
+      
+      </view>
   </scroll-view>
   <view class="miniView" style="top: {{100 * times}}px">
     <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>

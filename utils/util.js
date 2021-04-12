@@ -327,7 +327,7 @@ let header ={
    method: 'POST',
    dataType: 'json',
    success: res=> {
-      //  console.log( '请求成功:', res);
+       console.log( '请求成功:', res);
        callback(res)
     
    },
