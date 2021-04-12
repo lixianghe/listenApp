@@ -401,7 +401,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
         start:e.detail.start - 1,
         end:e.detail.end,
         sort:e.detail.sort,
-        offset:e.detail.start - 1
+        offset:e.detail.start - 1,
+        maxOffset:e.detail.start - 1
       })
     }else{
       // console.log('------=====:',parseInt( this.data.total/15))
@@ -590,7 +591,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
 
    console.log('sort:',this.data.sort)
     if(this.data.sort == 'asc'){
-      this.data.offset+=15
+      // this.data.offset+=15
+      this.data.maxOffset+=15
+      this.data.offset = this.data.maxOffset
      
     }else{
       this.data.offset-=15

@@ -456,7 +456,8 @@ Page({
   pre() {
     
     const that = this
-      console.log('currentIndex:',this.data.currentIndex)
+      this.data.currentIndex = this.data.canplay.findIndex(n => n.id == app.globalData.songInfo.id)
+      // console.log('preindex', index)
       if(this.data.currentIndex == 0){
         console.log('第一首了')
 
@@ -504,14 +505,20 @@ Page({
    
     const that = this
     console.log('下一首:',that)
-      console.log('currentIndex:',this.data.currentIndex)
+    this.data.currentIndex = this.data.canplay.findIndex(n => n.id == app.globalData.songInfo.id)
+      // console.log('currentIndex:',this.data.currentIndex)
       if(this.data.currentIndex == 14){
       console.log('最后一首了')
 
       }else{
 
         this.data.currentIndex++
+        
         let item = this.data.canplay[this.data.currentIndex]
+
+        console.log('item', item, this.data.canplay)
+
+        
         let isfree = item.feeType
         let isvipfree = item.isVipFree
        console.log('item:',item)
