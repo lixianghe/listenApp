@@ -338,9 +338,12 @@ Component({
     },
     watchPlay() {
       app.globalData.songInfo = wx.getStorageSync('songInfo')
+      const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+
       console.log('watchPlay-------------songInfo:',app.globalData.songInfo)
       this.setData({
-        songInfo: app.globalData.songInfo 
+        songInfo: app.globalData.songInfo ,
+        existed:isCollect
       })
     },
     // 因为1.9.2版本无法触发onshow和onHide所以事件由它父元素触发

@@ -13,6 +13,7 @@ let selectedNo = 0
 Page({
    mixins: [abumInfoMixin],
   data: {
+    maxOffset:0,
     offset:0,
     maxOffset: 0,
     start:0,
@@ -84,8 +85,6 @@ Page({
   }else{
     that.getAllList( that.data.optionId)
   }
-    // const msg = '网络异常，请检查网络！'
-    // this.getNetWork(msg)
     // 暂存专辑全部歌曲
     that.setData({
       optionId: options.id,
@@ -427,7 +426,6 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
 
   // 点击歌曲名称跳转到歌曲详情
   goPlayInfo(e) {
-    const msg = '网络异常，无法播放！'
    console.log('音频点击',e)
   //  !item.feeType &&  item.isVipFree 
    let isfree = e.currentTarget.dataset.song.feeType
@@ -459,7 +457,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('allList', this.data.canplay)
     this.setData({ currentId: songInfo.id })
-    this.getNetWork(msg, this.toInfo(sameSong))
+    this.toInfo(sameSong)
    }
   
   
@@ -536,28 +534,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       playing: e.detail,
     })
   },
-  // 获取网络信息，给出相应操作
-  getNetWork(title, cb) {
-    const that = this
-    // 监听网络状态
-    wx.getNetworkType({
-      async success(res) {
-        const networkType = res.networkType
-        if (networkType === 'none') {
-          that.setData({
-            msg: title,
-          })
-          that.bgConfirm = that.selectComponent('#bgConfirm')
-          that.bgConfirm.hideShow(true, 'out', () => {})
-        } else {
-          setTimeout(() => {
-            cb && cb()
-          }, 200)
-        }
-      },
-    })
-  },
- 
+
   // 列表滚动事件
   listScroll: tool.debounce(async function (res) {
 

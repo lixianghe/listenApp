@@ -8,17 +8,78 @@ const app = getApp()
 //设置设备diviceId
 // const deviceId = util.getDeviceId()
 // GET请求
+function NULLUSERGET(param,url, callback) {
+  console.log('版本号:',this.version)
+  console.log('access_token:', wx.getStorageSync('TOKEN'))
+  var publicParams = {
+      app_key: this.APP_KEY,
+      device_id: this.getDeviceId(),
+      client_os_type: 3,
+      nonce: this.generateRandom(),
+      timestamp: +new Date(),
+      access_token:  wx.getStorageSync('TOKEN').access_token,
+      pack_id:'com.app.globalData.wechat',
+    }; 
+  let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
+  let params = {...publicParams, ...param, sig}
+  //  console.log('params:',params)
+ 
+let header = {}
+header['xm-sign'] = encrypt(Date.now())
+header['content-type'] = 'application/json' 
+//  console.log('header:',header)
+
+ wx.request({
+   url: this.baseUrl + url,
+   data: params,
+   header: header, 
+   method: 'GET',
+   dataType: 'json',
+   success: res=> {
+       callback(res)
+    
+   },
+   fail: err => {
+     console.log('请求失败：', err);
+     this.registerNetworkListener()
+    // if(err.errMsg == 'request:fail '){
+    //   wx.showToast({
+    //     title: '网络错误请检查',
+    //     icon:'none'
+    //   })
+
+    // }
+    callback(err)
+     wx.hideLoading()
+   }
+ })
+
+
+}
+// GET请求
 function GET(param,url, callback) {
   console.log('版本号:',this.version)
+  var publicParams = {}
+  if( wx.getStorageSync('TOKEN').access_token ==''){
+   publicParams = {
+      app_key: this.APP_KEY,
+      device_id: this.getDeviceId(),
+      client_os_type: 3,
+      // access_token:  wx.getStorageSync('TOKEN').access_token,
+      pack_id:'com.app.globalData.wechat',
+    };
+  }else{
+     publicParams = {
+      app_key: this.APP_KEY,
+      device_id: this.getDeviceId(),
+      client_os_type: 3,
+      access_token:  wx.getStorageSync('TOKEN').access_token,
+      pack_id:'com.app.globalData.wechat',
+    };
+  }
 
 
-  let publicParams = {
-    app_key: this.APP_KEY,
-    device_id: this.getDeviceId(),
-    client_os_type: 3,
-    access_token:  wx.getStorageSync('TOKEN').access_token,
-    pack_id:'com.app.globalData.wechat',
-  };
+  
   let sig = this.calcuSig({...publicParams, ...param}, this.APP_SECRET);
   let params = {...publicParams, ...param, sig}
   //  console.log('params:',params)
@@ -611,7 +672,6 @@ function EventListener(app, that){
   //播放事件
   app.audioManager.onPlay(() => {
     console.log('-------------------------------onPlay-----------------------------------')
-    
     wx.hideLoading()
     that.setData({ playing: true });
     const pages = getCurrentPages()
@@ -861,6 +921,7 @@ module.exports = {
   calculateCount:calculateCount,
   GET:GET,
   MGET:MGET,
+  NULLUSERGET:NULLUSERGET,
   PLAYINFOGET:PLAYINFOGET,
   CATEGORYDETAILSGET:CATEGORYDETAILSGET,
   PLAYHISTORYGET:PLAYHISTORYGET,

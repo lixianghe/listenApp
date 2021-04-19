@@ -160,6 +160,8 @@ Page({
     utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
       console.log('专辑列表所有数据:', res)
       if (res.data && res.statusCode == 200) {
+        wx.setStorageSync('ALBUMISCOLLECT', res.data.items[0].is_subscribe)
+
         for (let item of res.data.items) {
           // console.log(item)
           that.data.canplay.push({
@@ -222,8 +224,9 @@ Page({
       'sort': "asc"
     }
     utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
-      // console.log('专辑列表所有数据:', res)
+       console.log('专辑列表所有数据:', res)
       if (res.data && res.statusCode == 200) {
+        wx.setStorageSync('ALBUMISCOLLECT', res.data.items[0].is_subscribe)
 
         for (let item of res.data.items) {
           // console.log(item)

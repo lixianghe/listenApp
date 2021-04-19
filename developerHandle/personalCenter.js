@@ -230,6 +230,9 @@ module.exports = {
           //有记录的老用户直接请求拿数据
           this.refreshToken()
         } else {
+        //   let token = wx.getStorageSync('TOKEN')
+        // token.access_token = ''
+        // wx.setStorageSync('TOKEN', token)
           //无token的是新用户，需要把iv,data发给服务端记录下来
           this.postInfoToService()
         }
@@ -252,9 +255,9 @@ module.exports = {
       iv: this.data.iv,
       encrypted_data: this.data.encryData
     }
-    utils.GET(param, utils.postInfoToService, res => {
+    utils.NULLUSERGET(param, utils.postInfoToService, res => {
       console.log('postInfoToService:', res)
-      if (res.data.access_token && res.statusCode == 200) {
+      if (res.data && res.data.access_token && res.statusCode == 200) {
 
         let token = wx.getStorageSync('TOKEN')
         token.access_token = res.data.access_token
@@ -263,7 +266,9 @@ module.exports = {
         this.refreshToken()
 
 
-      } else {}
+      } else {
+
+      }
     })
   },
 
