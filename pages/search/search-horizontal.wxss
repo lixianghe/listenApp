@@ -107,7 +107,7 @@
   display: inline-block;
   margin-right: 7.6vh;
   /* margin-top: 32vh; */
-  height: 68.6vh;
+  /* height: 68.6vh; */
   overflow: hidden;
   position: relative;
 }

@@ -63,7 +63,7 @@
 
 
     <!-- 页面数据 -->
-    <view style="margin-top:{{4* times}}px;overflow-y:hidden;height:{{50 * times}}px" class="dataView">
+    <view style="margin-top:{{4* times}}px;overflow-y:hidden" class="dataView">
       <view wx:if="{{pageState == 2}}" wx:for="{{info}}" wx:key="index" data-id="{{item.id}}"
         data-title="{{item.title}}" data-src="{{item.coverImgUrl}}" data-contentype="{{item.contentType}}"
         bindtap="linkAbumInfo" class="{{screen}}albumCard" data-disablefocus="true"
