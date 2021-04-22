@@ -261,7 +261,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
              that.setData({
               total:res.data.total,
               canplay: _list,
-              src:_list[0].coverImgUrl,
+              // src:_list[0].coverImgUrl,
               start:that.data.start
   
              })
@@ -346,7 +346,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
            this.setData({
              total:res.data.include_track_count,
              existed:res.data.is_subscribe,
-             src:app.impressImg(res.data.cover.large.url,100,100),
+             src:res.data.cover.large.url?app.impressImg(res.data.cover.large.url,100,100):app.impressImg(res.data.announcer.avatar_url,100,100),
              isVip:res.data.is_vip_free
   
            })          

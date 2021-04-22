@@ -63,31 +63,27 @@ Page({
       if (res.data.items.length > 0 && res.statusCode == 200) {
         let categoryArr = []
         for (let i = 0; i < res.data.items.length; i++) {
-          if(res.data.items[i].id != 95){
-            //因为95(播客)类型的没有数据就不要此分类
+            console.log('id:', res.data.items[i].id)
+           
             let obj = Object()
             obj.id = res.data.items[i].id
             obj.name = res.data.items[i].category_name
-  
             categoryArr.push(obj)
-          }
-         
-
         }
+         //因为95(播客)类型的没有数据就不要此分类,4的也不要
+        var newArr = categoryArr.filter(item => item.id !=95 &&  item.id !=4)
+        console.log('分类:', newArr)
 
-        this.data.categoryId = categoryArr[0].id
-        this.getALLAlbums(categoryArr[0].id)
+        this.data.categoryId = newArr[0].id
+        this.getALLAlbums(newArr[0].id)
         this.setData({
           reqS: true,
           'labels.show': true,
-          'labels.data': categoryArr,
+          'labels.data': newArr,
          
 
         })
-        // wx.pageScrollTo({
-        //   scrollTop:0,
-        //   duration: 0,
-        // })
+       
       
 
       }

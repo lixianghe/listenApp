@@ -3,7 +3,7 @@
     <!-- 快捷入口 -->
 
  <view class="quickEntry" >
-   <swiper current="{{swiperCurrent}}" bindchange="swiperChange" interval = '2000' autoplay = 'true' indicator-active-color='rgba(0, 0, 0, 0.5)'  indicator-color='rgba(192, 192, 192, 0.5)' indicator-dots = 'true'  class="swiper">
+   <swiper circular='true' current="{{swiperCurrent}}" bindchange="swiperChange" interval = '2000' autoplay = 'true' indicator-active-color='rgba(0, 0, 0, 0.5)'  indicator-color='rgba(192, 192, 192, 0.5)' indicator-dots = 'true'  class="swiper">
     <block data-item="{{item}}" wx:for="{{swiperArr}}" wx:key="id">
     <swiper-item  class="swiper-item">
 

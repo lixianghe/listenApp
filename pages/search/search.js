@@ -111,6 +111,7 @@ Page({
 
   },
   onShow() {
+    console.log('----------------------------:',this.data.times)
     this.setData({
       existed: wx.getStorageSync('ALBUMISCOLLECT')
     })

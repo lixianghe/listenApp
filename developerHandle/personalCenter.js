@@ -23,12 +23,12 @@ import utils from '../utils/util'
 
 
 module.exports = {
-  data: { 
-    
+  data: {
+
     iv: '',
     encryData: '',
     code: '',
-    showChangeAccount:false,
+    showChangeAccount: false,
     // 是否登录
     isLogin: null,
     // 开发者注入模板用户信息
@@ -54,39 +54,50 @@ module.exports = {
 
   onLoad(options) {
     var that = this
-  //  console.log('user-------------onload-----:',app.globalData.isTaiAccountChange)
-  //   if (app.globalData.isTaiAccountChange) {
-  //     if (that.data.openId) {
-  //       console.log("---------getUserInfo")
-  //       that.getUserInfo()
-  //     } else {
-  //       console.log("-----fromCodeGetOpenid")
-  //       //请求接口
-  //       that.fromCodeGetOpenid()
-  //     }
+    //  console.log('user-------------onload-----:',app.globalData.isTaiAccountChange)
+    //   if (app.globalData.isTaiAccountChange) {
+    //     if (that.data.openId) {
+    //       console.log("---------getUserInfo")
+    //       that.getUserInfo()
+    //     } else {
+    //       console.log("-----fromCodeGetOpenid")
+    //       //请求接口
+    //       that.fromCodeGetOpenid()
+    //     }
 
-  //   } else {
-  //     console.log("-----exit")
-  //     that.logoutTap()
-  //   }
+    //   } else {
+    //     console.log("-----exit")
+    //     that.logoutTap()
+    //   }
 
     if (wx.canIUse('onTaiAccountStatusChange')) {
       wx.onTaiAccountStatusChange(function (res) {
         console.log("---onTaiAccountStatusChange-----", res)
         if (res.isLoginUser) { // 有登录，记录数据
           console.log("---dispatch--codeLoginNew")
-          if (that.data.openId) {
-            that.getUserInfo()
-          } else {
-            console.log('getPhoneNumber--------------------code:', that.data.code)
-            //请求接口
-            
-            that.getCode()
-            that.fromCodeGetOpenid()
-          }
-        } else { // 有登出，清除数据
+          that.getPhoneNumber()
+          //   if (that.data.openId) {
+          //     that.getUserInfo()
+          //   } else {
+          //     console.log('getPhoneNumber--------------------code:', that.data.code)
+          //     //请求接口
+          //     wx.login({
+          //       success: (res) => {
+          //         this.data.code = res.code
+          //         console.log('onTaiAccountStatusChange------code:', this.data.code)
+          //          that.fromCodeGetOpenid()
+          //       },
+          //       fail: (err) => {
+          //         console.log('获取code失败：', err)
+
+          //       },
+
+          //     })
+
+          //   }
+          // } else { // 有登出，清除数据
           console.log("---dispatch--exit")
-         
+
           that.exitLogin()
         }
       })
@@ -97,64 +108,61 @@ module.exports = {
   },
   onShow() {
     var that = this
-    //  that.getCode()
     console.log('personcenter----------onshow')
     that.data.openId = wx.setStorageSync('OPENID')
-    let currentTime = new Date().getTime()
-    let deadline = wx.getStorageSync('TOKEN').deadline
-    if (currentTime < deadline) {
-      console.log('未过期----------onshow')
-      //未过期
-      let userInfo = wx.getStorageSync('USERINFO')
-      console.log('未过期----------userInfo', userInfo)
-      if (userInfo) {
-        that.setData({
-          isLogin: true,
-          userInfo: userInfo
-        })
-      } else {
+    wx.checkSession({
+      success(res) {
+        let currentTime = new Date().getTime()
+        let deadline = wx.getStorageSync('TOKEN').deadline
+        if (currentTime < deadline) {
+          console.log('未过期----------onshow')
+          //未过期
+          let userInfo = wx.getStorageSync('USERINFO')
+          console.log('未过期----------userInfo', userInfo)
+          if (userInfo) {
+            that.setData({
+              isLogin: true,
+              userInfo: userInfo
+            })
+          } else {
+            that.setData({
+              isLogin: false
+            })
+          }
+    
+        } else {
+          //过期
+          console.log('过期----------onshow')
+          that.setData({
+            isLogin: false
+          })
+        wx.login({
+            success: (res) => {
+              that.data.code = res.code
+            },
+            fail: (err) => {},
+            
+          })
+    
+        }
+    
+    
+    
+      },
+      fail(res) {
         that.setData({
           isLogin: false
         })
+
       }
-
-    } else {
-      //过期
-      console.log('过期----------onshow')
-      that.setData({
-        isLogin: false
-      })
-
-    }
-
-
-
-
-
-  },
-  //获取code
-  getCode() {
-    // return new Promise((resolve, reject) => {
-    console.log('--------------开始获取code')
-
-    wx.login({
-      success: (res) => {
-        this.data.code = res.code
-        console.log('第一次code:', this.data.code)
-
-      },
-      fail: (err) => {
-        console.log('获取code失败：', err)
-       
-      },
-
     })
 
-    // })
+
+  
 
 
   },
-
+  
   onReady() {
 
   },
@@ -167,43 +175,56 @@ module.exports = {
       //用户点击拒绝
       console.log('用户未授权')
     } else {
-      this.data.iv = e.detail.iv
-      this.data.encryData = e.detail.encryptedData
-      wx.showLoading({
-        title: '登录中...',
+      that.data.iv = e.detail.iv
+      that.data.encryData = e.detail.encryptedData
+      wx.checkSession({
+        success(res) {
+         
+      
+          that.getCode()
+         
+         
+         
+        },
+        fail(res) {
+          that.getCode()
+
+        }
       })
-    
-        wx.login({
-          success: (res) => {
-            this.data.code = res.code
-            console.log('第二次code:', this.data.code)
-            console.log('--openId', this.data.openId)
-            if (that.data.openId) {
-              that.getUserInfo()
-            } else {
-              console.log('getPhoneNumber--------------------code:', that.data.code)
-              //请求接口
-              that.fromCodeGetOpenid()
-              // })
-      
-            }
-    
-          },
-          fail: (err) => {
-            console.log('获取code失败：', err)
-           
-          },
-        })
-    
-      
-  
 
 
-
-
-    
     }
   },
+  //获取code
+  getCode() {
+    var that = this
+    wx.login({
+      success: (res) => {
+        wx.showLoading({
+          title: '登录中...',
+        })
+        that.data.code = res.code
+        console.log('第一次code:', that.data.code)
+        console.log('--openId', that.data.openId)
+        if (that.data.openId) {
+          that.getUserInfo()
+        } else {
+          console.log('getPhoneNumber--------------------code:', that.data.code)
+          //请求接口
+          that.fromCodeGetOpenid()
+
+        }
+
+      },
+      fail: (err) => {
+        console.log('获取code失败：', err)
+
+      },
+    })
+
+
+  },
+
   //通过code获取openid
   fromCodeGetOpenid: function () {
     console.log('-----------fromCodeGetOpenid---------:')
@@ -230,9 +251,9 @@ module.exports = {
           //有记录的老用户直接请求拿数据
           this.refreshToken()
         } else {
-        //   let token = wx.getStorageSync('TOKEN')
-        // token.access_token = ''
-        // wx.setStorageSync('TOKEN', token)
+          //   let token = wx.getStorageSync('TOKEN')
+          // token.access_token = ''
+          // wx.setStorageSync('TOKEN', token)
           //无token的是新用户，需要把iv,data发给服务端记录下来
           this.postInfoToService()
         }
@@ -306,6 +327,13 @@ module.exports = {
           icon: 'none'
         })
 
+
+        if(wx.getStorageSync('songInfo')){
+          let songinfo = wx.getStorageSync('songInfo')
+          this.getSongifCollect(songinfo.albumId)
+
+        }
+
       } else {
         wx.showToast({
           title: '登录失败',
@@ -314,6 +342,23 @@ module.exports = {
 
       }
     })
+
+  },
+ //音频是否收藏
+  getSongifCollect(albumid){
+    let param={}
+    utils.GET(param,utils.albumDetails+albumid,res=>{
+      console.log('专辑详情:',res)
+      if(res.data && res.statusCode == 200){
+        wx.setStorageSync('ALBUMISCOLLECT',res.data.is_subscribe)
+        this.selectComponent('#miniPlayer').setOnShow()    
+        
+      }else{
+       console.log('专辑详情错误:',res)
+
+      }
+
+   })
 
   },
 
@@ -345,27 +390,29 @@ module.exports = {
   logoutTap() {
     console.log('退出登录')
     this.setData({
-      showChangeAccount:true
+      showChangeAccount: true
     })
-   
+
 
   },
   //确定退出
-  confirm(){
+  confirm() {
     console.log('确定退出登录')
-   this.exitLogin()
-   
+    this.exitLogin()
+
   },
-  exitLogin(){
+  exitLogin() {
     wx.removeStorageSync('USERINFO')
     wx.removeStorageSync('ACCESSTOKEN')
+   
+
     app.userInfo.islogin = false
     let obj = {
       nickname: '',
       avatar: ''
     }
     this.setData({
-      openId:'',
+      openId: '',
       userInfo: obj,
       isLogin: false,
       existed: false
@@ -377,13 +424,13 @@ module.exports = {
     wx.setStorageSync('ALBUMISCOLLECT', false)
     this.selectComponent('#miniPlayer').setOnShow()
     this.setData({
-      showChangeAccount:false
+      showChangeAccount: false
     })
   },
   //取消退出
-  cancel(){
+  cancel() {
     this.setData({
-      showChangeAccount:false
+      showChangeAccount: false
     })
   },
 

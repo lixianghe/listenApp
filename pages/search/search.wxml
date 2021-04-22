@@ -1,83 +1,81 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100vh;">
-  <scroll-view class="searchContent" scroll-y="false" scroll-x="true" scroll-left="{{scrollLeft}}" lower-threshold="1920"bindscrolltolower="getLayoutData"
-  style="padding: {{2.5 * times}}px {{9 * times}}px; height: {{82 * times}}px;overflow-y:hidden;">
+  <scroll-view class="searchContent" scroll-y="false" scroll-x="true" scroll-left="{{scrollLeft}}"
+    lower-threshold="1920" bindscrolltolower="getLayoutData"
+    style="padding: {{0 * times}}px {{9 * times}}px; height: {{82 * times}}px;overflow-y:hidden;">
     <view class="mianContent"
-    style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
-       <view class="search" style="width: {{126 * times}}px; height: {{11 * times}}px;left: {{9 * times}}px;top:{{4.3 * times}}px">
-        <image src="../../images/search.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
-        <input class="input" type="text" value="{{keyWord}}" bindinput="search" data-focusindex="1" bindfocus="focus" bindblur="blur" placeholder="请输入进行搜索"
-        style="width: {{105 * times}}px; height: {{11 * times}}px;  font-size: {{4.9 * times}}px;"
-       
-        bindtap="aa"/>
-        <image wx:if="{{keyWord != ''}}" catchtap="clear" src="../../images/modal_close.png" alt=""  style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;"/>
+      style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
+      <view class="search"
+        style="width: {{126 * times}}px; height: {{11 * times}}px;left: {{9 * times}}px;top:{{4.3 * times}}px">
+        <image src="../../images/search.png" alt=""
+          style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;" />
+        <input class="input" type="text" value="{{keyWord}}" bindinput="search" data-focusindex="1" bindfocus="focus"
+          bindblur="blur" placeholder="请输入进行搜索"
+          style="width: {{105 * times}}px; height: {{11 * times}}px;  font-size: {{4.9 * times}}px;" bindtap="aa" />
+        <image wx:if="{{keyWord != ''}}" catchtap="clear" src="../../images/modal_close.png" alt=""
+          style="width: {{10 * times}}px; height: {{10 * times}}px;  margin: 0 {{2 * times}}px;" />
 
       </view>
-      <button class="cancel" wx:if="{{keyWord}}" bindtap="searchClick"
-      data-focusindex="1" 
-      style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{4.6 * times}}px;">搜索</button>
-      
+      <button class="cancel" wx:if="{{keyWord}}" bindtap="searchClick" data-focusindex="1"
+        style="width: {{20 * times}}px; height: {{9.8 * times}}px;  line-height: {{9.8 * times}}px; border-radius: {{9.8 * times}}px; font-size: {{4.6 * times}}px; left: {{141 * times}}px; top: {{4.6 * times}}px;">搜索</button>
       <!-- <view wx:if="{{info.length == 0}}"  class="remindTitle">推荐搜索</view> -->
-
-      <view class="label-view" wx:if="{{info.length>0}}" style="top: {{19.5 * times}}px; left: {{9 * times}}px; margin-bottom: {{4.89 * times}}px;  font-size: {{5.5 * times}}px;">
-        <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" data-focusindex="2"  wx:key="index" data-index="{{index}}" bindtap="selectTap" 
-        style="margin-right: {{5 * times}}px; padding: {{1.2 * times}}px {{5.1 * times}}px; border-radius: {{5.5 * times}}px;background:{{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}};color:{{index === currentTap ? '#000' : '#bebebe'}}">
-          <text>{{item.label}}</text>
-        </view>
-      </view>
-
-
       <!-- 搜索类目 -->
-      <view class="noSearch" wx:if="{{pageState == 1}}" style="margin-top: {{19 * times}}px;">
-        <view  wx:if="{{recentSearch.length > 0}}" class="recentSearch" style="width: {{66 * times}}px">
-          <view wx:if="{{info.length == 0}}" style="font-size: {{5.4 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">
+      <view class="noSearch" wx:if="{{pageState == 1}}" style="margin-top: {{16* times}}px;">
+        <view wx:if="{{recentSearch.length > 0}}" class="recentSearch" style="width: {{66 * times}}px">
+          <view wx:if="{{info.length == 0}}" style="font-size: {{5 * times}}px; margin-top:{{4* times}}px;margin-bottom: {{6 * times}}px"
+            class="remindTitle">
             <text>最近搜索</text>
-            <image catchtap="deletaClick" src="../../images/delete.png" style="width: {{6.7 * times}}px;height:{{6.7*times}}px;margin-left:{{1.6*times}}px" class="deleteimg"></image>
+            <image catchtap="deletaClick" src="../../images/delete.png"
+              style="width: {{6.7 * times}}px;height:{{6.7*times}}px;margin-left:{{1.6*times}}px" class="deleteimg">
+            </image>
           </view>
-          <view data-idx="{{index}}" data-focusindex="3"  wx:key="laterkey" bindtap="latersearchItemClick" class="recentItem"
-          style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
-          wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
+          <view data-idx="{{index}}" data-focusindex="3" wx:key="laterkey" bindtap="latersearchItemClick"
+            class="recentItem"
+            style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
+            wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
         </view>
 
         <!-- style="width: {{328 * times}}px" -->
-        <view class="remind" >
-          <view wx:if="{{info.length == 0}}" style="font-size: {{5.2 * times}}px;margin-bottom: {{8 * times}}px" class="remindTitle">推荐搜索</view>
+        <view class="remind">
+          <view wx:if="{{info.length == 0}}" style="font-size: {{5.2 * times}}px;margin-top:{{4* times}}px;margin-bottom: {{8 * times}}px"
+            class="remindTitle">推荐搜索</view>
           <view wx:if="{{info.length == 0}}" class="remindresultView">
-           <view data-focusindex="4" bindtap="searchItemClick" item='item' style="width: {{46 * times}}px;height: {{15 * times}}px"  wx:for="{{remindArr}}" wx:key="remindkey"  data-idx="{{index}}"  class="reminditem">
-            <view style="font-size: {{4.8 * times}}px;" class="item-num"> {{item.num}}</view>
-            <view style="font-size: {{4.8 * times}}px;margin-left: {{5 * times}}px;width: {{34 * times}}px;" class="item-text">{{item.text}}</view>
-           </view>
+            <view data-focusindex="4" bindtap="searchItemClick" item='item'
+              style="width: {{46 * times}}px;height: {{15 * times}}px" wx:for="{{remindArr}}" wx:key="remindkey"
+              data-idx="{{index}}" class="reminditem">
+              <view style="font-size: {{4.8 * times}}px;" class="item-num"> {{item.num}}</view>
+              <view style="font-size: {{4.8 * times}}px;margin-left: {{5 * times}}px;width: {{34 * times}}px;"
+                class="item-text">{{item.text}}</view>
+            </view>
           </view>
         </view>
       </view>
+      <!-- 页面盒子 -->
+    </view>
+
+    <view class="label-view" wx:if="{{info.length>0}}"
+      style=" margin-top:{{8* times}}px; left: 13vh;   font-size: {{4 * times}}px; ">
+      <view class="title{{index === currentTap ? ' active-tap' : ''}}" wx:for="{{labels}}" data-focusindex="2"
+        wx:key="index" data-index="{{index}}" bindtap="selectTap"
+        style="margin-right: {{5 * times}}px; padding: {{1.2 * times}}px {{5.1 * times}}px; border-radius: {{5.5 * times}}px;background:{{index === currentTap ? mainColor : 'rgba(255,255,255, 0.1)'}};color:{{index === currentTap ? '#000' : '#bebebe'}}">
+        <text>{{item.label}}</text>
+      </view>
+    </view>
 
 
-     
-    <!-- 页面盒子 -->
-  </view>
-  
-      <!-- 页面数据 -->
-      <view   style="margin-top:20vh;overflow-y:hidden;height:{{45 * times}}px" class="dataView">
-        <view 
-      wx:if="{{pageState == 2}}"
-        wx:for="{{info}}"
-        wx:key="index"
-        data-id="{{item.id}}"
-        data-title="{{item.title}}"
-        data-src="{{item.coverImgUrl}}"
-        data-contentype="{{item.contentType}}"
-        bindtap="linkAbumInfo"
-        class="{{screen}}albumCard"
-        data-disablefocus="true"
-        style="width: {{33.7 * times}}px; overflow-y:hidden; height: {{68.6 * times}}px; top: -32vh">
-        <image class="image" src="{{item.coverImgUrl}}"
-        data-focusindex="5" 
-        style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
-        <view class="albumTit" style=" margin-top: {{2 * times}}px; font-size: {{5.2 * times}}px;">
+    <!-- 页面数据 -->
+    <view style="margin-top:{{4* times}}px;overflow-y:hidden;height:{{50 * times}}px" class="dataView">
+      <view wx:if="{{pageState == 2}}" wx:for="{{info}}" wx:key="index" data-id="{{item.id}}"
+        data-title="{{item.title}}" data-src="{{item.coverImgUrl}}" data-contentype="{{item.contentType}}"
+        bindtap="linkAbumInfo" class="{{screen}}albumCard" data-disablefocus="true"
+        style="width: {{33.7 * times}}px; overflow-y:hidden; ">
+        <image class="image" src="{{item.coverImgUrl}}" data-focusindex="5"
+          style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
+        <view class="albumTit" style=" margin-top: {{1 * times}}px; font-size: {{5.2 * times}}px;">
           <text>{{ item.title }}</text>
         </view>
       </view>
-      
-      </view>
+
+    </view>
   </scroll-view>
   <view class="miniView" style="top: {{100 * times}}px">
     <mini-player id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
@@ -85,6 +83,4 @@
 </view>
 
 <!-- 空数据 -->
-<view class="noData" style="top: {{50 * times}}px"  wx:if="{{pageState == 3}}">暂无搜索内容</view>
-
-
+<view class="noData" style="top: {{50 * times}}px" wx:if="{{pageState == 3}}">暂无搜索内容</view>
