@@ -1,7 +1,7 @@
 <view class="{{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100vh;">
   <scroll-view class="searchContent" scroll-y="false" scroll-x="true" scroll-left="{{scrollLeft}}"
     lower-threshold="1920" bindscrolltolower="getLayoutData"
-    style="padding: {{0 * times}}px {{9 * times}}px; height: {{82 * times}}px;overflow-y:hidden;">
+    style="padding: {{0 * times}}px {{9 * times}}px; height: 100vh;overflow-y:hidden;">
     <view class="mianContent"
       style="width: {{126 * times}}px; height: {{11 * times}}px; border-radius: {{11 * times}}px; left: {{9 * times}}px;  top: {{4.3 * times}}px;">
       <view class="search"
@@ -30,7 +30,7 @@
           </view>
           <view data-idx="{{index}}" data-focusindex="3" wx:key="laterkey" bindtap="latersearchItemClick"
             class="recentItem"
-            style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{15 * times}}px"
+            style="overflow:hidden;text-overflow:ellipsis; font-size: {{4.8 * times}}px;width: {{32 * times}}px;height: {{14 * times}}px"
             wx:if="{{info.length == 0}}" wx:for="{{recentSearch}}">{{item}}</view>
         </view>
 
