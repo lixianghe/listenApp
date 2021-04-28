@@ -72,15 +72,7 @@ Page({
 
   },
   onLoad(options) {
-    console.log('----------------',app.globalData.version)
-    app.goAuthGetToken().then((res) => {
-      // console.log('-------token',wx.getStorageSync('TOKEN'))
-      // console.log('------------res:', res)
-      // console.log('=======---------------------res:', res)
-      this._swiperData()
-      this._mediaArrData()
-
-    });
+ 
   },
 
   //首页卡片数据
@@ -107,6 +99,25 @@ Page({
 
 
   },
+
+  //专辑是否收藏
+  getSongifCollect(albumid){
+    let param={}
+    utils.GET(param,utils.albumDetails+albumid,res=>{
+      console.log('专辑详情:',res)
+      if(res.data && res.statusCode == 200){
+        wx.setStorageSync('ALBUMISCOLLECT',res.data.is_subscribe)
+        this.selectComponent('#miniPlayer').setOnShow()    
+        
+      }else{
+       console.log('专辑详情错误:',res)
+
+      }
+
+   })
+
+  },
+
   
 //播放全部专辑
   clickHadle(e) {
@@ -126,8 +137,6 @@ Page({
     } else {
       //非Vip专辑
       this.getAllList(albumid)
-     
-
     }
      // 获取播放卡片
      let abumInfoId = wx.getStorageSync('abumInfoId')
@@ -160,8 +169,6 @@ Page({
     utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
       console.log('专辑列表所有数据:', res)
       if (res.data && res.statusCode == 200) {
-        wx.setStorageSync('ALBUMISCOLLECT', res.data.items[0].is_subscribe)
-
         for (let item of res.data.items) {
           // console.log(item)
           that.data.canplay.push({
@@ -190,6 +197,7 @@ Page({
           app.globalData.songInfo = app.globalData.canplay[0]
           wx.setStorageSync('playing', true)
           wx.setStorageSync('songInfo', app.globalData.canplay[0])
+          this.selectComponent('#miniPlayer').setOnShow()
           this.selectComponent('#miniPlayer').watchPlay()
           app.playing(this)
         })
@@ -226,7 +234,7 @@ Page({
     utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
        console.log('专辑列表所有数据:', res)
       if (res.data && res.statusCode == 200) {
-        wx.setStorageSync('ALBUMISCOLLECT', res.data.items[0].is_subscribe)
+     
 
         for (let item of res.data.items) {
           // console.log(item)
@@ -252,6 +260,8 @@ Page({
         app.globalData.songInfo = app.globalData.canplay[0]
         wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
+        console.log('是否收藏:',  wx.getStorageSync('ALBUMISCOLLECT'))
+        this.selectComponent('#miniPlayer').setOnShow()
         this.selectComponent('#miniPlayer').watchPlay()
         app.playing(this)
       }
@@ -436,10 +446,15 @@ Page({
 
   onShow() {
     // 首页数据
+    console.log('----------------',app.globalData.version)
+    app.goAuthGetToken().then((res) => {
+      // console.log('-------token',wx.getStorageSync('TOKEN'))
+      // console.log('------------res:', res)
+      // console.log('=======---------------------res:', res)
+      this._swiperData()
+      this._mediaArrData()
 
-    // console.log('index---onshow:')
-    // console.log('index---onshow:')
-
+    });
 
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()

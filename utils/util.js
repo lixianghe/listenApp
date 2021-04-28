@@ -636,6 +636,9 @@ function playAlrc(that, app) {
 
 
 function toggleplay(that, app) {
+  console.log('util----toggleplay------that:',that)
+  console.log('util----toggleplay------app:',app)
+
   if (that.data.playing) {
     console.log("暂停播放");
     that.setData({ 
@@ -644,9 +647,9 @@ function toggleplay(that, app) {
     app.stopmusic();
   } else {
     console.log("继续播放", app.globalData.currentPosition)
-    // that.setData({
-    //   playing: true
-    // });
+    that.setData({
+      playing: true
+    });
     app.playing(app.globalData.currentPosition, that);
   }
 }

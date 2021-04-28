@@ -546,10 +546,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     // this.data.start = 0
     // this.data.canplay = []
      console.log('滚到顶部')
-     wx.showToast({
-      title: '到顶了',
-      icon:'none'
-    })
+    //  wx.showToast({
+    //   title: '到顶了',
+    //   icon:'none'
+    // })
     // this.getAllList(this.data.optionId, 'down')
     
 
