@@ -42,6 +42,7 @@
   color: #e8e8e8;
   margin-top: 3.8vh;
 }
+
 .adminBtnOut {
   margin-top: 11.9vh;
   font-size: 4.9vh;

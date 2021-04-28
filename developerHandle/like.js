@@ -112,11 +112,11 @@ module.exports = {
         }
 
         var  id = wx.getStorageSync('songInfo').albumId
-        var isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+       
         for (let i = 0; i < laterArr.length; i++) {
           if(laterArr[i].id == id){
-            laterArr[i].isCollect = isCollect
            
+            wx.setStorageSync('ALBUMISCOLLECT',true)
           }
           
         }

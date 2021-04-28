@@ -61,19 +61,8 @@ Page({
     })
   },
   onLoad(options) {
-    const playing = wx.getStorageSync('playing')
-    if (!playing) {
-      this.setData({
-        playtime: app.globalData.playtime,
-        percent: app.globalData.percent || 0,
-      })
-    }
-    const that = this
-    utils.EventListener(app, that)
+    var that = this
     console.log('playinf-----options:',options)
-    // 监听歌曲播放状态，比如进度，时间
-    tool.playAlrc(that, app);
-    that.queryProcessBarWidth()
 
     // 根据分辨率设置样式
     that.setStyle()
@@ -261,7 +250,19 @@ Page({
  
   onShow: function () {
 
-
+    const playing = wx.getStorageSync('playing')
+    if (!playing) {
+      this.setData({
+        playtime: app.globalData.playtime,
+        percent: app.globalData.percent || 0,
+      })
+    }
+    const that = this
+    utils.EventListener(app, this)
+   
+    // 监听歌曲播放状态，比如进度，时间
+    tool.playAlrc(this, app);
+    that.queryProcessBarWidth()
   },
  
   play() {
