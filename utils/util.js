@@ -676,10 +676,13 @@ function EventListener(app, that){
   app.audioManager.onPlay(() => {
     console.log('-------------------------------onPlay-----------------------------------')
     wx.hideLoading()
-    that.setData({ playing: true });
     const pages = getCurrentPages()
+    // that.setData({ playing: true });
+    pages[pages.length - 1].setData({ playing: true })
     let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
-    if (miniPlayer) miniPlayer.setData({ playing: true })
+    if (miniPlayer) {
+      miniPlayer.setData({ playing: true })
+    }
     wx.setStorageSync('playing', true)
 
     // 控制首页专辑的播放gif
@@ -694,11 +697,14 @@ function EventListener(app, that){
   //暂停事件
   app.audioManager.onPause(() => {
     console.log('触发播放暂停事件');
-    that.setData({ playing: false });
-    wx.setStorageSync('playing', false)
     const pages = getCurrentPages()
+    // that.setData({ playing: false });
+    pages[pages.length - 1].setData({ playing: false })
+    wx.setStorageSync('playing', false)
     let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
-    if (miniPlayer) miniPlayer.setData({ playing: false })
+    if (miniPlayer) {
+      miniPlayer.setData({ playing: false })
+    }
     // 控制首页专辑的播放gif
     // let pages = getCurrentPages()
     let index = pages.filter(n => n.route == 'pages/index/index')[0]
@@ -720,7 +726,7 @@ function EventListener(app, that){
     if (miniPlayer) {
       miniPlayer.pre()
     } else {
-      that.pre()
+      pages[pages.length - 1].pre()
     }
   })
   //下一首事件
@@ -732,7 +738,7 @@ function EventListener(app, that){
     if (miniPlayer) {
       miniPlayer.next(true)
     } else {
-      that.next(true)
+      pages[pages.length - 1].next(true)
     }
   })
   //停止事件
@@ -746,6 +752,7 @@ function EventListener(app, that){
     console.log('触发播放错误事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
+    app.playing(app.globalData.currentPosition, that);
   })
   //播放完成事件
   app.audioManager.onEnded(() => {

@@ -337,6 +337,12 @@ Component({
        console.log(' 收藏和取消')
     },
     watchPlay() {
+      if (wx.canIUse('getPlayInfoSync')) {
+        let res = wx.getPlayInfoSync()
+        if (!res.playState) return
+        let panelSong = res.playList[res.playState.curIndex]
+        wx.setStorageSync('songInfo', panelSong)
+      }
       app.globalData.songInfo = wx.getStorageSync('songInfo')
       const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
 

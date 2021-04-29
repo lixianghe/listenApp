@@ -446,7 +446,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     })
     return
    }else{
-    const sameSong = app.globalData.songInfo.id == e.currentTarget.dataset.song.id
+    const sameSong = app.globalData.songInfo && (app.globalData.songInfo.id == e.currentTarget.dataset.song.id)
     this.data.currentIndex = e.currentTarget.dataset.no
     // 点击歌曲的时候把歌曲信息存到globalData里面
     const songInfo = sameSong ? app.globalData.songInfo : e.currentTarget.dataset.song
