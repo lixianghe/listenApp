@@ -746,6 +746,7 @@ function EventListener(app, that){
     console.log('触发停止事件');
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
+    wx.hideLoading()
   })
   //播放错误事件
   app.audioManager.onError(() => {
@@ -753,6 +754,7 @@ function EventListener(app, that){
     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
     app.playing(app.globalData.currentPosition, that);
+    wx.hideLoading()
   })
   //播放完成事件
   app.audioManager.onEnded(() => {

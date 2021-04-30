@@ -104,7 +104,7 @@ Page({
           const abumInfoName = wx.getStorageSync('abumInfoName')
           wx.setStorageSync('abumInfoName', options.abumInfoName)
           if (options.noPlay !== 'true' || abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-          if (options.noPlay !== 'true') 
+          if (options.noPlay !== 'true' && options.sameSong != 'true') 
           wx.showLoading({
             title: '加载中...',
             mask: true
@@ -118,7 +118,7 @@ Page({
           
           console.log('option----------------', options)
           if (options.noPlay != 'true') app.playing(that)
-          wx.hideLoading()
+          // wx.hideLoading()
         
 
         } else {
@@ -141,11 +141,11 @@ Page({
       const abumInfoName = wx.getStorageSync('abumInfoName')
       wx.setStorageSync('abumInfoName', that.data.abumInfoName)
       if (options.noPlay !== 'true' ||  abumInfoName !== options.abumInfoName) wx.setStorageSync('nativeList', canplay)
-      if (options.noPlay !== 'true') wx.showLoading({ title: '加载中...', mask: true })
+      if (options.noPlay !== 'true' && options.sameSong != 'true') wx.showLoading({ title: '加载中...', mask: true })
       wx.setStorageSync('songInfo', songInfo)
       console.log('option----------------', options)
       if (options.noPlay != 'true') app.playing(that)
-      wx.hideLoading()
+      // wx.hideLoading()
 
     }
 
@@ -182,7 +182,7 @@ Page({
            console.log('bannees-vip---音频----300---:')
           wx.setStorageSync('songInfo', songInfo)
           app.playing(that)
-          wx.hideLoading()
+          // wx.hideLoading()
         
 
         } else {
@@ -199,7 +199,7 @@ Page({
       })
         wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
       app.playing(that)
-      wx.hideLoading()
+      // wx.hideLoading()
 
     }
   },
