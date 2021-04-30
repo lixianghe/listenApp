@@ -366,7 +366,7 @@ function PLAYRECORDPOST(param,url, callback) {
   console.log('版本号:',this.version)
 
 
-    console.log('请求URL', this.baseUrl + url)
+    // console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
     device_id: this.getDeviceId(),  
@@ -388,7 +388,7 @@ let header ={
    method: 'POST',
    dataType: 'json',
    success: res=> {
-       console.log( '请求成功:', res);
+      //  console.log( '请求成功:', res);
        callback(res)
     
    },

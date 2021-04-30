@@ -62,34 +62,34 @@ Page({
   },
   onLoad(options) {
     var that = this
-    console.log('playinf-----options:',options)
+    // console.log('playinf-----options:',options)
 
     // 根据分辨率设置样式
     that.setStyle()
     // 获取歌曲列表
     const canplay = wx.getStorageSync('allList')
-    console.log('canplay:',canplay.length)
+    // console.log('canplay:',canplay.length)
     that.data.start = options.start
     that.data.currentIndex = options.currentNub
-    console.log('-------------start:',that.data.start)
+    // console.log('-------------start:',that.data.start)
     for (let i = 0; i < canplay.length; i++) {
       canplay[i].num = parseInt(that.data.start)+i+1
     }
     wx.setStorageSync('allList', canplay)
     const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
 
-    console.log('playInfo-------------------onload:',options)
+    // console.log('playInfo-------------------onload:',options)
     if (songInfo.feeType == true && options.sameSong != 'true' && options.noPlay != 'true') {
 
       that.data.isVip = true
       let param = {}
       utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
-        console.log('res:',res)
+        // console.log('res:',res)
         if (res.data && res.statusCode == 200) {
         
           app.globalData.songInfo.src = res.data.play_24_aac.url
 
-          console.log('app.globalData.songInfo:',app.globalData.songInfo)
+          // console.log('app.globalData.songInfo:',app.globalData.songInfo)
           that.setData({
             songInfo: app.globalData.songInfo,
             canplay: canplay,
@@ -637,16 +637,16 @@ Page({
     this.setData({
       animation: this.animation.export()
     })
-    setTimeout(() => {
-      this.setData({
-        noTransform: 'noTransform'
-      })
-    }, 300)
+    // setTimeout(() => {
+    //   this.setData({
+    //     noTransform: 'noTransform'
+    //   })
+    // }, 300)
   },
   closeList() {
     this.setData({
       showList: false,
-      noTransform: ''
+      // noTransform: ''
     })
     // 显示的过度动画
     this.animation.translate('-180vh', 0).step()
