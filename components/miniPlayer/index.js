@@ -340,8 +340,11 @@ Component({
       if (wx.canIUse('getPlayInfoSync')) {
         let res = wx.getPlayInfoSync()
         if (!res.playState) return
-        let panelSong = res.playList[res.playState.curIndex]
-        wx.setStorageSync('songInfo', panelSong)
+        if(res.playList.length > 0 && res.playState.curIndex){
+          let panelSong = res.playList[res.playState.curIndex]
+          wx.setStorageSync('songInfo', panelSong)
+        }
+     
       }
       app.globalData.songInfo = wx.getStorageSync('songInfo')
       const isCollect = wx.getStorageSync('ALBUMISCOLLECT')

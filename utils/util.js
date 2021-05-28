@@ -657,8 +657,8 @@ function toggleplay(that, app) {
 
 // 初始化 BackgroundAudioManager
 function initAudioManager(app, that,songInfo) {
-  // console.log('util------initAudioManager:',that)
-  // console.log('util------initAudioManager:',songInfo)
+  console.log('util------initAudioManager:',that)
+  console.log('util------initAudioManager:',songInfo)
 
   let list = wx.getStorageSync('nativeList')
   list.forEach(n => {
@@ -855,8 +855,7 @@ function generateUUID() {
 
 
 module.exports = {
-
-  version:'7.0.28',
+  version:'7.0.39',
  baseUrl : 'https://api.ximalaya.com/',
  MbaseUrl : 'https://m.ximalaya.com/',
    appId : 60023,

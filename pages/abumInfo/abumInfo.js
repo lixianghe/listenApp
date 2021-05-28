@@ -467,8 +467,11 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     app.globalData.abumInfoId = this.data.optionId
     wx.setStorageSync('abumInfoId', this.data.optionId)
      console.log('-------------start:',this.data.start)
-     
-    wx.navigateTo({ url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}&sameSong=${sameSong}` })
+    //  pages/playInfo/playInfo?mediaId=404806523&albumId=46192528&currentTime=1619675125155&auto=true&type=3
+    wx.navigateTo({ 
+      //  url:'../playInfo/playInfo?mediaId=404806523&albumId=46192528&currentTime=1619675125155&auto=true&type=3'
+         url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}&sameSong=${sameSong}`
+     })
   },
   // 改变current
   changeCurrent(currentId) {

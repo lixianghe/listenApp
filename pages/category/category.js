@@ -71,11 +71,12 @@ Page({
             categoryArr.push(obj)
         }
          //因为95(播客)类型的没有数据就不要此分类,4的也不要
-        var newArr = categoryArr.filter(item => item.id !=95 &&  item.id !=4)
+         var newArr = categoryArr.filter(item => item.id !=95 &&  item.id !=4)
         console.log('分类:', newArr)
 
         this.data.categoryId = newArr[0].id
         this.getALLAlbums(newArr[0].id)
+       
         this.setData({
           reqS: true,
           'labels.show': true,

@@ -318,8 +318,8 @@ module.exports = {
         let token = wx.getStorageSync('TOKEN')
         token.access_token = res.data.access_token
         wx.setStorageSync('TOKEN', token)
-        //  this.getUserInfo()
-        this.refreshToken()
+         this.getUserInfo()
+        // this.refreshToken()
 
 
       } else {
@@ -439,18 +439,23 @@ module.exports = {
   exitLogin() {
     wx.removeStorageSync('USERINFO')
     wx.removeStorageSync('OPENID')
-
+    console.log('exitLogin-------token',wx.getStorageSync('TOKEN'))
+    wx.removeStorageSync('TOKEN')
+    app.goAuthGetToken().then((res) => {
+      console.log('exitLogin---new-------token',wx.getStorageSync('TOKEN'))
+      console.log('=======---------------------res:', res)
+    });
     app.userInfo.islogin = false
     let obj = {
       nickname: '',
       avatar: ''
     }
     this.setData({
-     
+      openId:'',
       userInfo: obj,
       isLogin: false,
       existed: false,
-      showWxLogin:false
+      showWxLogin:true
     })
     wx.showToast({
       title: '退出成功',

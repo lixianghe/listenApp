@@ -17,7 +17,7 @@ App({
     isTaiUserChange: false,
     token: '',
     // 版本号
-    version: '7.0.28',
+    version: '7.0.39',
     isNetConnected: true,
     indexData: [], // 静态首页数据
     latelyListenId: [], // 静态记录播放id
@@ -94,6 +94,7 @@ App({
     // myPlugin.injectWx(wx)
     // 关于音乐播放的
     var that = this;
+    utils.EventListener(that)
     //播放列表中下一首
     wx.onBackgroundAudioStop(function () {
       const pages = getCurrentPages()
@@ -223,6 +224,7 @@ App({
   },
   vision: '1.0.0',
   cutplay: async function (that, type, cutFlag) {
+    console.log('-=-=-=--=:',that,type,cutFlag)
     that.setData({percent: 0})
     // 判断循环模式
     let allList = wx.getStorageSync('nativeList')
@@ -230,14 +232,16 @@ App({
     let loopType = wx.getStorageSync('loopType') || 'listLoop'
     // 如果缓存没有abumInfoName，说明是从首页单曲进入，list为单首
     let abumInfoName = wx.getStorageSync('abumInfoName')
-    // 歌曲列表
-    allList = abumInfoName ? this.setList(loopType, allList, cutFlag) : [this.globalData.songInfo]
+    // 歌曲列表 wx.getStorageSync('allList')
+    allList =wx.getStorageSync('allList')
+    // allList = abumInfoName ? this.setList(loopType, allList, cutFlag) : [this.globalData.songInfo]
     // 当前歌曲的索引
     let no = allList.findIndex(n => Number(n.id) === Number(this.globalData.songInfo.id))
     let index = this.setIndex(type, no, allList)
     //歌曲切换 停止当前音乐
     this.globalData.playing = false;
     let song = allList[index] || allList[0]
+    console.log('no----index-----song:',no,index,song)
     // wx.pauseBackgroundAudio();
     // 下一首是vip的情况
     if (!song.feeType && song.isVipFree) {
@@ -334,13 +338,11 @@ App({
       that = seek
     }
     const songInfo = wx.getStorageSync('songInfo')
-     console.log('playingSong', songInfo)
+    console.log('playingSong', songInfo)
     // 如果是车载情况
     console.log('percent--------------', this.globalData.percent)
     utils.initAudioManager(this, that, songInfo)
     this.carHandle(songInfo, seek)
-    // let app = this
-    
     this.globalData.playBeginAt = new Date().getTime();
      this.upLoadPlayinfo()
   },
