@@ -312,8 +312,14 @@ Component({
           songInfo: app.globalData.songInfo
         })
       }
-      // 监听歌曲播放状态，比如进度，时间
-      utils.playAlrc(that, app);
+      if(wx.getStorageSync('playing')){
+// 监听歌曲播放状态，比如进度，时间
+utils.playAlrc(that, app);
+      }else{
+// 监听歌曲播放状态，比如进度，时间
+that.watchPlay()
+      }
+      
     },
     btnstart(e) {
       const index = e.currentTarget.dataset.index
@@ -337,23 +343,46 @@ Component({
        console.log(' 收藏和取消')
     },
     watchPlay() {
+      var that =this
       if (wx.canIUse('getPlayInfoSync')) {
         let res = wx.getPlayInfoSync()
-        if (!res.playState) return
-        if(res.playList.length > 0 && res.playState.curIndex){
+        console.log('watchPlay-------------res:',res)
+         if (!res.playState) return
+         console.log('-----------1:')
+         console.log('-----------1:',res.playList.length)
+         console.log('-----------1:',res.playState.curIndex)
+
+        if(res.playList.length > 0 && res.playState.curIndex>-1){
+          console.log('-----------2:')
           let panelSong = res.playList[res.playState.curIndex]
           wx.setStorageSync('songInfo', panelSong)
+          let playing = res.playState.status == 1 ? true : false
+          wx.setStorageSync('playing', playing)
+          let  time = res.playState.currentPosition / res.playState.duration * 100
+          let isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+          console.log('-----------songInfo:',panelSong)
+          console.log('-----------percent:',time)
+          console.log('-----------playing:',playing)
+          console.log('-----------existed:',isCollect)
+          app.globalData.playing = playing
+
+          app.globalData.percent = time
+          app.globalData.playing = playing
+          app.globalData.currentPosition = res.playState.currentPosition
+          // app.globalData.playtime = playtime ? formatduration(playtime * 1000) : '00:00'
+
+          that.setData({
+            songInfo: panelSong ,
+            percent:time,
+            playing:playing,
+            existed:isCollect
+          })
         }
      
       }
       app.globalData.songInfo = wx.getStorageSync('songInfo')
-      const isCollect = wx.getStorageSync('ALBUMISCOLLECT')
-
       console.log('watchPlay-------------songInfo:',app.globalData.songInfo)
-      this.setData({
-        songInfo: app.globalData.songInfo ,
-        existed:isCollect
-      })
+     
     },
     // 因为1.9.2版本无法触发onshow和onHide所以事件由它父元素触发
     setOnShow() {

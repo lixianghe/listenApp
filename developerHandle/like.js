@@ -52,7 +52,15 @@ module.exports = {
     // },
   },
   onShow() {
-    this._getLikeList()
+    // app.goAuthGetToken().then((res) => {
+      // console.log('-------token',wx.getStorageSync('TOKEN'))
+      // console.log('------------res:', res)
+      // console.log('=======---------------------res:', res)
+      this._getLikeList()
+
+    // });
+
+   
   },
   onLoad(options) {
     
@@ -84,13 +92,16 @@ module.exports = {
 
   //获取我喜欢的数据
   _getLikeList(){
-
+  wx.showLoading({
+    title: '加载中...',
+  })
     let param = {
      timeline:0
     }
     utils.LIKEGET(param,utils.getUserCollectAlbums,res=>{
+      wx.hideLoading()
       console.log('我的收藏:',res)
-      if(res.data.items && res.data.items.length > 0 && res.statusCode == 200){
+      if( res.data.items.length > 0 && res.statusCode == 200){
         // item.title = item.mediaName                               // 歌曲名称
         // item.id = item.mediaId                                    // 歌曲Id
         // item.src = item.coverUrl                                  // 歌曲的封面

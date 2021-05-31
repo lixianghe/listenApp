@@ -204,7 +204,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
       
     })
   },
-    // 获取所有的播放列表（首页item点击）
+    // 获取所有的播放列表
     getAllList(albumid, lazy = false) {
       var that = this
       return new Promise((resolve, reject) => {
@@ -218,7 +218,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
           'offset': lazy == 'up' ? that.data.maxOffset : that.data.offset,
           'sort': that.data.sort
         }
-        console.log('parram-------------:',param)
+        console.log('param-------------:',param)
         console.log('start:',this.data.start)
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
@@ -235,6 +235,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                   coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
                   feeType:item.is_free ,
                   isVipFree:item.is_vip_free,
+                  isPaid:item.is_paid,
+                  isAuthorized:item.is_authorized,
                   src:item.play_info.play_64.url,       
                   mediaType:item.album.kind,
                   mediaAuthor:item.announcer.nickname,
@@ -430,8 +432,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   //  !item.feeType &&  item.isVipFree 
    let isfree = e.currentTarget.dataset.song.feeType
    let isvipfree = e.currentTarget.dataset.song.isVipFree
+   let isPaid = e.currentTarget.dataset.song.isPaid 
+   let authored = e.currentTarget.dataset.song.isAuthorized 
    console.log('是否免费',isfree)
-   if(!isfree && isvipfree){
+   if(!this.data.isVip && !isfree && isPaid || this.data.isVip &&!isfree && !authored && !isvipfree){
      //收费曲目
      wx.showModal({
       title: '无权限',
@@ -572,8 +576,6 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
 
    console.log('sort:',this.data.sort)
     this.data.maxOffset+=15
-
-    
     console.log('offset:',this.data.offset)
     console.log('start:',this.data.start)
     this.getAllList(this.data.optionId, 'up')

@@ -98,10 +98,10 @@ module.exports = {
   },
   onShow() {
     var that = this
-    app.goAuthGetToken().then((res) => {
-      console.log('-------token',wx.getStorageSync('TOKEN'))
-      console.log('=======---------------------res:', res)
-    });
+    // app.goAuthGetToken().then((res) => {
+    //   console.log('-------token',wx.getStorageSync('TOKEN'))
+    //   console.log('=======---------------------res:', res)
+    // });
 
     console.log('personcenter----------onshow')
     that.data.openId = wx.setStorageSync('OPENID')

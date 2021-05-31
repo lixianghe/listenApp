@@ -41,10 +41,13 @@
         
         <text wx:if="{{sort == 'asc' && (item.id !== currentId || !playing)}}">{{start + index + 1 }}</text>
         <text wx:if="{{sort == 'desc' && (item.id !== currentId || !playing)}}">{{start-index }}</text>
+        <text class="commonText" wx:if="{{!isVip && item.isPaid || !item.isAuthorized && isVip && !item.isVipFree   }}">
+          <text wx:if="{{ item.feeType }}" class="testfree" >试听</text> 
 
-        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:green;border: 1px solid green;width:16vh;text-align:center;line-height:7vh;height:7vh" wx:if="{{item.feeType &&  item.isVipFree}}">试听</text>
+          <text wx:if="{{ !item.feeType }}" class="nofree"  >付费</text>
+        </text>
 
-        <text class="audition" style="margin-right:3vh;border-radius:4vh;color:{{mainColor}};border: 1px solid {{mainColor}};width:16vh;text-align:center;line-height:7vh;height:7vh" wx:if="{{!item.feeType &&  item.isVipFree }}">付费</text>
+       
         <!-- <text style="max-width:70%">{{item.title}}</text> -->
 
         <text style="flex: 1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:{{item.isVipFree ? '0' : '7.35vh'}}" class="songname">{{item.title}}</text>

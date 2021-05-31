@@ -92,10 +92,32 @@
   line-height: 7.6vh;
   transform: translateY(-5vh);
 }
+.commonText{
+  /* margin-right:3vh;
+  margin-left:3vh; */
+  border-radius:4vh;
+  width:16vh;
+  text-align:center;
+  line-height:7vh;
+  height:7vh
+}
+.testfree{
+ 
+  color:green;
+  border: 1px solid green;
+  
+}
+.nofree{
+ 
+  color:#dc5e4e;
+  border: 1px solid #dc5e4e;
+  
+}
 .page .left .songList view text:nth-child(1) {
-  width: 7.6vh;
+  /* width: 7.6vh; */
   display: inline-block;
   text-align: right;
+  border-radius: 4vh;
   /* margin-left: -5vh; */
 }
 .page .left .songList view .songname {

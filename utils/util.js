@@ -414,10 +414,7 @@ function REFRESHTOKENPOST(param,url, callback) {
   // console.log('参数', param)
   // console.log('URL',  url)
   console.log('版本号:',this.version)
-
-
    console.log('请求URL', this.baseUrl + url)
-  
   let publicParams = {
         client_id: this.APP_KEY,
         client_secret:this.APP_SECRET,
@@ -460,8 +457,6 @@ function REFRESHTOKENPOST(param,url, callback) {
   
       }
        callback(err)
-    
-    
      wx.hideLoading()
    }
  })
@@ -474,8 +469,6 @@ function ALBUMSUBCRIBEPOST(param,url, callback) {
   // console.log('参数', param)
   // console.log('URL',  url)
   console.log('版本号:',this.version)
-
-
    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     app_key: this.APP_KEY,
@@ -618,13 +611,13 @@ function formatToSend(dt) {
 function playAlrc(that, app) {
   var time = 0, playtime = 0;
   app.audioManager.onTimeUpdate((res) => {
-    // console.log('----------------------------音乐播放：',app.globalData.audioManager) 
+    // console.log('playAlrc----------------------------音乐播放：',app.audioManager) 
     time = app.audioManager.currentTime / app.audioManager.duration * 100
     playtime = app.audioManager.currentTime
     app.globalData.percent = time
     app.globalData.currentPosition = app.audioManager.currentTime
     app.globalData.playtime = playtime ? formatduration(playtime * 1000) : '00:00'
-    // console.log('音乐监听-------------' + app.globalData.currentPosition + '-----------------' + app.globalData.playtime)
+    //  console.log('音乐监听-------------' + app.globalData.currentPosition + '-----------------' + app.globalData.playtime)
     if (!that.data.isDrag) {
       that.setData({
         playtime: playtime ? formatduration(playtime * 1000) : '00:00',
@@ -667,14 +660,16 @@ function initAudioManager(app, that,songInfo) {
   app.audioManager.playInfo = {
     playList: list
   };
-  // EventListener(that)
+    EventListener(app,that)
 }
 
 // 监听播放，上一首，下一首
 function EventListener(app, that){
+  console.log('监听播放，上一首，下一首--------------------------------------------EventListener')
+
   //播放事件
   app.audioManager.onPlay(() => {
-    console.log('-------------------------------onPlay-----------------------------------')
+    console.log('------onPlay---------')
     wx.hideLoading()
     const pages = getCurrentPages()
     // that.setData({ playing: true });

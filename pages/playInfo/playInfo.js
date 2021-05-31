@@ -7,6 +7,7 @@ import utils from '../../utils/util'
 Page({
   mixins: [require('../../developerHandle/playInfo')],
   data: {
+    pageSize:15,
     isVip: false,
     currentIndex: 0,
     existed: false,
@@ -50,7 +51,8 @@ Page({
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
-    start: ''
+    start: '',
+    canplay:[],
   },
   // 播放器实例
   audioManager: null,
@@ -134,7 +136,7 @@ Page({
        app.log('非续播----canplay:',canplay.length)
       that.data.start = options.start
       that.data.currentIndex = options.currentNub
-      // console.log('-------------start:',that.data.start)
+       console.log('-------------start:',that.data.start)
       for (let i = 0; i < canplay.length; i++) {
         canplay[i].num = parseInt(that.data.start) + i + 1
       }
@@ -525,11 +527,13 @@ Page({
       let item = this.data.canplay[this.data.currentIndex]
       let isfree = item.feeType
       let isvipfree = item.isVipFree
+      let isPaid = item.isPaid 
+      let authored = item.isAuthorized 
       console.log('item:', item)
 
       console.log('isfree:', isfree)
       console.log('isvipfree:', isvipfree)
-      if (!isfree && isvipfree) {
+      if(!app.globalData.isVip && !isfree && isPaid || app.globalData.isVip &&!isfree && !authored && !isvipfree){
         this.data.currentIndex++
 
         //收费曲目
@@ -566,7 +570,7 @@ Page({
     console.log('下一首:', that)
     this.data.currentIndex = this.data.canplay.findIndex(n => n.id == app.globalData.songInfo.id)
     // console.log('currentIndex:',this.data.currentIndex)
-    if (this.data.currentIndex == 14) {
+    if (this.data.currentIndex == this.data.canplay.length) {
       console.log('最后一首了')
 
     } else {
@@ -580,11 +584,13 @@ Page({
 
       let isfree = item.feeType
       let isvipfree = item.isVipFree
+      let isPaid = item.isPaid 
+      let authored = item.isAuthorized 
       console.log('item:', item)
+
       console.log('isfree:', isfree)
       console.log('isvipfree:', isvipfree)
-
-      if (!isfree && isvipfree) {
+      if(!app.globalData.isVip && !isfree && isPaid || app.globalData.isVip &&!isfree && !authored && !isvipfree){
         this.data.currentIndex--
 
         //收费曲目
@@ -603,7 +609,8 @@ Page({
         let mediaId = this.data.canplay[this.data.currentIndex].id
         app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
          console.log('nextfee--------------', app.globalData.songInfo)
-        if (!app.globalData.songInfo.feeType && app.globalData.songInfo.isVipFree) {
+        
+        if (!app.globalData.isVip && ! app.globalData.songInfo.feeType &&  app.globalData.songInfo.isPaid || app.globalData.isVip &&! app.globalData.songInfo.feeType && ! app.globalData.songInfo.isAuthorized && ! app.globalData.songInfo.isVipFree) {
           wx.showToast({
             title: '暂无权限收听,请从喜马拉雅APP购买',
             icon: 'none'
@@ -612,6 +619,7 @@ Page({
         }
         this.vipMediaPlay(mediaId)
       } else {
+        console.log('下一首')
         app.cutplay(that, 1)
 
       }
@@ -719,7 +727,13 @@ Page({
     const songInfo = e.currentTarget.dataset.song
     let isfree = songInfo.feeType
     let isvipfree = songInfo.isVipFree
-    if (!isfree && isvipfree) {
+    let isPaid =songInfo.isPaid 
+      let authored = songInfo.isAuthorized 
+    
+
+      console.log('isfree:', isfree)
+      console.log('isvipfree:', isvipfree)
+      if(!app.globalData.isVip && !isfree && isPaid || app.globalData.isVip &&!isfree && !authored && !isvipfree){
       //收费曲目
       wx.showModal({
         title: '无权限',
@@ -788,6 +802,119 @@ Page({
       })
     }, 500)
   },
+
+   // 滚到顶部
+   listTop: tool.throttle(async function (res) {
+  
+     console.log('滚到顶部')
+   
+    
+
+  }, 2000),
+  // 滚到底部
+  listBehind: tool.throttle(async function (res) {
+   console.log('滚到底部----------sort:',this.data.sort)
+    
+    this.getAllList(this.data.songInfo.albumId, 'up')
+    
+  }, 1000),
+
+    // 获取所有的播放列表
+    getAllList(albumid, lazy = false) {
+      var that = this
+      return new Promise((resolve, reject) => {
+        
+        // console.log('专辑id:',albumid)
+        wx.showLoading({
+          title: '加载中...',
+        })
+        let param={
+          'limit': that.data.pageSize,
+          'offset': wx.getStorageSync('allList').length,
+          'sort': 'asc'
+        }
+        console.log('param-------------:',param)
+        // console.log('start:',this.data.start)
+        let _list = []
+        utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
+            console.log('专辑列表所有数据:',res)
+            wx.hideLoading()
+           if(res.data.items.length > 0 && res.statusCode == 200){
+               //非vip
+               for (let item of res.data.items) {
+                _list.push({
+                  title :item.title ,                            // 歌曲名称
+                  //  title :that.cutStr(item.title) ,                            // 歌曲名称
+                  id : item.id  ,                                  // 歌曲Id
+                  dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
+                  coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
+                  feeType:item.is_free ,
+                  isVipFree:item.is_vip_free,
+                  isPaid:item.is_paid,
+                  isAuthorized:item.is_authorized,
+                  src:item.play_info.play_64.url,       
+                  mediaType:item.album.kind,
+                  mediaAuthor:item.announcer.nickname,
+                  authorId:item.announcer.id,
+                  albumId:item.album_id
+                 })
+               }
+            console.log('lazy-------------:',lazy)
+             // 上拉和下拉的情况
+             if (lazy == 'up'){
+              _list = that.data.canplay.concat(_list)
+             } else if (lazy == 'down') {
+              _list = _list.concat(that.data.canplay)
+             }
+             console.log('_list-------------:',_list)
+           
+             if(_list.length == res.data.total){
+               wx.showToast({
+                 title: '到底了',
+                 icon:'none'
+               })
+               
+            }
+            for (let i = 0; i < _list.length; i++) {
+              _list[i].num = parseInt(that.data.start) + i + 1
+            }
+          
+             that.setData({
+              total:res.data.total,
+              canplay: _list,
+             
+  
+             })
+             wx.setStorageSync('canplay', this.data.canplay)
+             wx.setStorageSync('allList', this.data.canplay)
+            resolve()
+
+           }else{
+            console.log('------length------:',that.data.total)
+            console.log('------------:',res.data.total)
+            if(that.data.total == res.data.total){
+              wx.showToast({
+                title: '到底了',
+                icon:'none'
+              })
+              
+           }
+            
+           }
+        })
+      })
+    },
+
+         // 播放时间格式化
+         formatMusicTime(time) {
+          let m = parseInt(time / 60);
+          let s = parseInt(time % 60);
+          m = m < 10 ? '0' + m : m;
+          s = s < 10 ? '0' + s : s;
+          return m + ':' + s
+        },
+    
+
   // 查询processBar宽度
   queryProcessBarWidth() {
     var query = this.createSelectorQuery();

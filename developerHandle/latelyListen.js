@@ -84,11 +84,16 @@ module.exports = {
     ]
   },
   onShow() {
-    console.log('------', this.data.info)
+    // app.goAuthGetToken().then((res) => {
+      // console.log('-------token',wx.getStorageSync('TOKEN'))
+      // console.log('------------res:', res)
+      // console.log('=======---------------------res:', res)
+      this.getLaterListen()
+
+    // });
 
   },
   onLoad(options) {
-    this.getLaterListen()
   },
   onReady() {
 
@@ -115,10 +120,15 @@ module.exports = {
 
   //最近收听
   getLaterListen() {
+    wx.showLoading({
+      title: '加载中...',
+    })
     let param = {
 
     }
     utils.PLAYHISTORYGET(param, utils.historyPlay, res => {
+      wx.hideLoading()
+
       console.log('最近收听:', res)
       if (res.data.items.length > 0 && res.statusCode == 200) {
         // item.title = item.mediaName                               // 歌曲名称

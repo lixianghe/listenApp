@@ -70,8 +70,8 @@ Page({
             obj.name = res.data.items[i].category_name
             categoryArr.push(obj)
         }
-         //因为95(播客)类型的没有数据就不要此分类,4的也不要
-         var newArr = categoryArr.filter(item => item.id !=95 &&  item.id !=4)
+         //因为95(播客)类型的没有数据就不要此分类
+         var newArr = categoryArr.filter(item => item.id !=95)
         console.log('分类:', newArr)
 
         this.data.categoryId = newArr[0].id

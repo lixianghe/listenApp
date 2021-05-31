@@ -34,7 +34,8 @@ App({
     PIbigScreen: null,
     startTime:'00:00',
     playBeginAt:'',
-    abumInfoId:''
+    abumInfoId:'',
+    isVip:false
   },
   // 小程序颜色主题
   sysInfo: {
@@ -72,8 +73,7 @@ App({
   currentIndex: null,
   onLaunch: function () {
     this.log('app---------onLaunch---版本号:',this.globalData.version)
-    //  this.isTaiAccountChange()
-    // this.goAuthGetToken()
+     this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
     //图片压缩
@@ -91,10 +91,9 @@ App({
     } else {
       this.globalData.screen = 'v'
     }
-    // myPlugin.injectWx(wx)
     // 关于音乐播放的
     var that = this;
-    utils.EventListener(that)
+    // utils.EventListener(that)
     //播放列表中下一首
     wx.onBackgroundAudioStop(function () {
       const pages = getCurrentPages()
@@ -118,6 +117,7 @@ App({
       if(res.playState){
         let playing = res.playState.status == 1 ? true : false
         wx.setStorageSync('playing', playing)
+
       }
     
     }
@@ -126,24 +126,7 @@ App({
 
   
 
-  isTaiAccountChange(){
-    
-    // this.log("function-----------------appId--:",this.globalData.appId)
-    // this.log("function-----------------onTaiAccountStatusChange--:",this.globalData.isTaiUserChange)
-    // if (wx.canIUse('onTaiAccountStatusChange')) {
-    //   wx.onTaiAccountStatusChange(function (res) {
-    //     this.log("---onTaiAccountStatusChange--", res)
-    //     this.globalData.isTaiUserChange = res.isLoginUser
-      
-    //   })
-    // } else {
-    //   this.log('不支持-----------------onTaiAccountStatusChange')
 
-    // }
-    // this.log("-----isTaiAccountChange--:",this.globalData.isTaiUserChange)
-
-
-  },
 // 图片压缩 - 初始化
   initImgPress: function () {
       let canUseImgCompress = false;
@@ -224,7 +207,10 @@ App({
   },
   vision: '1.0.0',
   cutplay: async function (that, type, cutFlag) {
-    console.log('-=-=-=--=:',that,type,cutFlag)
+    console.log('-=-=-=--=that:',that)
+    console.log('-=-=-=--=type:',type)
+    console.log('-=-=-=--=cutFlag:',cutFlag)
+
     that.setData({percent: 0})
     // 判断循环模式
     let allList = wx.getStorageSync('nativeList')
@@ -244,7 +230,12 @@ App({
     console.log('no----index-----song:',no,index,song)
     // wx.pauseBackgroundAudio();
     // 下一首是vip的情况
-    if (!song.feeType && song.isVipFree) {
+    let isfree = song.feeType
+    let isvipfree = song.isVipFree
+    let isPaid = song.isPaid 
+    let authored = song.isAuthorized 
+    console.log('是否免费',isfree)
+    if(!this.globalData.isVip && !isfree && isPaid || this.globalData.isVip &&!isfree && !authored && !isvipfree){
       wx.showToast({
         title: '暂无权限收听,请从喜马拉雅APP购买',
         icon: 'none'
@@ -262,12 +253,16 @@ App({
       mediaId: song.id,
       contentType: 'story',
       isVipFree:song.isVipFree,
-      isfree:song.feeType
+      isfree:song.feeType,
+      isPaid:song.isPaid,
+      authored:song.isAuthorized 
     }
+    
 
     console.log('----------------------',params)
-    if(!params.isfree && params.isVipFree){
-  //收费曲目
+
+
+    if(!this.globalData.isVip && !params.isfree && params.isPaid || this.globalData.isVip && !params.isfree && !params.authored && !params.isvipfree){  //收费曲目
   wx.showModal({
     title: '无权限',
     content: '暂无权限收听,请从喜马拉雅APP购买',
@@ -348,7 +343,7 @@ App({
   },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
-    // console.log('carHandle--songInfo.src:',songInfo)
+     console.log('------carHandle--songInfo.src:',songInfo)
     if(songInfo.src){
       this.audioManager.src = songInfo.src
       this.audioManager.title = songInfo.title
@@ -403,7 +398,7 @@ App({
       var isLogin = wx.getStorageSync('USERINFO')
       var Token = wx.getStorageSync('TOKEN')
       var currentTime = new Date().getTime()
-      // console.log('-------isLogin',isLogin)
+      //  console.log('-------isLogin',isLogin)
       // console.log('-------token',Token)
       // console.log('-------currentTime',currentTime)
       // console.log('-------endTime',Token.deadline)
@@ -417,10 +412,11 @@ App({
         // console.log('---++++----',Token.isLogin)
         if (currentTime < Token.deadline && Token.isLogin ) {
           wx.setStorageSync('TOKEN', Token)
-          //  console.log('token:',Token)
+          console.log('token没有过期:',Token)
           resolve(Token)
+          // that.getToken(resolve, reject)
         } else {
-          // console.log('----====---')
+          console.log('已登录token过期重新获取')
           that.getToken(resolve, reject)
         }
       }else{
@@ -429,7 +425,7 @@ App({
         //    console.log('token:',Token)
         //   resolve(Token)
         // } else {
-        //    console.log('----====---')
+          console.log('没有登录token过期重新获取')
           that.getToken(resolve, reject)
         // }
       }
@@ -441,7 +437,6 @@ App({
    },
     getToken(resolve, reject){
       var that = this
-
         console.log("APP_KEY--",  utils.APP_KEY)
         console.log("deviceid--",  utils.getDeviceId())
          console.log("nonce--",  utils.generateRandom())
@@ -472,7 +467,7 @@ App({
        header:header,
         success: res => {
           
-          // console.log("access_token----success--", res)   
+           console.log("access_token----success--", res)   
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
           that.log("失效时间", res.data.deadline)   
           // canUseToken = res.data
