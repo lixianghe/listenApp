@@ -50,7 +50,7 @@
        
         <!-- <text style="max-width:70%">{{item.title}}</text> -->
 
-        <text style="flex: 1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:{{item.isVipFree ? '0' : '7.35vh'}}" class="songname">{{item.title}}</text>
+        <text style="flex: 1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:5vh" class="songname">{{item.title}}</text>
         <!-- <text class="playCount">{{m1.filterNum(item.playCount)}}</text> -->
         <text style="margin-right: {{item.isVipFree ? '0' : '10vh'}}">{{item.dt}}</text>
       </view>

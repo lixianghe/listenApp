@@ -104,13 +104,13 @@ Page({
   getSongifCollect(albumid){
     let param={}
     utils.GET(param,utils.albumDetails+albumid,res=>{
-      console.log('专辑详情:',res)
+      console.log('专辑是否收藏:',res)
       if(res.data && res.statusCode == 200){
         wx.setStorageSync('ALBUMISCOLLECT',res.data.is_subscribe)
-        this.selectComponent('#miniPlayer').setOnShow()    
+        // this.selectComponent('#miniPlayer').setOnShow()    
         
       }else{
-       console.log('专辑详情错误:',res)
+       console.log('专辑是否收藏错误:',res)
 
       }
 
@@ -124,19 +124,21 @@ Page({
     console.log('播放全部专辑', e)
     // console.log('播放全部专辑', e.currentTarget.dataset.isvip)
 
-    let isVip = e.currentTarget.dataset.isvip
+    let isVip = e.target.dataset.isvip
     let albumid = e.detail.typeid
+    this.getSongifCollect(albumid)
+
     let albumName = e.target.dataset.title
-    let collect = e.target.dataset.collect
-    wx.setStorageSync('ALBUMISCOLLECT', collect)
     wx.setStorageSync('abumInfoName', albumName)
 
     if (isVip) {
       //Vip专辑
       this.VipAlbumGetAudioId(albumid)
+
     } else {
       //非Vip专辑
       this.getAllList(albumid)
+
     }
      // 获取播放卡片
      let abumInfoId = wx.getStorageSync('abumInfoId')
@@ -154,6 +156,7 @@ Page({
        playing: true
      })
      wx.setStorageSync('abumInfoId', albumid)
+
   },
 
   VipAlbumGetAudioId(albumid) {
@@ -197,9 +200,10 @@ Page({
           app.globalData.songInfo = app.globalData.canplay[0]
           wx.setStorageSync('playing', true)
           wx.setStorageSync('songInfo', app.globalData.canplay[0])
+
+          app.playing(this)
           this.selectComponent('#miniPlayer').setOnShow()
           this.selectComponent('#miniPlayer').watchPlay()
-          app.playing(this)
         })
 
       }
@@ -261,9 +265,11 @@ Page({
         wx.setStorageSync('playing', true)
         wx.setStorageSync('songInfo', app.globalData.canplay[0])
         console.log('是否收藏:',  wx.getStorageSync('ALBUMISCOLLECT'))
+       
+
+        app.playing(this)
         this.selectComponent('#miniPlayer').setOnShow()
         this.selectComponent('#miniPlayer').watchPlay()
-        app.playing(this)
       }
 
     })

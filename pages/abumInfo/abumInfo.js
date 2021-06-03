@@ -351,7 +351,11 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
              src:res.data.cover.large.url?app.impressImg(res.data.cover.large.url,100,100):app.impressImg(res.data.announcer.avatar_url,100,100),
              isVip:res.data.is_vip_free
   
-           })          
+           })   
+           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+
+           this.selectComponent('#miniPlayer').setOnShow()
+      
            
          }else{
           console.log('专辑详情错误:',res)

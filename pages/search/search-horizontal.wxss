@@ -153,7 +153,7 @@
 .input[focus-select=true]:before {
   content:"";
   position:absolute;
-  width: calc(100% - 140px);
+  /* width: calc(100% - 140px); */
   height: 100%;
   vertical-align: bottom;
   /* box-shadow: inset 4px 4px #ffac2d, inset -4px -4px #ffac2d; */

@@ -114,13 +114,39 @@ App({
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
       console.log('res-------------:',  res)
-      if(res.playState){
-        let playing = res.playState.status == 1 ? true : false
-        wx.setStorageSync('playing', playing)
+        if(res.playList.length > 0 && res.playState.curIndex>-1){
+          console.log('-----------2:')
+          let panelSong = res.playList[res.playState.curIndex]
+          wx.setStorageSync('songInfo', panelSong)
+          let playing = res.playState.status == 1 ? true : false
+          wx.setStorageSync('playing', playing)
+          let  time = res.playState.currentPosition / res.playState.duration * 100
+          let isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+          console.log('-----------songInfo:',panelSong)
+          console.log('-----------percent:',time)
+          console.log('-----------playing:',playing)
+          console.log('-----------existed:',isCollect)
+          that.globalData.songInfo = panelSong
+          that.globalData.playing = playing
+          that.globalData.percent = time
+          that.globalData.playing = playing
+          that.globalData.currentPosition = res.playState.currentPosition
+          // that.globalData.playtime = playtime ? formatduration(playtime * 1000) : '00:00'
 
+          // that.setData({
+          //   songInfo: panelSong ,
+          //   percent:time,
+          //   playing:playing,
+          //   existed:isCollect
+          // })
+        }
+     
       }
+      // that.globalData.songInfo = wx.getStorageSync('songInfo')
+      console.log('app-------------songInfo:',that.globalData.songInfo)
     
-    }
+    
+  
 
   },
 
@@ -167,7 +193,7 @@ App({
       this.globalData.canUseImgCompress = canUseImgCompress;
       this.globalData.imgCompresDomain = imgCompresDomain;
     },
-    // 图片压缩 - 执行函数
+    // 图片压缩 
     impressImg(imgUrl, w, h) {
    
       let impressImg = imgUrl;

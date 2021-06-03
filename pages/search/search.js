@@ -441,14 +441,14 @@ Page({
 
   },
 
-  focus() {
-    this.setData({
-      showMInibar: false
-    })
-  },
-  blur() {
-    this.setData({
-      showMInibar: true
-    })
-  }
+  // focus() {
+  //   this.setData({
+  //     showMInibar: false
+  //   })
+  // },
+  // blur() {
+  //   this.setData({
+  //     showMInibar: true
+  //   })
+  // }
 })
