@@ -52,13 +52,13 @@ module.exports = {
     // },
   },
   onShow() {
-    // app.goAuthGetToken().then((res) => {
-      // console.log('-------token',wx.getStorageSync('TOKEN'))
-      // console.log('------------res:', res)
-      // console.log('=======---------------------res:', res)
+    app.goAuthGetToken().then((res) => {
+      console.log('-------token',wx.getStorageSync('TOKEN'))
+      console.log('------------res:', res)
+      console.log('=======---------------------res:', res)
       this._getLikeList()
 
-    // });
+     });
 
    
   },

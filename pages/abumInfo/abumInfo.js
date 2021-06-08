@@ -349,7 +349,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
              total:res.data.include_track_count,
              existed:res.data.is_subscribe,
              src:res.data.cover.large.url?app.impressImg(res.data.cover.large.url,100,100):app.impressImg(res.data.announcer.avatar_url,100,100),
-             isVip:res.data.is_vip_free
+            //  isVip:res.data.is_vip_free
   
            })   
            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
@@ -438,8 +438,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
    let isvipfree = e.currentTarget.dataset.song.isVipFree
    let isPaid = e.currentTarget.dataset.song.isPaid 
    let authored = e.currentTarget.dataset.song.isAuthorized 
-   console.log('是否免费',isfree)
+   console.log('isVip:',this.data.isVip)
+
    if(!this.data.isVip && !isfree && isPaid || this.data.isVip &&!isfree && !authored && !isvipfree){
+    console.log('收费曲目')
      //收费曲目
      wx.showModal({
       title: '无权限',
@@ -499,10 +501,22 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   // 播放全部
   async playAll() {
     console.log('播放全部')
-    if( this.data.canplay[0].isVipFree){
-      //vip的
-      let param = {}
-      utils.PLAYINFOGET(param, utils.getMediaInfo + this.data.canplay[0].id + '/play-info', res => {
+    let song = this.data.canplay[0]
+    console.log('播放全部:',song)
+
+    let isfree = song.feeType
+    let isvipfree = song.isVipFree
+    let isPaid = song.isPaid 
+    let authored = song.isAuthorized 
+    console.log('isVip:',this.data.isVip)
+    //区分收费，试听，和免费
+    // !isVip && item.isPaid || !item.isAuthorized && isVip && !item.isVipFree 
+     if(!this.data.isVip  && isPaid || this.data.isVip  && !authored && !isvipfree){
+       
+       if(isfree){
+         console.log('试听')
+     let param = {}
+      utils.PLAYINFOGET(param, utils.getMediaInfo + song.id + '/play-info', res => {
         console.log('res:', res)
         if (res.data && res.statusCode == 200) {
           console.log('bannees-vip---音频----300---:')
@@ -512,10 +526,47 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   
         }
       })
+       }else{
+      
+       console.log('收费')
+       wx.showModal({
+        title: '无权限',
+        content: '暂无权限收听,请从喜马拉雅APP购买',
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+       }
 
-    }else{
-     this.vipAndFreePlay()
-    }
+   
+
+     }else{
+      console.log('免费')
+       //免费播放
+       this.vipAndFreePlay()
+
+     }
+    // if( this.data.canplay[0].isVipFree){
+    //   //vip的
+    //   let param = {}
+    //   utils.PLAYINFOGET(param, utils.getMediaInfo + this.data.canplay[0].id + '/play-info', res => {
+    //     console.log('res:', res)
+    //     if (res.data && res.statusCode == 200) {
+    //       console.log('bannees-vip---音频----300---:')
+    //       this.data.canplay[0].src = res.data.play_24_aac.url
+    //       this.vipAndFreePlay()
+    //     } else {
+  
+    //     }
+    //   })
+
+    // }else{
+    //  this.vipAndFreePlay()
+    // }
    
    
   },

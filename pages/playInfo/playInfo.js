@@ -309,19 +309,32 @@ Page({
   },
 
   onShow: function () {
-
+var that = this
     const playing = wx.getStorageSync('playing')
-    if (!playing) {
-      this.setData({
-        playtime: app.globalData.playtime,
-        percent: app.globalData.percent || 0,
-      })
+console.log('songInfo----',wx.getStorageSync('songInfo'))
+console.log('songInfo--===--',app.globalData.songInfo)
+console.log('playing----',playing)
+
+    if(wx.getStorageSync('songInfo').src || app.globalData.songInfo.src){
+      if (!playing) {
+        that.setData({
+          playtime: app.globalData.playtime,
+          percent: app.globalData.percent || 0,
+        })
+      }
+    }else{
+     
+      that.setData({
+          playtime: app.globalData.playtime,
+          percent:  0,
+        })
+      
     }
-    const that = this
-    utils.EventListener(app, this)
+   
+    utils.EventListener(app, that)
 
     // 监听歌曲播放状态，比如进度，时间
-    tool.playAlrc(this, app);
+    tool.playAlrc(that, app);
     that.queryProcessBarWidth()
   },
 
@@ -335,16 +348,17 @@ Page({
   albumClick(e) {
     // console.log('专辑点击:',e)
     let id = e.currentTarget.dataset.song.albumId
-    // console.log('专辑id:',id)
-    const src = e.currentTarget.dataset.song.src
     const title = this.data.abumInfoName
-    wx.setStorageSync('img', src)
-    wx.navigateBack({
-      delta: 0,
-    })
-    // wx.navigateTo({
-    //   url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+
+    // console.log('专辑id:',id)
+    // const src = e.currentTarget.dataset.song.src
+    // wx.setStorageSync('img', src)
+    // wx.navigateBack({
+    //   delta: 0,
     // })
+    wx.navigateTo({
+      url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+    })
 
 
   },
@@ -683,9 +697,27 @@ Page({
   // 暂停/播放
   toggle() {
     const that = this
-    tool.toggleplay(that, app)
-    app.globalData.playBeginAt = new Date().getTime();
-    app.upLoadPlayinfo()
+    if(wx.getStorageSync('songInfo').src || app.globalData.songInfo.src){
+      tool.toggleplay(that, app)
+      app.globalData.playBeginAt = new Date().getTime();
+      app.upLoadPlayinfo()
+    }else{
+      console.log('收费曲目')
+      //收费曲目
+      wx.showModal({
+       title: '无权限',
+       content: '暂无权限收听,请从喜马拉雅APP购买',
+       success (res) {
+         if (res.confirm) {
+           console.log('用户点击确定')
+         } else if (res.cancel) {
+           console.log('用户点击取消')
+         }
+       }
+     })
+     return 
+    }
+   
   },
   // 播放列表
   more() {

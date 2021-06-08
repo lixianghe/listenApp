@@ -189,7 +189,7 @@ Page({
       })
      
       this.data.categoryId =e.currentTarget.dataset.groupid
-
+      this.data.pageNub =0
       this.getALLAlbums(e.currentTarget.dataset.groupid)
     } else {
       console.log('小于间隔秒数')

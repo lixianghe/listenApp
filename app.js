@@ -114,7 +114,7 @@ App({
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
       console.log('res-------------:',  res)
-        if(res.playList.length > 0 && res.playState.curIndex>-1){
+        if(res.playList && res.playList.length > 0 && res.playState.curIndex>-1){
           console.log('-----------2:')
           let panelSong = res.playList[res.playState.curIndex]
           wx.setStorageSync('songInfo', panelSong)
@@ -131,19 +131,16 @@ App({
           that.globalData.percent = time
           that.globalData.playing = playing
           that.globalData.currentPosition = res.playState.currentPosition
-          // that.globalData.playtime = playtime ? formatduration(playtime * 1000) : '00:00'
+       
+        }
+        if(that.globalData.playing){
+          this.playing( that.globalData.currentPosition ,that)
 
-          // that.setData({
-          //   songInfo: panelSong ,
-          //   percent:time,
-          //   playing:playing,
-          //   existed:isCollect
-          // })
         }
      
       }
       // that.globalData.songInfo = wx.getStorageSync('songInfo')
-      console.log('app-------------songInfo:',that.globalData.songInfo)
+      // console.log('app-------------songInfo:',that.globalData.songInfo)
     
     
   
@@ -266,7 +263,11 @@ App({
         title: '暂无权限收听,请从喜马拉雅APP购买',
         icon: 'none'
       })
-      return false
+
+
+      console.log('---------------------是否免费')
+      this.stopmusic()
+      return 
     }
 
 
@@ -362,7 +363,7 @@ App({
     console.log('playingSong', songInfo)
     // 如果是车载情况
     console.log('percent--------------', this.globalData.percent)
-    utils.initAudioManager(this, that, songInfo)
+     utils.initAudioManager(this, that, songInfo)
     this.carHandle(songInfo, seek)
     this.globalData.playBeginAt = new Date().getTime();
      this.upLoadPlayinfo()
@@ -370,6 +371,7 @@ App({
   // 车载情况下的播放
   carHandle(songInfo, seek) {
      console.log('------carHandle--songInfo.src:',songInfo)
+
     if(songInfo.src){
       this.audioManager.src = songInfo.src
       this.audioManager.title = songInfo.title
@@ -379,7 +381,22 @@ App({
           position: seek
         })
       }
-    }
+     }else{
+  console.log('收费曲目')
+     //收费曲目
+     wx.showModal({
+      title: '无权限',
+      content: '暂无权限收听,请从喜马拉雅APP购买',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+    return
+     }
   
   },
 

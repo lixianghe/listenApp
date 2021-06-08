@@ -9,6 +9,7 @@ Page({
       'title': '已经见底啦~~',
       'src': '/images/album_img_default.png'
     },
+    allPlayIndex:'',
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
@@ -122,41 +123,86 @@ Page({
 //播放全部专辑
   clickHadle(e) {
     console.log('播放全部专辑', e)
-    // console.log('播放全部专辑', e.currentTarget.dataset.isvip)
+    console.log('playing', wx.getStorageSync('playing'))
 
-    let isVip = e.target.dataset.isvip
-    let albumid = e.detail.typeid
-    this.getSongifCollect(albumid)
+    let idx = e.target.dataset.no
+    if(this.data.allPlayIndex != idx){
+        console.log("不相等");
+        app.stopmusic();
+        this.data.allPlayIndex = idx
+        let isVip = e.target.dataset.isvip
+        let albumid = e.detail.typeid
+        this.getSongifCollect(albumid)
+        let albumName = e.target.dataset.title
+        wx.setStorageSync('abumInfoName', albumName)
+        if (isVip) {
+          //Vip专辑
+          this.VipAlbumGetAudioId(albumid)
+        } else {
+          //非Vip专辑
+          this.getAllList(albumid)
+        }
+         // 获取播放卡片
+         let abumInfoId = wx.getStorageSync('abumInfoId')
+         let oldStory = this.selectComponent(`#story${abumInfoId}`)
+         let story = this.selectComponent(`#story${albumid}`)
+         // 清空上一专辑状态
+         if (oldStory) {
+           oldStory.setData({
+             playing: false
+           })
+         }
+        //  // 设置当前专辑状态
+        //  story.setData({
+        //    abumInfoId: albumid,
+        //    playing: true
+        //  })
+         wx.setStorageSync('abumInfoId', albumid)
+     
+     
+    }else{
+      this.data.allPlayIndex = idx
 
-    let albumName = e.target.dataset.title
-    wx.setStorageSync('abumInfoName', albumName)
-
-    if (isVip) {
-      //Vip专辑
-      this.VipAlbumGetAudioId(albumid)
-
-    } else {
-      //非Vip专辑
-      this.getAllList(albumid)
-
-    }
-     // 获取播放卡片
-     let abumInfoId = wx.getStorageSync('abumInfoId')
-     let oldStory = this.selectComponent(`#story${abumInfoId}`)
-     let story = this.selectComponent(`#story${albumid}`)
-     // 清空上一专辑状态
-     if (oldStory) {
-       oldStory.setData({
-         playing: false
+      if( wx.getStorageSync('playing')){
+        console.log("暂停播放");
+      
+        app.stopmusic();
+       }else{
+  
+       
+      let isVip = e.target.dataset.isvip
+      let albumid = e.detail.typeid
+      this.getSongifCollect(albumid)
+      let albumName = e.target.dataset.title
+      wx.setStorageSync('abumInfoName', albumName)
+      if (isVip) {
+        //Vip专辑
+        this.VipAlbumGetAudioId(albumid)
+  
+      } else {
+        //非Vip专辑
+        this.getAllList(albumid)
+      }
+       // 获取播放卡片
+       let abumInfoId = wx.getStorageSync('abumInfoId')
+       let oldStory = this.selectComponent(`#story${abumInfoId}`)
+       let story = this.selectComponent(`#story${albumid}`)
+       // 清空上一专辑状态
+       if (oldStory) {
+         oldStory.setData({
+           playing: false
+         })
+       }
+       // 设置当前专辑状态
+       story.setData({
+         abumInfoId: albumid,
+         playing: true
        })
-     }
-     // 设置当前专辑状态
-     story.setData({
-       abumInfoId: albumid,
-       playing: true
-     })
-     wx.setStorageSync('abumInfoId', albumid)
+       wx.setStorageSync('abumInfoId', albumid)
+      }
+    }
 
+   
   },
 
   VipAlbumGetAudioId(albumid) {

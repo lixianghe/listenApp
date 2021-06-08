@@ -634,15 +634,15 @@ function toggleplay(that, app) {
 
   if (that.data.playing) {
     console.log("暂停播放");
-    that.setData({ 
-      playing: false 
-    });
+    // that.setData({ 
+    //   playing: false 
+    // });
     app.stopmusic();
   } else {
     console.log("继续播放", app.globalData.currentPosition)
-    that.setData({
-      playing: true
-    });
+    // that.setData({
+    //   playing: true
+    // });
     app.playing(app.globalData.currentPosition, that);
   }
 }
@@ -754,6 +754,10 @@ function EventListener(app, that){
   //播放完成事件
   app.audioManager.onEnded(() => {
     console.log('触发播放完成事件');
+    that.setData({ playing: false });
+    wx.setStorageSync('playing', false)
+    // app.playing(app.globalData.currentPosition, that);
+    // wx.hideLoading()
   })
 }
 

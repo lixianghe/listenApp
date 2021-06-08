@@ -41,7 +41,7 @@
         
         <text wx:if="{{sort == 'asc' && (item.id !== currentId || !playing)}}">{{start + index + 1 }}</text>
         <text wx:if="{{sort == 'desc' && (item.id !== currentId || !playing)}}">{{start-index }}</text>
-        <text class="commonText" wx:if="{{!isVip && item.isPaid || !item.isAuthorized && isVip && !item.isVipFree   }}">
+        <text class="commonText" wx:if="{{!isVip && item.isPaid || !item.isAuthorized && isVip && !item.isVipFree }}">
           <text wx:if="{{ item.feeType }}" class="testfree" >试听</text> 
 
           <text wx:if="{{ !item.feeType }}" class="nofree"  >付费</text>

@@ -282,13 +282,34 @@ Component({
     // 暂停
     toggle() {
      
-      this.triggerEvent('setPlaying', !this.data.playing)
-        console.log('-----------------',this.data.playing)
-        utils.toggleplay(this, app)
+     
+        if(wx.getStorageSync('songInfo').src || app.globalData.songInfo.src){
+          this.triggerEvent('setPlaying', !this.data.playing)
+          console.log('-----------------',this.data.playing)
+          utils.toggleplay(this, app)
+
+        }else{
+          console.log('收费曲目')
+          //收费曲目
+          wx.showModal({
+           title: '无权限',
+           content: '暂无权限收听,请从喜马拉雅APP购买',
+           success (res) {
+             if (res.confirm) {
+               console.log('用户点击确定')
+             } else if (res.cancel) {
+               console.log('用户点击取消')
+             }
+           }
+         })
+         return    
+            }
     },
     // 进入播放详情
     playInfo() { 
-      if(!wx.getStorageSync('songInfo') || !app.globalData.songInfo){
+      console.log('getStorageSync----songInfo:',wx.getStorageSync('songInfo'))
+      console.log('app-----songInfo:',app.globalData.songInfo)
+      if(!wx.getStorageSync('songInfo') && !app.globalData.songInfo){
         wx.showToast({
           title: '暂无播放音频',
           icon:'none'
