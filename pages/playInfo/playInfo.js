@@ -310,6 +310,8 @@ Page({
 
   onShow: function () {
 var that = this
+//先刷子token
+that.refreshToken()
     const playing = wx.getStorageSync('playing')
 console.log('songInfo----',wx.getStorageSync('songInfo'))
 console.log('songInfo--===--',app.globalData.songInfo)
@@ -357,7 +359,7 @@ console.log('playing----',playing)
     //   delta: 0,
     // })
     wx.navigateTo({
-      url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+      url: '../albumInfo/albumInfo?id=' + id + '&title=' + title + '&routeType=album'
     })
 
 
@@ -428,6 +430,20 @@ console.log('playing----',playing)
 
 
   },
+      //刷新token
+      refreshToken() {
+        let param = {}
+        utils.REFRESHTOKENPOST(param, utils.refreshToken, res => {
+          console.log('刷新Token:', res)
+          if (res.data && res.statusCode == 200) {
+            res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+            console.log("失效时间", res.data.deadline)
+            res.data.isLogin = true
+            wx.setStorageSync('TOKEN', res.data)
+         
+          }
+        })
+      },
   //收藏专辑
   collectAlbum() {
     let param = {

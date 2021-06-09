@@ -54,7 +54,7 @@ module.exports = {
 
     let url
     if (routeType === 'album') {
-      url = `../abumInfo/abumInfo?id=${id}&title=${title}`
+      url = `../albumInfo/albumInfo?id=${id}&title=${title}`
     } else if (routeType === 'media') {
       url = `../playInfo/playInfo?id=${id}`
     }

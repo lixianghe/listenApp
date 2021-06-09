@@ -58,7 +58,7 @@ Page({
     const routeType = e.currentTarget.dataset.contentype
  
     wx.navigateTo({
-      url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+      url: '../albumInfo/albumInfo?id='+id+'&title='+title+'&routeType=album'
     })
    
 

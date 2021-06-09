@@ -208,7 +208,7 @@ Page({
     wx.setStorageSync('img', src)
     const routeType = e.currentTarget.dataset.contentype
     console.log('title:',title)
-    let url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}`
+    let url = `../albumInfo/albumInfo?id=${id}&title=${title}&routeType=${routeType}`
 
     wx.navigateTo({
       url: url

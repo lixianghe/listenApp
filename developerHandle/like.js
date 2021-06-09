@@ -52,16 +52,32 @@ module.exports = {
     // },
   },
   onShow() {
-    app.goAuthGetToken().then((res) => {
-      console.log('-------token',wx.getStorageSync('TOKEN'))
-      console.log('------------res:', res)
-      console.log('=======---------------------res:', res)
-      this._getLikeList()
 
-     });
+    this.refreshToken()
+    // app.goAuthGetToken().then((res) => {
+    //   console.log('-------token',wx.getStorageSync('TOKEN'))
+    //   console.log('------------res:', res)
+    //   console.log('=======---------------------res:', res)
+    //   this._getLikeList()
+
+    //  });
 
    
   },
+    //刷新token
+    refreshToken() {
+      let param = {}
+      utils.REFRESHTOKENPOST(param, utils.refreshToken, res => {
+        console.log('刷新Token:', res)
+        if (res.data && res.statusCode == 200) {
+          res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+          console.log("失效时间", res.data.deadline)
+          res.data.isLogin = true
+          wx.setStorageSync('TOKEN', res.data)
+          this._getLikeList()
+        }
+      })
+    },
   onLoad(options) {
     
   },
@@ -78,7 +94,7 @@ module.exports = {
       // const routeType = e.currentTarget.dataset.contentype
    
       wx.navigateTo({
-        url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+        url: '../albumInfo/albumInfo?id='+id+'&title='+title+'&routeType=album'
       })
     }else{
 

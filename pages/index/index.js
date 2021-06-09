@@ -9,7 +9,7 @@ Page({
       'title': '已经见底啦~~',
       'src': '/images/album_img_default.png'
     },
-    allPlayIndex:'',
+    allPlayIndex:-1,
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
@@ -128,7 +128,11 @@ Page({
     let idx = e.target.dataset.no
     if(this.data.allPlayIndex != idx){
         console.log("不相等");
-        app.stopmusic();
+        // if(wx.getStorageSync('playing') && this.data.allPlayIndex != -1){
+        //   console.log("555555");
+        //   app.stopmusic();
+
+        // }
         this.data.allPlayIndex = idx
         let isVip = e.target.dataset.isvip
         let albumid = e.detail.typeid
@@ -152,15 +156,17 @@ Page({
              playing: false
            })
          }
-        //  // 设置当前专辑状态
-        //  story.setData({
-        //    abumInfoId: albumid,
-        //    playing: true
-        //  })
+         // 设置当前专辑状态
+         story.setData({
+           abumInfoId: albumid,
+           playing: true
+         })
          wx.setStorageSync('abumInfoId', albumid)
      
      
     }else{
+      console.log('1111111')
+
       this.data.allPlayIndex = idx
 
       if( wx.getStorageSync('playing')){
@@ -169,7 +175,8 @@ Page({
         app.stopmusic();
        }else{
   
-       
+        console.log('22222')
+
       let isVip = e.target.dataset.isvip
       let albumid = e.detail.typeid
       this.getSongifCollect(albumid)
@@ -204,6 +211,8 @@ Page({
 
    
   },
+ 
+
 
   VipAlbumGetAudioId(albumid) {
     var that = this
@@ -400,7 +409,7 @@ Page({
     let id = item.banner_content_id
     let title = item.banner_content_title
     wx.navigateTo({
-      url: '../abumInfo/abumInfo?id=' + id + '&routeType=album' + '&title=' + title + '&from=1'
+      url: '../albumInfo/albumInfo?id=' + id + '&routeType=album' + '&title=' + title + '&from=1'
     })
 
   },
@@ -422,7 +431,7 @@ Page({
         app.globalData.latelyListenId.push(id)
       }
       wx.navigateTo({
-        url: `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
+        url: `../albumInfo/albumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
       })
     }else{
 
@@ -431,7 +440,7 @@ Page({
     
     // let url
     // if (routeType === 'album' || routeType === 'fm') {
-    //   url = `../abumInfo/abumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
+    //   url = `../albumInfo/albumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
     // } else if (routeType === 'media') {
     //   url = `../playInfo/playInfo?id=${id}`
     // }

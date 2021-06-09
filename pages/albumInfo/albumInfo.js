@@ -9,9 +9,9 @@ let scrollTopNo = 0
 
 // 选择的选集
 let selectedNo = 0
- let abumInfoMixin = require('../../developerHandle/abumInfo')
+ let albumInfoMixin = require('../../developerHandle/albumInfo')
 Page({
-   mixins: [abumInfoMixin],
+   mixins: [albumInfoMixin],
   data: {
     maxOffset:0,
     offset:0,
@@ -69,7 +69,7 @@ Page({
 
   async onLoad(options) {
     var that = this
-     console.log('-------------abumInfo---onload:',options)
+     console.log('-------------albumInfo---onload:',options)
     var albumid = options.id
     that.data.optionId = albumid
     that.data.type = options.from

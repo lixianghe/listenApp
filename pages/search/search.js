@@ -414,7 +414,7 @@ Page({
     wx.setStorageSync('img', src)
     if (this.data.currentTap == 0 || this.data.currentTap == 2) {
       wx.navigateTo({
-        url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+        url: '../albumInfo/albumInfo?id=' + id + '&title=' + title + '&routeType=album'
       })
     } else {
       //进主播页面
@@ -426,7 +426,7 @@ Page({
     // const routeType = e.currentTarget.dataset.contentype
     // let url
     // if (routeType === 'album') {
-    //   url = `../abumInfo/abumInfo?id=${id}&title=${title}`
+    //   url = `../albumInfo/albumInfo?id=${id}&title=${title}`
     // } else if (routeType === 'media') {
     //   url = `../playInfo/playInfo?id=${id}`
     // } 

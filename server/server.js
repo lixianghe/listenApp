@@ -34,7 +34,7 @@ var server= http.createServer(function(request, response){
             })
             break;
         case '/api/abumInfo':
-            fs.readFile('./data/abumInfo.json', 'UTF-8', function(err, data){
+            fs.readFile('./data/albumInfo.json', 'UTF-8', function(err, data){
                 if(!err){
                     
                     response.writeHead(200, {"Content-Type": "text/json;charset=UTF-8"});

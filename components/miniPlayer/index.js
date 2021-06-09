@@ -319,7 +319,7 @@ Component({
       let abumInfoName = wx.getStorageSync('abumInfoName')
       wx.navigateTo({
         url: '../playInfo/playInfo?noPlay=true'+'&collect='+wx.getStorageSync('ALBUMISCOLLECT')+'&abumInfoName='+abumInfoName+'&start=0'
-        // url: '../abumInfo/abumInfo?id='+id+'&title='+title+'&routeType=album'
+        // url: '../albumInfo/albumInfo?id='+id+'&title='+title+'&routeType=album'
         // url: `../playInfo/playInfo?noPlay=true&collect=${wx.getStorageSync('ALBUMISCOLLECT')}&abumInfoName=${abumInfoName}`
       })
     },
@@ -408,6 +408,8 @@ that.watchPlay()
     // 因为1.9.2版本无法触发onshow和onHide所以事件由它父元素触发
     setOnShow() {
       let that = this
+      that.refreshToken()
+
       const canplay = wx.getStorageSync('canplay')
       that.listenPlaey()
       const playing = wx.getStorageSync('playing')
@@ -428,6 +430,20 @@ that.watchPlay()
       })
       
     },
+      //刷新token
+      refreshToken() {
+        let param = {}
+        utils.REFRESHTOKENPOST(param, utils.refreshToken, res => {
+          console.log('刷新Token:', res)
+          if (res.data && res.statusCode == 200) {
+            res.data.deadline = +new Date() + (res.data.expires_in * 1000);
+            console.log("失效时间", res.data.deadline)
+            res.data.isLogin = true
+            wx.setStorageSync('TOKEN', res.data)
+         
+          }
+        })
+      },
     setOnHide() {
 
     }

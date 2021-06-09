@@ -108,7 +108,7 @@ module.exports = {
     // const routeType = e.currentTarget.dataset.contentype
     if (id) {
       wx.navigateTo({
-        url: '../abumInfo/abumInfo?id=' + id + '&title=' + title + '&routeType=album'
+        url: '../albumInfo/albumInfo?id=' + id + '&title=' + title + '&routeType=album'
       })
 
     } else {

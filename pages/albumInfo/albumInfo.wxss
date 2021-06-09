@@ -99,19 +99,23 @@
   width:16vh;
   text-align:center;
   line-height:7vh;
-  height:7vh
+  height:7vh;
+  margin-left: 2vh;
 }
 .testfree{
  
   color:green;
   border: 1px solid green;
+  font-size: 5vh;
+  padding: 0 2vh;
   
 }
 .nofree{
  
   color:#dc5e4e;
   border: 1px solid #dc5e4e;
-  
+  font-size: 5vh;
+  padding: 0 2vh;
 }
 .page .left .songList view text:nth-child(1) {
   /* width: 7.6vh; */
