@@ -129,7 +129,7 @@ module.exports = {
           laterArr.push({
             title:res.data.items[i].title,
             id:res.data.items[i].id,
-            src:res.data.items[i].cover.middle.url,
+            src:app.impressImg(res.data.items[i].album.cover.large.url,280,280) ,
             // contentType:res.data.items[i].kind,
             contentType:'album',
             isCollect:true,

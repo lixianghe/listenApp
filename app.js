@@ -6,6 +6,8 @@ import { data, getVipMedia,getMedia } from './developerHandle/playInfo'
 require('./utils/minixs')
 App({
   globalData: {
+    canUseImgCompress: false,
+    imgCompresDomain: "",
     appName: 'ximalayaxin',
     // 屏幕类型
     screen: '',
@@ -17,7 +19,7 @@ App({
     isTaiUserChange: false,
     token: '',
     // 版本号
-    version: '7.0.39',
+    version: '7.0.49',
     isNetConnected: true,
     indexData: [], // 静态首页数据
     latelyListenId: [], // 静态记录播放id
@@ -148,73 +150,112 @@ App({
   },
 
   
+  /**
+   * 初始化图片压缩
+   */
+  initImgPress() {
+    // INFO('初始化压缩域名');
+    this.log('-----initImgPress----:')
+    let canUseImgCompress = false;
+    let imgCompresDomain = '';
+    const that = this;
+    
+    if (wx.canIUse('getMossApiSync') || wx.canIUse('getMossApi')) {
+      this.log('----支持----initImgPress----:')
 
+      const ret = wx.getMossApiSync({
+        type: 'image-compress',
+      });
+      this.log('----支持----initImgPress----ret:',ret)
+      if (typeof ret === null || ret === '' || ret === undefined) {
+        this.log('111111111111111:')
 
-// 图片压缩 - 初始化
-  initImgPress: function () {
-      let canUseImgCompress = false;
-      let imgCompresDomain = "";
-      let that = this;
-      if (wx.canIUse("getMossApiSync") && wx.canIUse("getMossApi")) {
-        const ret = wx.getMossApiSync({
-          type: "image-compress",
-        });
-        if (typeof ret == null || ret == "" || ret == "undefined") {
-          //判断字符串是否为空，为空用getMossApi
-          wx.getMossApi({
-            type: "image-compress",
-            success(e) {
-              // this.log("getMossApi" + e.url);
-              canUseImgCompress = true;
-              imgCompresDomain = e.url;
-              that.globalData.canUseImgCompress = canUseImgCompress;
-              that.globalData.imgCompresDomain = imgCompresDomain;
-            },
-            fail() {
-              // this.log("getMossApi执行失败");
-              that.globalData.initImgTimer && clearTimeout(that.globalData.initImgTimer);
-              that.globalData.initImgTimer = setTimeout(() => {
-                that.initImgPress();
-              }, 30000);
-            },
-            complete() {
-              // this.log("getMossApi执行完成");
-            },
-          });
-        } else {
-          // this.log("getMossApiSync" + ret);
-          canUseImgCompress = true;
-          imgCompresDomain = ret;
-        }
-      }
-      this.globalData.canUseImgCompress = canUseImgCompress;
-      this.globalData.imgCompresDomain = imgCompresDomain;
-    },
-    // 图片压缩 
-    impressImg(imgUrl, w, h) {
+        // 判断字符串是否为空，为空用getMossApi
+        wx.getMossApi({
+          type: 'image-compress',
+          success(e) {
+            this.log('222222222222-----initImgPress----success:',e)
+
+            that.globalData.initImgCount = 0;
+            INFO(`getMossApi${e.url}`);
+            canUseImgCompress = true;
+            imgCompresDomain = e.url;
+            that.globalData.canUseImgCompress = canUseImgCompress;
+            that.globalData.imgCompresDomain = imgCompresDomain;
+          },
+          fail(res) {
+            this.log('-----initImgPress----fail:',e)
+
+            ERROR(`getMossApi执行失败------initImgCount=${that.globalData.initImgCount}}`);
+            that.globalData.initImgTimer && clearTimeout(that.globalData.initImgTimer);
+            if (that.globalData.initImgCount < 10) {
+              that.globalData.initImgTimer = setTimeout(() => {
+                that.globalData.initImgCount += 1;
+                that.initImgPress();
+              }, 30000);
+            }
+            Report.apiCallFailReport('getMossApi', JSON.stringify(res));
+          },
+          complete() {
+            INFO('getMossApi执行完成');
+          },
+        });
+      } else {
+        // this.log('555555555555555:')
+
+        // INFO(`getMossApiSync${ret}`);
+        canUseImgCompress = true;
+        imgCompresDomain = ret;
+        this.globalData.canUseImgCompress = canUseImgCompress;
+        this.globalData.imgCompresDomain = imgCompresDomain;
+        this.log('initImgPress-----555----:',this.globalData.canUseImgCompress)
+        this.log('initImgPress-----5555----:',this.globalData.imgCompresDomain)
+      }
+    }else{
+    this.log('-不支持----initImgPress----:')
+
+    }
+  
+
+  },
+/**
+   * 压缩图片
+   */
+  impressImg(imgUrl, width, height) {
+    // this.log('app----impressImg:',imgUrl)
+    // this.log('app----impressImg---width:',width)
+    // this.log('app----impressImg---height:',height)
+
+    let impressImg = imgUrl;
+    // this.log('impressImg----6----:',this.globalData.canUseImgCompress)
+    // this.log('impressImg-----6----:',this.globalData.imgCompresDomain)
+    const  canUseImgCompress  = this.globalData.canUseImgCompress;
+    const  imgCompresDomain  = this.globalData.imgCompresDomain;
    
-      let impressImg = imgUrl;
-      const canUseImgCompress = this.globalData.canUseImgCompress;
-      const imgCompresDomain = this.globalData.imgCompresDomain;
-      if (canUseImgCompress) {
-        //可以使用压缩服务
-        if (imgCompresDomain.length > 0) {
-          //压缩域名获取成功
-          const encodeImgUrl = encodeURIComponent(imgUrl);
-          impressImg = `${imgCompresDomain}&w=${w ? w : 200}&h=${h ? h : 200}&url=${encodeImgUrl}`;
-        } else {
-          //压缩域名获取失败
-          impressImg = "";
-          // this.log(imgCompresDomain + "压缩域名获取失败");
-          this.initImgPress();
-        }
-      } else {
-        //不可以使用压缩服务，显示默认图
-        impressImg = imgUrl;
-      }
-  // console.log('压缩图片:',impressImg)
-  return impressImg
-},
+
+
+    if (canUseImgCompress) {
+      // 可以使用压缩服务
+      if (imgCompresDomain.length > 0) {
+        // 压缩域名获取成功
+        const encodeImgUrl = encodeURIComponent(imgUrl);
+        impressImg = `${imgCompresDomain}&w=${width}&h=${height}&url=${encodeImgUrl}`;
+        //  DEBUG(`压缩图片${impressImg}`);
+      } else {
+        // 压缩域名获取失败
+        impressImg = '';
+        // ERROR(`${imgCompresDomain}压缩域名获取失败`);
+        this.initImgPress();
+      }
+    } else {
+      // 不可以使用压缩服务，显示默认图
+      impressImg = imgUrl;
+      // this.log('不支持图片压缩:')
+      // ERROR(`${canUseImgCompress}不支持压缩服务`);
+    }
+    // this.log('图片压缩:',impressImg)
+    return impressImg;
+  },
   // 保存用户信息
   setUserInfo(userInfo) {
     this.userInfo = userInfo

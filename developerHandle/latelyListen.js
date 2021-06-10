@@ -149,7 +149,7 @@ module.exports = {
           laterArr.push({
             title: res.data.items[i].album.title,
             id: res.data.items[i].album.id,
-            src: res.data.items[i].album.cover.middle.url,
+            src:app.impressImg(res.data.items[i].album.cover.large.url,280,280) ,
             contentType: 'album',
             isVip: res.data.items[i].album.is_vip_free,
 

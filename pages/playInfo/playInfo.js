@@ -895,7 +895,7 @@ console.log('playing----',playing)
                   //  title :that.cutStr(item.title) ,                            // 歌曲名称
                   id : item.id  ,                                  // 歌曲Id
                   dt :that.formatMusicTime(item.duration) ,                                  // 歌曲的时常
-                  coverImgUrl :item.album.cover.middle.url ,                         // 歌曲的封面
+                  coverImgUrl : app.impressImg(item.album.cover.large.url,360,360),                    // 歌曲的封面
                   feeType:item.is_free ,
                   isVipFree:item.is_vip_free,
                   isPaid:item.is_paid,

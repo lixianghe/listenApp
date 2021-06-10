@@ -129,7 +129,7 @@ Page({
             id: item.id,
             allTitle:item.title,
             title:that.cutStr(item.title) ,
-            src:app.impressImg(item.cover.middle.url,100,100) ,
+            src:app.impressImg(item.cover.large.url,272,272) ,
             contentType: item.kind,
             count: utils.calculateCount(item.play_count),
             isVip: item.is_vip_free

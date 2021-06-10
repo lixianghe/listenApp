@@ -92,7 +92,7 @@ Page({
             title :item.title ,                            // 歌曲名称
             id : item.id  ,                                  // 歌曲Id
             dt :this.formatMusicTime(item.duration) ,                                  // 歌曲的时常
-            coverImgUrl :item.image.url ,                         // 歌曲的封面
+            coverImgUrl : app.impressImg(item.image.url,280,280),                         // 歌曲的封面
             src:item.play_info.play_64.url,
             feeType:item.is_vip_free 
            })
@@ -149,7 +149,7 @@ Page({
           laterArr.push({
             title:res.data.items[i].title,
             id:res.data.items[i].id,
-            src:res.data.items[i].announcer.avatar_url,
+            src:res.data.items[i].cover.large.url,
             contentType:'album',
             isHome:false,
             

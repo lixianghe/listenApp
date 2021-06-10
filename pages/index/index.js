@@ -73,7 +73,8 @@ Page({
 
   },
   onLoad(options) {
- 
+   
+
   },
 
   //首页卡片数据
@@ -85,10 +86,11 @@ Page({
       'scope': 0
     }
     utils.GET(param, utils.indexBanners, res => {
-       console.log('首页banners数据:', res)
+      //  app.log('首页banners数据:', res)
       if (res.data.banners.length > 0 && res.statusCode == 200) {
         res.data.banners.forEach(item => {
-          item.banner_cover_url = app.impressImg(item.banner_cover_url,175,70)
+          item.banner_cover_url = app.impressImg(item.banner_cover_url,690,280)
+          // console.log('-----------item.url:',item.banner_cover_url )
           
         });
         this.setData({
@@ -355,8 +357,8 @@ Page({
             id: item.album.id,
             allTitle: item.album.title,
             title: that.cutStr(item.album.title),
-            
-            src: app.impressImg(item.album.cover.middle.url,100,100),
+          
+             src: app.impressImg(item.album.cover.large.url,280,280),
             contentType: item.album.kind,
             count: utils.calculateCount(item.album.play_count),
             isVip: item.album.is_vip_free,
@@ -507,7 +509,8 @@ Page({
 
   onShow() {
     // 首页数据
-    console.log('----------------',app.globalData.version)
+    // console.log('----------------',app.globalData.version)
+    
     app.goAuthGetToken().then((res) => {
       // console.log('-------token',wx.getStorageSync('TOKEN'))
       // console.log('------------res:', res)

@@ -282,7 +282,8 @@ Page({
             // item.coverImgUrl = item.coverUrl                          // 歌曲的封面
             title: item.title,
             id: item.id,
-            coverImgUrl: item.cover.middle.url
+           
+            coverImgUrl: app.impressImg(item.cover.large.url,212,212),  
 
           })
         }
@@ -332,7 +333,9 @@ Page({
 
             title: item.nickname,
             id: item.uid,
-            coverImgUrl: item.small_pic
+            coverImgUrl:item.small_pic,  
+
+            // coverImgUrl: app.impressImg(item.small_pic,212,212),  
 
           })
         }
@@ -380,7 +383,7 @@ Page({
           this.data.info.push({
             title: item.title,
             id: item.album_id,
-            coverImgUrl: item.image.url
+            coverImgUrl: app.impressImg(item.album.cover.large.url,212,212),  
           })
         }
         this.setData({

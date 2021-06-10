@@ -854,7 +854,7 @@ function generateUUID() {
 
 
 module.exports = {
-  version:'7.0.39',
+  version:'7.0.49',
  baseUrl : 'https://api.ximalaya.com/',
  MbaseUrl : 'https://m.ximalaya.com/',
    appId : 60023,
