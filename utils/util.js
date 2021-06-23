@@ -410,10 +410,10 @@ let header ={
 }
 // POST请求
 function REFRESHTOKENPOST(param,url, callback) {
-  // console.log('REFRESHTOKENPOST')
-  // console.log('参数', param)
+  console.log('REFRESHTOKENPOST')
+  console.log('参数', param)
   // console.log('URL',  url)
-  console.log('版本号:',this.version)
+  // console.log('版本号:',this.version)
    console.log('请求URL', this.baseUrl + url)
   let publicParams = {
         client_id: this.APP_KEY,
@@ -428,7 +428,7 @@ function REFRESHTOKENPOST(param,url, callback) {
       let sig = this.calcuSig(publicParams, this.APP_SECRET);
        let params = { ...publicParams, sig }
       //  console.log('sig:',sig)
-        // console.log('params:',params)
+         console.log('params:',params)
     
        let header ={
          'xm-sign':encrypt(Date.now()),
@@ -650,7 +650,7 @@ function toggleplay(that, app) {
 
 // 初始化 BackgroundAudioManager
 function initAudioManager(app, that,songInfo) {
-  console.log('util------initAudioManager:',that)
+  console.log('11111111111111111111111111111111111111111111111111util------initAudioManager:',that)
   console.log('util------initAudioManager:',songInfo)
 
   let list = wx.getStorageSync('nativeList')

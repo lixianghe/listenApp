@@ -1,4 +1,3 @@
-// import { init, checkStatus } from './utils/api'
 import btnConfig from './utils/pageOtpions/pageOtpions'
 import utils from './utils/util'
 import {encrypt} from './utils/xmSign/utils';
@@ -75,6 +74,8 @@ App({
   currentIndex: null,
   onLaunch: function () {
     this.log('app---------onLaunch---版本号:',this.globalData.version)
+    this.globalData.isVip = wx.getStorageSync('USERINFO').is_vip?wx.getStorageSync('USERINFO').is_vip:false
+    
      this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
@@ -83,9 +84,7 @@ App({
     // 判断playInfo页面样式，因为这里最快执行所以放在这
     this.setStyle()
     this.audioManager = wx.getBackgroundAudioManager()
-    // 判断用户是否已经登录了
-    this.checkStatus()
-    // wx.setStorageSync('username', 'T-mac')
+   
     
     // 判断横竖屏
     if (wx.getSystemInfoSync().windowWidth > wx.getSystemInfoSync().windowHeight) {
@@ -256,42 +255,39 @@ App({
     // this.log('图片压缩:',impressImg)
     return impressImg;
   },
-  // 保存用户信息
-  setUserInfo(userInfo) {
-    this.userInfo = userInfo
-    wx.setStorageSync('userInfo', userInfo)
-  },
-  // 获取用户信息
-  getUserInfo(key) {
-    let userInfo = this.userInfo.userId ? this.userInfo : wx.getStorageSync('userInfo')
-    if (key) {
-      return userInfo[key]
-    }
-    return userInfo
-  },
-  vision: '1.0.0',
+
+  
   cutplay: async function (that, type, cutFlag) {
     console.log('-=-=-=--=that:',that)
     console.log('-=-=-=--=type:',type)
     console.log('-=-=-=--=cutFlag:',cutFlag)
 
     that.setData({percent: 0})
+    console.log('1111111111111111111')
+
     // 判断循环模式
     let allList = wx.getStorageSync('nativeList')
     // 根据循环模式设置数组
     let loopType = wx.getStorageSync('loopType') || 'listLoop'
-    // 如果缓存没有abumInfoName，说明是从首页单曲进入，list为单首
-    let abumInfoName = wx.getStorageSync('abumInfoName')
+    console.log('2222222222')
+
     // 歌曲列表 wx.getStorageSync('allList')
     allList =wx.getStorageSync('allList')
-    // allList = abumInfoName ? this.setList(loopType, allList, cutFlag) : [this.globalData.songInfo]
+    console.log('allList:',allList)
+
     // 当前歌曲的索引
-    let no = allList.findIndex(n => Number(n.id) === Number(this.globalData.songInfo.id))
+    console.log('3333333322223333',this.globalData.songInfo)
+
+    let no = allList.findIndex(n => Number(n.id) === Number(wx.getStorageSync('songInfo').id))
+    console.log('333333333333',no)
+
     let index = this.setIndex(type, no, allList)
     //歌曲切换 停止当前音乐
     this.globalData.playing = false;
+    console.log('4444444444')
+
     let song = allList[index] || allList[0]
-    console.log('no----index-----song:',no,index,song)
+    console.log('allList---no----index-----song:',allList, no,index,song)
     // wx.pauseBackgroundAudio();
     // 下一首是vip的情况
     let isfree = song.feeType
@@ -455,25 +451,7 @@ App({
     }
   },
 
-  checkStatus(){
-    if(!this.userInfo.token){
-      return
-    }
-    checkStatus({}).then(res => {
-      // 若code为0且changeFlag为true，更新token和refreshToken
-      if (res.changeFlag){
-        this.userInfo.token = res.token
-        this.userInfo.refreshToken = res.refreshToken
-        wx.setStorageSync('token', res.token)
-        wx.setStorageSync('refreshToken', res.refreshToken)
-      }
 
-      this.tokenStatus = 0
-      wx.setStorageSync('userInfo', this.userInfo)
-    }).catch(err => {
-
-    })
-  },
 
     // 获得token
   goAuthGetToken() {
@@ -509,7 +487,7 @@ App({
         //    console.log('token:',Token)
         //   resolve(Token)
         // } else {
-          console.log('没有登录token过期重新获取')
+          console.log('没有登录重新获取token')
           that.getToken(resolve, reject)
         // }
       }
@@ -608,12 +586,12 @@ App({
   },
   //全局上传播放行为
   upLoadPlayinfo:function(){
-    // console.log('-----------------------songInfo:',this.globalData.songInfo)
-    if(!this.globalData.songInfo.id || this.globalData.songInfo.id == undefined){
+     console.log('上传-----------------------songInfo:',wx.getStorageSync('songInfo'))
+    if(!wx.getStorageSync('songInfo').id || wx.getStorageSync('songInfo').id == undefined){
       return
     }
     const playRecords = {
-       track_id:this.globalData.songInfo.id,
+       track_id:wx.getStorageSync('songInfo').id,
       played_secs: ~~this.globalData.currentPosition || ~~this.globalData.startTime,
       started_at:this.globalData.playBeginAt,
       ended_at:new Date().getTime(),

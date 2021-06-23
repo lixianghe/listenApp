@@ -19,7 +19,6 @@ Page({
     start:0,
     end:null,
     sort:'asc',
-    isVip:false,
     type:null,
     canplay: [],
     percent: 0,
@@ -208,8 +207,6 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     getAllList(albumid, lazy = false) {
       var that = this
       return new Promise((resolve, reject) => {
-        // 假设allList是canplay，真实情况根据接口来
-        // console.log('专辑id:',albumid)
         wx.showLoading({
           title: '加载中...',
         })
@@ -352,9 +349,14 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
             //  isVip:res.data.is_vip_free
   
            })   
-           wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+           if(wx.getStorageSync('songInfo').id == res.data.id){
+            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
 
-           this.selectComponent('#miniPlayer').setOnShow()
+            this.selectComponent('#miniPlayer').setOnShow()
+           }else{
+
+           }
+         
       
            
          }else{
@@ -438,9 +440,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
    let isvipfree = e.currentTarget.dataset.song.isVipFree
    let isPaid = e.currentTarget.dataset.song.isPaid 
    let authored = e.currentTarget.dataset.song.isAuthorized 
-   console.log('isVip:',this.data.isVip)
+   console.log('isVip:',app.globalData.isVip)
+   
 
-   if(!this.data.isVip && !isfree && isPaid || this.data.isVip &&!isfree && !authored && !isvipfree){
+   if(!app.globalData.isVip && !isfree && isPaid || app.globalData.isVip &&!isfree && !authored && !isvipfree){
     console.log('收费曲目')
      //收费曲目
      wx.showModal({
@@ -508,10 +511,10 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     let isvipfree = song.isVipFree
     let isPaid = song.isPaid 
     let authored = song.isAuthorized 
-    console.log('isVip:',this.data.isVip)
+    console.log('isVip:',app.globalData.isVip)
     //区分收费，试听，和免费
     // !isVip && item.isPaid || !item.isAuthorized && isVip && !item.isVipFree 
-     if(!this.data.isVip  && isPaid || this.data.isVip  && !authored && !isvipfree){
+     if(!app.globalData.isVip  && isPaid || app.globalData.isVip && !authored && !isvipfree){
        
        if(isfree){
          console.log('试听')

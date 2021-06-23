@@ -45,8 +45,18 @@ Page({
 
   },
   onLoad(options) {
-    this.getCategoryAlbums()
-   
+    let { categoryId } = options
+    if(categoryId !== undefined) {
+      console.log('categoryId', categoryId)
+      this.setData({
+        categoryId: categoryId,
+        currentTap: Number(categoryId)
+      }, () => {
+        this.getCategoryAlbums(categoryId)
+      })
+    } else {
+      this.getCategoryAlbums()
+    }
   },
   onShow() {
    
@@ -54,7 +64,7 @@ Page({
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()
   },
-  getCategoryAlbums() {
+  getCategoryAlbums(categoryId) {
     let param = {
       'limit': 50
     }
@@ -63,7 +73,7 @@ Page({
       if (res.data.items.length > 0 && res.statusCode == 200) {
         let categoryArr = []
         for (let i = 0; i < res.data.items.length; i++) {
-            console.log('id:', res.data.items[i].id)
+            console.log('id:', res.data.items[i].id,res.data.items[i].category_name)
            
             let obj = Object()
             obj.id = res.data.items[i].id
@@ -74,8 +84,11 @@ Page({
          var newArr = categoryArr.filter(item => item.id !=95)
         console.log('分类:', newArr)
 
+        let params = categoryId ? categoryId : newArr[0].id
         this.data.categoryId = newArr[0].id
-        this.getALLAlbums(newArr[0].id)
+        console.log('params', params)
+        this.getALLAlbums(params)
+        // this.getALLAlbums(newArr[0].id)
        
         this.setData({
           reqS: true,

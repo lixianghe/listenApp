@@ -102,7 +102,16 @@ Page({
 
   },
 
-  onLoad() {
+  onLoad(options) {
+    let { keyword } = options
+    if(keyword !== undefined) {
+      console.log('keyword', keyword)
+      this.setData({
+        keyWord: keyword
+      }, () => {
+        this.albumsSearch()
+      })
+    }
     this.getLaterSearchWord()
     this.getHotWords()
     this.setData({
@@ -383,7 +392,7 @@ Page({
           this.data.info.push({
             title: item.title,
             id: item.album_id,
-            coverImgUrl: app.impressImg(item.album.cover.large.url,212,212),  
+            coverImgUrl: app.impressImg(item.image.url,212,212),  
           })
         }
         this.setData({

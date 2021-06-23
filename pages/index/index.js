@@ -86,7 +86,7 @@ Page({
       'scope': 0
     }
     utils.GET(param, utils.indexBanners, res => {
-      //  app.log('首页banners数据:', res)
+        console.log('首页banners数据:', res)
       if (res.data.banners.length > 0 && res.statusCode == 200) {
         res.data.banners.forEach(item => {
           item.banner_cover_url = app.impressImg(item.banner_cover_url,690,280)
@@ -331,8 +331,6 @@ Page({
 
     })
   },
-
-
   // 播放时间格式化
   formatMusicTime(time) {
     let m = parseInt(time / 60);
@@ -432,6 +430,7 @@ Page({
       if (!app.globalData.latelyListenId.includes(id)) {
         app.globalData.latelyListenId.push(id)
       }
+     
       wx.navigateTo({
         url: `../albumInfo/albumInfo?id=${id}&title=${title}&routeType=${routeType}&type=2`
       })
@@ -508,12 +507,9 @@ Page({
   },
 
   onShow() {
-    // 首页数据
-    // console.log('----------------',app.globalData.version)
-    
+    // 首页数据    
     app.goAuthGetToken().then((res) => {
       // console.log('-------token',wx.getStorageSync('TOKEN'))
-      // console.log('------------res:', res)
       // console.log('=======---------------------res:', res)
       this._swiperData()
       this._mediaArrData()

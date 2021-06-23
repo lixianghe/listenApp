@@ -357,6 +357,7 @@ module.exports = {
         })
         wx.setStorageSync('USERINFO', res.data)
         app.userInfo.islogin = true
+        app.globalData.isVip = res.data.is_vip
         wx.showToast({
           title: '登录成功',
           icon: 'none'
