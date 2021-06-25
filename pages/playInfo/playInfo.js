@@ -624,13 +624,12 @@ Page({
       let isvipfree = item.isVipFree
       let isPaid = item.isPaid
       let authored = item.isAuthorized
-      console.log('item:', item)
       console.log('isfree:', isfree)
       console.log('isvipfree:', isvipfree)
       console.log('isVip:', app.globalData.isVip)
 
       if (!app.globalData.isVip && !isfree && isPaid &&  !item.src || app.globalData.isVip && !isfree && !authored && !isvipfree && !item.src) {
-        this.data.currentIndex--
+        // this.data.currentIndex--
         console.log('aaaaaaaaaaaaaaa:')
 
         //收费曲目
@@ -837,7 +836,7 @@ Page({
       process = 1
     }
     let percent = (process * 100).toFixed(3)
-    // console.log('songInfo-----:',app.globalData.songInfo)
+     console.log('songInfo-----:',app.globalData.songInfo)
     console.log('songInfo--==---:',wx.getStorageSync('songInfo'))
 
     let currentTime = process * tool.formatToSend(wx.getStorageSync('songInfo').dt)

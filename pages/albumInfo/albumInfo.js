@@ -344,11 +344,20 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
          if(res.data && res.statusCode == 200){
            this.setData({
              total:res.data.include_track_count,
-             existed:res.data.is_subscribe,
              src:res.data.cover.large.url?app.impressImg(res.data.cover.large.url,360,360):app.impressImg(res.data.announcer.avatar_url,360,360),
             //  isVip:res.data.is_vip_free
   
-           })   
+           }) 
+           //没有登录，全部置为非收藏状态  
+           if(wx.getStorageSync('USERINFO')){
+            this.setData({
+              existed:res.data.is_subscribe,
+            }) 
+           }else{
+            this.setData({
+              existed:false,
+            }) 
+           }
            if(wx.getStorageSync('songInfo').id == res.data.id){
             wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
 

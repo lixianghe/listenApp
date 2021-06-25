@@ -158,7 +158,9 @@ Component({
     },
     //收藏专辑
     collectAlbum() {
-      // console.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
+       console.log('----------------minibar-----收藏专辑:',wx.getStorageSync('songInfo').albumId)
+       console.log('----------------minibar-----收藏专辑:',app.globalData.songInfo.albumId)
+
       let param = {
         id: wx.getStorageSync('songInfo').albumId
       }
@@ -307,8 +309,8 @@ Component({
     },
     // 进入播放详情
     playInfo() {
-      // console.log('getStorageSync----songInfo:', wx.getStorageSync('songInfo'))
-      console.log('app-----songInfo:', app.globalData.songInfo)
+     console.log('getStorageSync----songInfo:', wx.getStorageSync('songInfo'))
+      // console.log('app-----songInfo:', app.globalData.songInfo)
       if (!wx.getStorageSync('songInfo') && !app.globalData.songInfo) {
         wx.showToast({
           title: '暂无播放音频',
@@ -317,31 +319,31 @@ Component({
         return
       }
       // let abumInfoName = wx.getStorageSync('abumInfoName')
-      let abumInfoName = app.globalData.songInfo.title
+      let abumInfoName =wx.getStorageSync('songInfo').title?wx.getStorageSync('songInfo').title: app.globalData.songInfo.title
 
       wx.navigateTo({
         url: '../playInfo/playInfo?noPlay=true' + '&collect=' + wx.getStorageSync('ALBUMISCOLLECT') + '&abumInfoName=' + abumInfoName + '&start=0'
-        // url: '../albumInfo/albumInfo?id='+id+'&title='+title+'&routeType=album'
-        // url: `../playInfo/playInfo?noPlay=true&collect=${wx.getStorageSync('ALBUMISCOLLECT')}&abumInfoName=${abumInfoName}`
+       
       })
     },
     // 监听音乐播放的状态
     listenPlaey() {
       const that = this;
       // 每次从缓存中拿到当前歌曲的相关信息，还有播放列表
-      console.log('listenPlaey--------------songInfo:', app.globalData.songInfo)
-      if (app.globalData.songInfo && app.globalData.songInfo.title) {
+      console.log('listenPlaey--------songInfo:', app.globalData.songInfo)
+      console.log('listenPlaey----=====----songInfo:', wx.getStorageSync('songInfo'))
+      let playing = wx.getStorageSync('playing')
+
+      if (app.globalData.songInfo   ||  wx.getStorageSync('songInfo')  ) {
+        console.log('listenPlaey-------123')
+
         that.setData({
-          songInfo: app.globalData.songInfo
+          songInfo: app.globalData.songInfo?app.globalData.songInfo: wx.getStorageSync('songInfo')
         })
       }
-      // if (wx.getStorageSync('playing')) {
-        // 监听歌曲播放状态，比如进度，时间
+     
         utils.playAlrc(that, app);
-      // } else {
-      //   // 监听歌曲播放状态，比如进度，时间
-        //  that.watchPlay()
-      // }
+     
 
     },
     btnstart(e) {
@@ -418,9 +420,22 @@ Component({
       console.log('minibar----songInfo------albumId:', wx.getStorageSync('songInfo').albumId)
       console.log('minibar---- app.globalData------abumInfoId:', app.globalData.abumInfoId)
       console.log('minibar----setonshow------isCollect:', isCollect)
-      if (app.globalData.songInfo) {
+      console.log('minibar----setonshow------canplay:', canplay)
+      console.log('minibar----setonshow------playing:', playing)
+      if(wx.getStorageSync('USERINFO')){
         that.setData({
           existed: isCollect,
+        })
+      }else{
+        that.setData({
+          existed: false,
+        })
+      }
+
+      if (app.globalData.songInfo  ) {
+        console.log('listenPlaey-------456')
+
+        that.setData({
           songInfo: app.globalData.songInfo
         })
       }
@@ -428,6 +443,7 @@ Component({
       that.setData({
         playing: playing,
         canplay: canplay,
+        percent:app.globalData.percent
       })
 
     },

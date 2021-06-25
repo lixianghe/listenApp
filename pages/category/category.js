@@ -45,13 +45,15 @@ Page({
 
   },
   onLoad(options) {
+    console.log('category:',options)
     let { categoryId } = options
     if(categoryId !== undefined) {
       console.log('categoryId', categoryId)
       this.setData({
         categoryId: categoryId,
-        currentTap: Number(categoryId)
+        // currentTap: Number(categoryId)
       }, () => {
+
         this.getCategoryAlbums(categoryId)
       })
     } else {
@@ -59,8 +61,6 @@ Page({
     }
   },
   onShow() {
-   
-
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()
   },
@@ -73,7 +73,7 @@ Page({
       if (res.data.items.length > 0 && res.statusCode == 200) {
         let categoryArr = []
         for (let i = 0; i < res.data.items.length; i++) {
-            console.log('id:', res.data.items[i].id,res.data.items[i].category_name)
+            // console.log('id:', res.data.items[i].id,res.data.items[i].category_name)
            
             let obj = Object()
             obj.id = res.data.items[i].id
@@ -83,13 +83,21 @@ Page({
          //因为95(播客)类型的没有数据就不要此分类
          var newArr = categoryArr.filter(item => item.id !=95)
         console.log('分类:', newArr)
+        newArr.forEach((item,index) => {
+          if(item.id == categoryId){
+            this.setData({
+              currentTap:index
+            })
+
+          }
+          
+        });
+       
 
         let params = categoryId ? categoryId : newArr[0].id
         this.data.categoryId = newArr[0].id
         console.log('params', params)
-        this.getALLAlbums(params)
-        // this.getALLAlbums(newArr[0].id)
-       
+        this.getALLAlbums(params)       
         this.setData({
           reqS: true,
           'labels.show': true,

@@ -57,7 +57,7 @@
       
     </view>
     <!-- 加载中盒子 -->
-    <view class="albumCard" wx:if="{{!reqL}}" wx:for="{{3}}" wx:key="index">
+    <view class="albumCard" wx:if="{{!reqL}}" wx:for="{{5}}" wx:key="index">
       <view class="imgB bone"></view>
       <view class="albumTitB">
         <view class="tb bone"></view>

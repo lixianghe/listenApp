@@ -3,10 +3,10 @@
   display:none!important;
   position: absolute;
   right:0;
-  bottom:30vh;
+  bottom:0vh;
   width:10vh;
   height: 10vh;
-  background: red;
+  background: yellow;
   z-index: 9999999999999;
 }
 .log {

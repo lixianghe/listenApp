@@ -15,7 +15,13 @@
         {
           "name": "类目",
           "pathName": "pages/category/category",
-          "query": "categoryId=21",
+          "query": "categoryId=1",
+          "scene": null
+        },
+        {
+          "name": "自动播放",
+          "pathName": "pages/latelyListen/latelyListen",
+          "query": "playing=true",
           "scene": null
         }
       ]

@@ -77,7 +77,7 @@ Page({
 
   },
 
-  //首页卡片数据
+  //首页轮播图数据
   _swiperData() {
     let param = {
       'banner_content_type': 2,
@@ -86,11 +86,11 @@ Page({
       'scope': 0
     }
     utils.GET(param, utils.indexBanners, res => {
-        console.log('首页banners数据:', res)
+        app.log('首页banners数据:', res)
       if (res.data.banners.length > 0 && res.statusCode == 200) {
         res.data.banners.forEach(item => {
           item.banner_cover_url = app.impressImg(item.banner_cover_url,690,280)
-          // console.log('-----------item.url:',item.banner_cover_url )
+        //  console.log('-----------item.url:',item.banner_cover_url )
           
         });
         this.setData({
@@ -110,7 +110,6 @@ Page({
       console.log('专辑是否收藏:',res)
       if(res.data && res.statusCode == 200){
         wx.setStorageSync('ALBUMISCOLLECT',res.data.is_subscribe)
-        // this.selectComponent('#miniPlayer').setOnShow()    
         
       }else{
        console.log('专辑是否收藏错误:',res)
@@ -260,7 +259,6 @@ Page({
 
           app.playing(this)
           this.selectComponent('#miniPlayer').setOnShow()
-          this.selectComponent('#miniPlayer').watchPlay()
         })
 
       }
@@ -325,8 +323,7 @@ Page({
        
 
         app.playing(this)
-        this.selectComponent('#miniPlayer').setOnShow()
-        this.selectComponent('#miniPlayer').watchPlay()
+         this.selectComponent('#miniPlayer').setOnShow()
       }
 
     })
@@ -517,7 +514,6 @@ Page({
     });
 
     this.selectComponent('#miniPlayer').setOnShow()
-    this.selectComponent('#miniPlayer').watchPlay()
     // 获取播放卡片
     let abumInfoId = wx.getStorageSync('abumInfoId')
     let story = this.selectComponent(`#story${abumInfoId}`)

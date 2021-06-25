@@ -5,6 +5,7 @@ import { data, getVipMedia,getMedia } from './developerHandle/playInfo'
 require('./utils/minixs')
 App({
   globalData: {
+    isBmw:false,
     canUseImgCompress: false,
     imgCompresDomain: "",
     appName: 'ximalayaxin',
@@ -75,7 +76,8 @@ App({
   onLaunch: function () {
     this.log('app---------onLaunch---版本号:',this.globalData.version)
     this.globalData.isVip = wx.getStorageSync('USERINFO').is_vip?wx.getStorageSync('USERINFO').is_vip:false
-    
+    //区分平台
+    this.isBMW()
      this.goAuthGetToken()
     // 获取小程序颜色主题
     this.getTheme()
@@ -114,7 +116,7 @@ App({
     // 测试getPlayInfoSync
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
-      console.log('res-------------:',  res)
+      console.log('app----getPlayInfoSync-----res:',  res)
         if(res.playList && res.playList.length > 0 && res.playState.curIndex>-1){
           console.log('-----------2:')
           let panelSong = res.playList[res.playState.curIndex]
@@ -133,6 +135,9 @@ App({
           that.globalData.playing = playing
           that.globalData.currentPosition = res.playState.currentPosition
        
+        }else{
+          this.globalData.songInfo = ''
+          wx.setStorageSync('songInfo', '')
         }
         if(that.globalData.playing){
           this.playing( that.globalData.currentPosition ,that)
@@ -147,7 +152,19 @@ App({
   
 
   },
+  //判断是否bmw平台
+  isBMW() {
+    let sysInfo = wx.getSystemInfoSync();
+    console.log('-----------------isbmw', sysInfo)
+    if (sysInfo.brand == "BMW") {
+      this.globalData.isBmw = true
+    
+    } else {
+      this.globalData.isBmw = false
 
+    }
+    console.log('isBmw-------', JSON.stringify(this.data))
+  },
   
   /**
    * 初始化图片压缩
@@ -176,7 +193,7 @@ App({
             this.log('222222222222-----initImgPress----success:',e)
 
             that.globalData.initImgCount = 0;
-            INFO(`getMossApi${e.url}`);
+            console.log(`getMossApi${e.url}`);
             canUseImgCompress = true;
             imgCompresDomain = e.url;
             that.globalData.canUseImgCompress = canUseImgCompress;
@@ -185,7 +202,7 @@ App({
           fail(res) {
             this.log('-----initImgPress----fail:',e)
 
-            ERROR(`getMossApi执行失败------initImgCount=${that.globalData.initImgCount}}`);
+            console.log(`getMossApi执行失败------initImgCount=${that.globalData.initImgCount}}`);
             that.globalData.initImgTimer && clearTimeout(that.globalData.initImgTimer);
             if (that.globalData.initImgCount < 10) {
               that.globalData.initImgTimer = setTimeout(() => {
@@ -196,7 +213,7 @@ App({
             Report.apiCallFailReport('getMossApi', JSON.stringify(res));
           },
           complete() {
-            INFO('getMossApi执行完成');
+            console.log('getMossApi执行完成');
           },
         });
       } else {
@@ -224,35 +241,42 @@ App({
     // this.log('app----impressImg:',imgUrl)
     // this.log('app----impressImg---width:',width)
     // this.log('app----impressImg---height:',height)
-
+   
     let impressImg = imgUrl;
     // this.log('impressImg----6----:',this.globalData.canUseImgCompress)
     // this.log('impressImg-----6----:',this.globalData.imgCompresDomain)
     const  canUseImgCompress  = this.globalData.canUseImgCompress;
     const  imgCompresDomain  = this.globalData.imgCompresDomain;
-   
-
-
-    if (canUseImgCompress) {
-      // 可以使用压缩服务
-      if (imgCompresDomain.length > 0) {
-        // 压缩域名获取成功
-        const encodeImgUrl = encodeURIComponent(imgUrl);
-        impressImg = `${imgCompresDomain}&w=${width}&h=${height}&url=${encodeImgUrl}`;
-        //  DEBUG(`压缩图片${impressImg}`);
+    if(this.globalData.isBmw){
+      // console.log('宝马平台压缩:')
+      //是宝马平台就压缩
+      if (canUseImgCompress) {
+        // 可以使用压缩服务
+        if (imgCompresDomain.length > 0) {
+          // 压缩域名获取成功
+          const encodeImgUrl = encodeURIComponent(imgUrl);
+          impressImg = `${imgCompresDomain}&w=${width}&h=${height}&url=${encodeImgUrl}`;
+          //  DEBUG(`压缩图片${impressImg}`);
+        } else {
+          // 压缩域名获取失败
+          impressImg = '';
+          // ERROR(`${imgCompresDomain}压缩域名获取失败`);
+          this.initImgPress();
+        }
       } else {
-        // 压缩域名获取失败
-        impressImg = '';
-        // ERROR(`${imgCompresDomain}压缩域名获取失败`);
-        this.initImgPress();
+        // 不可以使用压缩服务，显示默认图
+        impressImg = imgUrl;
+        // this.log('不支持图片压缩:')
+        // ERROR(`${canUseImgCompress}不支持压缩服务`);
       }
-    } else {
-      // 不可以使用压缩服务，显示默认图
+    }else{
+      // console.log('不是宝马平台不压缩:')
       impressImg = imgUrl;
-      // this.log('不支持图片压缩:')
-      // ERROR(`${canUseImgCompress}不支持压缩服务`);
     }
-    // this.log('图片压缩:',impressImg)
+
+
+
+  //  console.log('图片压缩:',impressImg)
     return impressImg;
   },
 
@@ -277,8 +301,9 @@ App({
 
     // 当前歌曲的索引
     console.log('3333333322223333',this.globalData.songInfo)
+    console.log('111111111111111111122222',wx.getStorageSync('songInfo'))
 
-    let no = allList.findIndex(n => Number(n.id) === Number(wx.getStorageSync('songInfo').id))
+    let no = allList.findIndex(n => (n.src) == (this.globalData.songInfo.src))
     console.log('333333333333',no)
 
     let index = this.setIndex(type, no, allList)
@@ -294,8 +319,10 @@ App({
     let isvipfree = song.isVipFree
     let isPaid = song.isPaid 
     let authored = song.isAuthorized 
-    console.log('是否免费',isfree)
-    if(!this.globalData.isVip && !isfree && isPaid || this.globalData.isVip &&!isfree && !authored && !isvipfree){
+    console.log('vip',this.globalData.isVip)
+    // !app.globalData.isVip && !isfree && isPaid &&  !item.src || app.globalData.isVip && !isfree && !authored && !isvipfree && !item.src
+
+    if(!this.globalData.isVip && !isfree && isPaid &&  !song.src || this.globalData.isVip &&!isfree && !authored && !isvipfree&&  !song.src){
       wx.showToast({
         title: '暂无权限收听,请从喜马拉雅APP购买',
         icon: 'none'

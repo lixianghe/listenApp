@@ -14,8 +14,8 @@
       <image class="image" data-focusindex="5" bindtap="player" data-name="{{item.name}}" wx:else src="{{item.img}}" />
     </view>
     <view class="view" catchtap="playInfo" data-focusindex="5">                                                                           
-      <image class="pic" src="{{songInfo.coverImgUrl}}" />
-      <text class="text" wx:if="{{songInfo.title}}">{{songInfo.title}}</text>
+      <image class="pic"  wx:if="{{songInfo.coverImgUrl }}" src="{{songInfo.coverImgUrl}}" />
+      <text class="text" wx:if="{{songInfo.title }}">{{songInfo.title}}</text>
     </view>
   </view>
   <view catchtap="playInfo" style="flex: 1;height: 100%" data-disablefocus="true"></view>

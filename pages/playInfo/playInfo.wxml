@@ -30,7 +30,7 @@
       </view>
       <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;"  class="song-author">
         <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
-        <text style="position:absolute;right:2vh;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;top:1.5vh" >{{songInfo.mediaAuthor}}</text>
+        <text style="position:absolute;right:2vh;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;top:1.5vh" >{{songInfo.mediaAuthor?songInfo.mediaAuthor:songInfo.name}}</text>
       </view>
     </view>
     <view class="noReady" wx:else>
@@ -89,7 +89,7 @@
           </view>
           <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;"  class="song-author">
             <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
-            <text style="position:absolute;right:2vh;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;top:1.5vh" >{{songInfo.mediaAuthor}}</text>
+            <text style="position:absolute;right:2vh;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;display: inline-block;left:13vh;font-size:5vh;color:white;text-align:left;top:1.5vh" >{{songInfo.mediaAuthor?songInfo.mediaAuthor:songInfo.name}}</text>
           </view>
         </view>
 
@@ -142,7 +142,7 @@
 <!-- 弹出播放列表 -->
 <view class="playList {{noTransform}}" animation="{{animation}}">
   <view class="title">
-    <text>播放列表({{canplay.length}})</text>
+    <text>播放列表</text>
     <button bindtap="closeList">
       <image src="/images/closeList.png" />
     </button>
