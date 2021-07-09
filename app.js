@@ -5,6 +5,7 @@ import { data, getVipMedia,getMedia } from './developerHandle/playInfo'
 require('./utils/minixs')
 App({
   globalData: {
+    albumLength:0,
     isBmw:false,
     canUseImgCompress: false,
     imgCompresDomain: "",
@@ -114,13 +115,27 @@ App({
     });
     wx.setStorageSync('playing', false)
     // 测试getPlayInfoSync
+    this.log('app11111111111111111111111:')
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
-      console.log('app----getPlayInfoSync-----res:',  res)
+      this.log('app----getPlayInfoSync-----res:',  res)
         if(res.playList && res.playList.length > 0 && res.playState.curIndex>-1){
-          console.log('-----------2:')
+          res.playList.forEach(item => {
+            item.customize = JSON.parse(item.options)
+            item.albumId = item.customize.albumId
+            item.id = item.customize.id
+            item.dt = item.customize.dt
+            item.mediaAuthor = item.customize.mediaAuthor
+            item.authorId = item.customize.authorId
+            item.albumName = item.customize.albumName
+          });
+          this.log('-----------2:',res.playList)
           let panelSong = res.playList[res.playState.curIndex]
           wx.setStorageSync('songInfo', panelSong)
+          wx.setStorageSync('canplay', res.playList)
+          wx.setStorageSync('allList', res.playList)
+          wx.setStorageSync('nativeList', res.playList)
+
           let playing = res.playState.status == 1 ? true : false
           wx.setStorageSync('playing', playing)
           let  time = res.playState.currentPosition / res.playState.duration * 100
@@ -144,9 +159,12 @@ App({
 
         }
      
+      }else{
+        this.log('不支持app----getPlayInfoSync-----res')
+
       }
       // that.globalData.songInfo = wx.getStorageSync('songInfo')
-      // console.log('app-------------songInfo:',that.globalData.songInfo)
+       this.log('app-------------songInfo:',that.globalData.songInfo)
     
     
   
@@ -171,13 +189,13 @@ App({
    */
   initImgPress() {
     // INFO('初始化压缩域名');
-    this.log('-----initImgPress----:')
+    // this.log('-----initImgPress----:')
     let canUseImgCompress = false;
     let imgCompresDomain = '';
     const that = this;
     
     if (wx.canIUse('getMossApiSync') || wx.canIUse('getMossApi')) {
-      this.log('----支持----initImgPress----:')
+      // this.log('----支持----initImgPress----:')
 
       const ret = wx.getMossApiSync({
         type: 'image-compress',
@@ -228,7 +246,7 @@ App({
         this.log('initImgPress-----5555----:',this.globalData.imgCompresDomain)
       }
     }else{
-    this.log('-不支持----initImgPress----:')
+    // this.log('-不支持----initImgPress----:')
 
     }
   
@@ -303,7 +321,7 @@ App({
     console.log('3333333322223333',this.globalData.songInfo)
     console.log('111111111111111111122222',wx.getStorageSync('songInfo'))
 
-    let no = allList.findIndex(n => (n.src) == (this.globalData.songInfo.src))
+    let no = allList.findIndex(n => (n.id) == (wx.getStorageSync('songInfo').id))
     console.log('333333333333',no)
 
     let index = this.setIndex(type, no, allList)
@@ -414,17 +432,20 @@ App({
   },
   // 暂停音乐
   stopmusic: function () {
+    console.log('stopmusic--------')
     wx.pauseBackgroundAudio();
     this.globalData.playBeginAt = new Date().getTime();
     this.upLoadPlayinfo()
   },
   // 根据歌曲url播放歌曲
   playing: function (seek, that) {
+    // wx.setStorageSync('playing', true)
+
     if (that == undefined) {
       that = seek
     }
     const songInfo = wx.getStorageSync('songInfo')
-    console.log('playingSong', songInfo)
+    console.log('playing--------Song', songInfo)
     // 如果是车载情况
     console.log('percent--------------', this.globalData.percent)
      utils.initAudioManager(this, that, songInfo)
@@ -432,6 +453,27 @@ App({
     this.globalData.playBeginAt = new Date().getTime();
      this.upLoadPlayinfo()
   },
+  //   playing: function (seek, that) {
+  //   if (that == undefined) {
+  //     that = seek
+  //   }
+  //       const songInfo = wx.getStorageSync('songInfo')
+  //       const pages = getCurrentPages()
+  //       let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
+  //       if (!songInfo.dataUrl) return
+  //       // 播放错误时，调起播放的标识符
+  //       let fl = true
+  //       if (miniPlayer) miniPlayer.setData({ playing: true })
+  //       pages[pages.length - 1].setData({
+  //           playing: true
+  //       })
+  //       wx.setStorageSync('playing',true)
+  //       tool.initAudioManager(this, that, songInfo, fl)
+  //       this.carHandle(songInfo, seek)
+  //   this.globalData.playBeginAt = new Date().getTime();
+  //   this.upLoadPlayinfo()
+  //       
+  //     },
   // 车载情况下的播放
   carHandle(songInfo, seek) {
      console.log('------carHandle--songInfo.src:',songInfo)
@@ -558,7 +600,7 @@ App({
           
            console.log("access_token----success--", res)   
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
-          that.log("失效时间", res.data.deadline)   
+          // that.log("失效时间", res.data.deadline)   
           // canUseToken = res.data
           wx.setStorageSync('TOKEN', res.data)
           resolve(res.data)

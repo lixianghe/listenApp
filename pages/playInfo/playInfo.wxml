@@ -26,7 +26,7 @@
       <!-- <text class="title-name">{{songInfo.title}}{{m1.showSinger(songInfo.singer)}}</text> -->
       <view catchtap="albumClick"  data-song="{{songInfo}}"  style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;" class="song-type">
         <image style="display: inline-block; width:8vh;height:8vh" src="../../images/leftauthor.png" class=""></image>
-        <text style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle; display: inline-block;font-size:5vh;color:white;text-align:left;" >{{abumInfoName}}</text>
+        <text style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle; display: inline-block;font-size:5vh;color:white;text-align:left;" >{{songInfo.albumName}}</text>
       </view>
       <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;"  class="song-author">
         <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
@@ -85,7 +85,7 @@
         <view style="display: flex;align-items: center;">
           <view catchtap="albumClick"  data-song="{{songInfo}}"  style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;" class="song-type">
             <image style="display: inline-block; width:8vh;height:8vh" src="../../images/leftauthor.png" class=""></image>
-            <text style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;display: inline-block;font-size:5vh;color:white;text-align:left;" >{{abumInfoName}}</text>
+            <text style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;display: inline-block;font-size:5vh;color:white;text-align:left;" >{{songInfo.albumName}}</text>
           </view>
           <view  catchtap="authorClick"  data-song="{{songInfo}}" style="position:relative;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;"  class="song-author">
             <image style="position:absolute;display: inline-block; width:8vh;height:8vh;top:1vh;left:1vh" src="../../images/authorright.png" class=""></image>
@@ -160,7 +160,7 @@
       <view class="view" style="color: {{item.id === currentId ? mainColor : '#fff'}}"  wx:key="index" wx:for="{{canplay}}">
         <view  bindtap="playSong" data-no='{{index}}' data-song="{{item}}" style="width: 100%;height: 6.6vh;line-height: 6.6vh;">
           <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
-          <!-- <text wx:else>{{index + 1}}</text> -->
+          <!-- <text >{{start + index+1}}</text> -->
           <text >{{item.num}}</text>
           <text style="width:75%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.title}}</text>
           <text class="audition" style="color:{{mainColor}};border: 1px solid {{mainColor}}" wx:if="{{item.feeType === '01'}}">试听</text>

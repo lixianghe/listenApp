@@ -53,21 +53,7 @@ class xmSign {
     })
   }
 
-  // updateClock() {
-  //   this.clockTimer = setInterval(() => {
-  //     if (
-  //       window.XM_SERVER_CLOCK - this.INISTAL_TIME <=
-  //         this.RESET_SERVER_CLOCK_LIMIT ||
-  //       document.hidden
-  //     ) {
-  //       window.XM_SERVER_CLOCK += this.CLOCK_UPDATE_INTERVAL
-  //     } else {
-  //       clearInterval(this.clockTimer)
-  //       this.clockTimer = null
-  //       this.start(true)
-  //     }
-  //   }, this.CLOCK_UPDATE_INTERVAL)
-  // }
+ 
 }
 
 export default xmSign

@@ -93,6 +93,7 @@ Page({
     wx.setNavigationBarTitle({
       title: options.title,
     })
+   
     // 设置样式
     that.setStyle()
     // 获取十首歌得高度
@@ -220,6 +221,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
         let _list = []
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
             console.log('专辑列表所有数据:',res)
+            app.globalData.albumLength = res.data.total
             wx.hideLoading()
            if(res.data.items.length > 0 && res.statusCode == 200){
                //非vip
@@ -238,7 +240,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
                   mediaType:item.album.kind,
                   mediaAuthor:item.announcer.nickname,
                   authorId:item.announcer.id,
-                  albumId:item.album_id
+                  albumId:item.album_id,
+                  albumName:that.data.abumInfoName
                  })
                }
             console.log('lazy-------------:',lazy)
@@ -249,13 +252,13 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
               _list = _list.concat(that.data.canplay)
              }
              console.log('_list-------------:',_list)
-             if(_list.length == res.data.total){
-               wx.showToast({
-                 title: '到底了',
-                 icon:'none'
-               })
+            //  if(_list.length == res.data.total){
+            //    wx.showToast({
+            //      title: '到底了',
+            //      icon:'none'
+            //    })
                
-            }
+            // }
           
              that.setData({
               total:res.data.total,
@@ -270,17 +273,14 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
            }else{
             console.log('------length------:',that.data.total)
             console.log('------------:',res.data.total)
-            if(that.data.total == res.data.total){
-              wx.showToast({
-                title: '到底了',
-                icon:'none'
-              })
+          //   if(that.data.total == res.data.total){
+          //     wx.showToast({
+          //       title: '到底了',
+          //       icon:'none'
+          //     })
               
-           }
-            // this.setData({
-            //   showModal: true,
-            //   req:-1
-            // })
+          //  }
+           
            }
         })
       })
@@ -389,6 +389,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
 
     this.selectComponent('#miniPlayer').setOnShow()
     this.selectComponent('#miniPlayer').watchPlay()
+  
   },
   onHide() {
     this.selectComponent('#miniPlayer').setOnHide()
@@ -409,7 +410,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   // 接受子组件传值
   async changeWords(e) {
     console.log('e', e)
-    // console.log('接受子组件传值-----:',e)
+     console.log('接受子组件传值-----:',e)
     // 请求新的歌曲列表
    
     if(e.detail.sort =='asc'){
@@ -445,6 +446,7 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
   goPlayInfo(e) {
    console.log('音频点击',e)
   //  !item.feeType &&  item.isVipFree 
+  this.data.currentNo = e.currentTarget.dataset.no
    let isfree = e.currentTarget.dataset.song.feeType
    let isvipfree = e.currentTarget.dataset.song.isVipFree
    let isPaid = e.currentTarget.dataset.song.isPaid 
@@ -471,8 +473,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     const sameSong = app.globalData.songInfo && (app.globalData.songInfo.id == e.currentTarget.dataset.song.id)
     this.data.currentIndex = e.currentTarget.dataset.no
     // 点击歌曲的时候把歌曲信息存到globalData里面
-    const songInfo = sameSong ? app.globalData.songInfo : e.currentTarget.dataset.song
-    console.log('app.globalData.songInfo----------', app.globalData.songInfo)
+    const songInfo = sameSong ? wx.getStorageSync('songInfo')  : e.currentTarget.dataset.song
+    console.log('songInfo----------', songInfo)
       app.globalData.songInfo = songInfo
     wx.setStorageSync('songInfo', songInfo)
     wx.setStorageSync('abumInfoName', this.data.abumInfoName)
@@ -489,10 +491,12 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     app.globalData.abumInfoId = this.data.optionId
     wx.setStorageSync('abumInfoId', this.data.optionId)
      console.log('-------------start:',this.data.start)
-    //  pages/playInfo/playInfo?mediaId=404806523&albumId=46192528&currentTime=1619675125155&auto=true&type=3
+     console.log('-------------end:',this.data.end)
+
+
     wx.navigateTo({ 
-      //  url:'../playInfo/playInfo?mediaId=404806523&albumId=46192528&currentTime=1619675125155&auto=true&type=3'
-         url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}&sameSong=${sameSong}`
+
+         url: `../playInfo/playInfo?id=${app.globalData.songInfo.id}&abumInfoName=${wx.getStorageSync('abumInfoName')}&collect=${this.data.existed}&start=${this.data.start}&currentNub=${this.data.currentIndex}&sameSong=${sameSong}&end=${this.data.end}&type=1`
      })
   },
   // 改变current

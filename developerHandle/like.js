@@ -75,6 +75,9 @@ module.exports = {
           res.data.isLogin = true
           wx.setStorageSync('TOKEN', res.data)
           this._getLikeList()
+        }else{
+          this._getLikeList()
+
         }
       })
     },

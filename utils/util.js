@@ -4,6 +4,7 @@ import CryptoJS from '../utils/crypto-js';
 import HmacSHA1 from '../utils/hmac-sha1';
 import md5 from '../utils/md5';
 import {encrypt} from '../utils/xmSign/utils';
+// import { title } from 'process';
 const app = getApp()
 //设置设备diviceId
 // const deviceId = util.getDeviceId()
@@ -634,6 +635,8 @@ function toggleplay(that, app) {
 
   if (that.data.playing) {
     console.log("暂停播放");
+    wx.setStorageSync('playing', false)
+
     // that.setData({ 
     //   playing: false 
     // });
@@ -643,25 +646,114 @@ function toggleplay(that, app) {
     // that.setData({
     //   playing: true
     // });
+    wx.setStorageSync('playing', true)
     app.playing(app.globalData.currentPosition, that);
   }
 }
 
 
-// 初始化 BackgroundAudioManager
+//初始化 BackgroundAudioManager
 function initAudioManager(app, that,songInfo) {
-  console.log('11111111111111111111111111111111111111111111111111util------initAudioManager:',that)
+  console.log('1111111------util------initAudioManager:',that)
   console.log('util------initAudioManager:',songInfo)
 
   let list = wx.getStorageSync('nativeList')
-  list.forEach(n => {
-    n.dataUrl = n.src
-  })
-  app.audioManager.playInfo = {
-    playList: list
-  };
+  console.log('list:',list)
+  var playList = [];
+  for (let media of list) {{
+    if(media.src){
+      playList.push({
+        title : media.title,
+        coverImgUrl :media.coverImgUrl,
+        dataUrl :media.src,
+        customize:  ({
+          albumId: media.albumId,
+          id: media.id,
+          dt:media.dt,
+          freeType:media.freeType,
+          mediaAuthor:media.mediaAuthor,
+          authorId:media.authorId,
+          albumName:media.albumName
+          
+        })
+      })
+
+    }
+
+
+  }}
+  console.log('playList:',playList)
+  if (wx.canIUse('getPlayInfoSync')) {
+    try {
+      var curPlayList = []
+      console.log('-=-=-==', playList)
+      for (var i = 0; i < playList.length; i++) {
+        var obj = {}
+        obj.title =playList[i].title
+        obj.singer = ''
+        obj.coverImgUrl = playList[i].coverImgUrl
+        obj.dataUrl = playList[i].dataUrl
+        obj.options =  JSON.stringify(playList[i].customize)
+        
+        if (obj.dataUrl) {
+          curPlayList.push(obj)
+        } else {
+
+        }
+
+      }
+    } catch (error) {
+      console.log('报错', error)
+    }
+    console.log('---------curPlayList:', curPlayList)
+    // let status = wx.getStorageSync('playing')? 1 : 0
+    app.audioManager.playInfo = {
+      playList: curPlayList,
+      // playState: {
+      //   curIndex: this.data.playIdx, //当前播放列表索引
+      //   duration: this.data.musicTime.duration, //总时长
+      //   currentPosition: this.data.musicTime.currentPosition, //当前播放时间
+      //   status: status, //当前播放状态 0暂停状态 1播放状态 2没有音乐播放
+
+      // },
+      // context: this.data.media.customize
+
+     
+    }
+   
+  }
+
+ 
+  
     EventListener(app,that)
 }
+// function initAudioManager(app, that, songInfo, fl) {
+//     console.log('11111111111111111111111111111111111111111111111111util------initAudioManager:',that)
+//   console.log('util------initAudioManager:',songInfo)
+//     if (fl) {
+//       let playList = []
+//       songInfo.abumInfoName = wx.getStorageSync('abumInfoName') || 1
+//       songInfo.currentPageNo = wx.getStorageSync('currentPageNo') 
+//       let canplaying = songInfo.abumInfoName ? wx.getStorageSync('canplaying') || [] : [songInfo]
+//       if(canplaying.length) playList = canplaying.map(item=>{
+//         item.options = JSON.stringify(item)
+//         return item
+//         // return{
+//         //   title:item.title || '',
+//         //   coverImgUrl:item.coverImgUrl || '',
+//         //   dataUrl:item.dataUrl || '',
+//         //   options:JSON.stringify(item),
+//         // }
+//       })
+//       if(JSON.stringify(app.cardPplayList) != JSON.stringify(playList)){
+//         app.cardPplayList = playList
+//         app.audioManager.playInfo = {
+//             playList,
+//             context: JSON.stringify(songInfo)
+//         }
+//       }
+//     }
+//   }
 
 // 监听播放，上一首，下一首
 function EventListener(app, that){
@@ -692,6 +784,7 @@ function EventListener(app, that){
   //暂停事件
   app.audioManager.onPause(() => {
     console.log('触发播放暂停事件');
+
     const pages = getCurrentPages()
     // that.setData({ playing: false });
     pages[pages.length - 1].setData({ playing: false })
@@ -706,9 +799,9 @@ function EventListener(app, that){
     if (!index) return
     let abumInfoId = wx.getStorageSync('abumInfoId')
     let story = index.selectComponent(`#story${abumInfoId}`)
-    // console.log('story=====', index, abumInfoId, story)
+   console.log('story=====', index, abumInfoId, story)
     if (story) story.setData({ playing: false })
-    
+    console.log('----',wx.getStorageSync('playing'))
 
   })
   //上一首事件

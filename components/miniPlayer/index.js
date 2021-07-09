@@ -72,7 +72,9 @@ Component({
   audioManager: null,
   attached: function () {
     const that = this
+
     utils.EventListener(app, that)
+
   },
   detached: function () {
 
@@ -322,7 +324,7 @@ Component({
       let abumInfoName =wx.getStorageSync('songInfo').title?wx.getStorageSync('songInfo').title: app.globalData.songInfo.title
 
       wx.navigateTo({
-        url: '../playInfo/playInfo?noPlay=true' + '&collect=' + wx.getStorageSync('ALBUMISCOLLECT') + '&abumInfoName=' + abumInfoName + '&start=0'
+        url: '../playInfo/playInfo?noPlay=true' + '&collect=' + wx.getStorageSync('ALBUMISCOLLECT') + '&abumInfoName=' + abumInfoName + '&start=0'+'&type=1'
        
       })
     },
@@ -332,7 +334,6 @@ Component({
       // 每次从缓存中拿到当前歌曲的相关信息，还有播放列表
       console.log('listenPlaey--------songInfo:', app.globalData.songInfo)
       console.log('listenPlaey----=====----songInfo:', wx.getStorageSync('songInfo'))
-      let playing = wx.getStorageSync('playing')
 
       if (app.globalData.songInfo   ||  wx.getStorageSync('songInfo')  ) {
         console.log('listenPlaey-------123')
@@ -422,7 +423,7 @@ Component({
       console.log('minibar----setonshow------isCollect:', isCollect)
       console.log('minibar----setonshow------canplay:', canplay)
       console.log('minibar----setonshow------playing:', playing)
-      if(wx.getStorageSync('USERINFO')){
+      if(wx.getStorageSync('USERINFO') && (app.globalData.songInfo || wx.getStorageSync('songInfo'))){
         that.setData({
           existed: isCollect,
         })
@@ -455,7 +456,7 @@ Component({
         if (res.data && res.statusCode == 200) {
           res.data.deadline = +new Date() + (res.data.expires_in * 1000);
           console.log("失效时间", res.data.deadline)
-          res.data.isLogin = true
+          // res.data.isLogin = true
           wx.setStorageSync('TOKEN', res.data)
 
         } else {

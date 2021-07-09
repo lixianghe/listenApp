@@ -8,6 +8,7 @@ Page({
   mixins: [require('../../developerHandle/playInfo')],
   data: {
     pageSize: 15,
+    currentNub:0,
     currentIndex: 0,
     existed: false,
     songInfo: {},
@@ -51,6 +52,7 @@ Page({
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,
     start: '',
+    end:'',
     canplay: [],
   },
   // 播放器实例
@@ -66,70 +68,81 @@ Page({
     // 根据分辨率设置样式
     that.setStyle()
     console.log('playInfo-------------------onload:', options)
+    that.data.currentNub = options.currentNub?options.currentNub:0
+
+    // that.data.end = options.end
+    let nub = parseInt(that.data.currentNub)
+    console.log('playInfo---------onload---nub:', parseInt(nub/15))
+
+    that.data.end= parseInt(nub/15)==0?15:parseInt(nub/15)*15+15
+    console.log('playInfo---------onload---end:', that.data.end)
+    
+    that.data.abumInfoName= wx.getStorageSync('songInfo').title
+    console.log('abumInfoName-------------------:', that.data.abumInfoName)
+
     if (options.type == 3) {
       //续播  
-      console.log('--------续播-------')
-      const canplay = wx.getStorageSync('allList')
-      console.log('续播---canplay:', canplay)
-      const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
-      that.data.currentIndex = canplay.findIndex(item => item.id === songInfo.id)
-      console.log('续播---songInfo:', songInfo)
-      if (songInfo.feeType == true) {
+      // app.log('--------续播-------')
+      // const canplay = wx.getStorageSync('allList')
+      // app.log('续播---canplay:', canplay)
+      // const songInfo = app.globalData.songInfo ? app.globalData.songInfo : wx.getStorageSync('songInfo')
+      // that.data.currentIndex = canplay.findIndex(item => item.id === songInfo.id)
+      // console.log('续播---songInfo:', songInfo)
+      // if (songInfo.feeType == true) {
+      //   let param = {}
+      //   utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
+      //     // console.log('res:',res)
+      //     if (res.data && res.statusCode == 200) {
+      //       app.globalData.songInfo.src = res.data.play_24_aac.url
+      //       app.log('app.globalData.songInfo:', app.globalData.songInfo)
+      //       that.setData({
+      //         songInfo: app.globalData.songInfo,
+      //         canplay: canplay,
+      //         existed: false,
 
-        let param = {}
-        utils.PLAYINFOGET(param, utils.getMediaInfo + songInfo.id + '/play-info', res => {
-          // console.log('res:',res)
-          if (res.data && res.statusCode == 200) {
-            app.globalData.songInfo.src = res.data.play_24_aac.url
-            app.log('app.globalData.songInfo:', app.globalData.songInfo)
-            that.setData({
-              songInfo: app.globalData.songInfo,
-              canplay: canplay,
-              existed: false,
+      //         abumInfoName: app.globalData.songInfo.title,
+      //         playing: tr
+      //       })
 
-              abumInfoName: app.globalData.songInfo.title,
-              playing: tr
-            })
+      //       wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+      //       // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+      //       // const abumInfoName = wx.getStorageSync('abumInfoName')
+      //       wx.setStorageSync('abumInfoName', that.data.abumInfoName)
+      //       wx.setStorageSync('nativeList', canplay)
+      //       app.globalData.songInfo = that.data.songInfo
 
-            wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-            // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-            // const abumInfoName = wx.getStorageSync('abumInfoName')
-            wx.setStorageSync('abumInfoName', that.data.abumInfoName)
-            wx.setStorageSync('nativeList', canplay)
-            app.globalData.songInfo = that.data.songInfo
-
-            app.log('续播---------bannees-vip---音频----300---:')
-            wx.setStorageSync('songInfo', that.data.songInfo)
-            app.playing(that)
+      //       app.log('续播---------bannees-vip---音频----300---:')
+      //       wx.setStorageSync('songInfo', that.data.songInfo)
+      //       app.playing(that)
 
 
-          } else {
+      //     } else {
 
-          }
+      //     }
 
-        })
-      } else {
-        console.log('canplay:', canplay)
-        that.setData({
-          songInfo: songInfo,
-          canplay: canplay,
-          existed: false,
+      //   })
+      // } else {
+      //   console.log('canplay:', canplay)
+      //   that.setData({
+      //     songInfo: songInfo,
+      //     canplay: canplay,
+      //     existed: false,
 
-          abumInfoName: app.globalData.songInfo.title,
-          playing: true
-        })
+      //     abumInfoName: app.globalData.songInfo.albumName,
+      //     playing: true
+      //   })
 
-        wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
-        // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
-        wx.setStorageSync('abumInfoName', that.data.abumInfoName)
-        wx.setStorageSync('nativeList', canplay)
-        app.globalData.songInfo = that.data.songInfo
-        wx.setStorageSync('songInfo', that.data.songInfo)
-        app.playing(that)
-      }
-      app.globalData.abumInfoId = that.data.songInfo.albumId
+      //   wx.setStorageSync('ALBUMISCOLLECT', this.data.existed)
+      //   // 把abumInfoName存在缓存中，切歌的时候如果不是专辑就播放同一首
+      //   wx.setStorageSync('abumInfoName', that.data.abumInfoName)
+      //   wx.setStorageSync('nativeList', canplay)
+      //   app.globalData.songInfo = that.data.songInfo
+      //   wx.setStorageSync('songInfo', that.data.songInfo)
+      //   app.playing(that)
+      // }
+      // app.globalData.abumInfoId = that.data.songInfo.albumId
 
-    } else {
+    } else if(options.type == 1) {
       //非续播------ 获取歌曲列表
       const canplay = wx.getStorageSync('allList')
       console.log('非续播----canplay:', canplay.length)
@@ -214,6 +227,63 @@ Page({
 
       }
       app.globalData.abumInfoId = that.data.songInfo.albumId
+    }else{
+      let res = wx.getPlayInfoSync()
+      console.log('app----getPlayInfoSync-----res:',  res)
+  
+      if (wx.canIUse('getPlayInfoSync') && res.playList) {
+       
+          if(res.playList && res.playList.length > 0 && res.playState.curIndex>-1){
+            res.playList.forEach(item => {
+              item.customize = JSON.parse(item.options)
+              item.albumId = item.customize.albumId
+              item.id = item.customize.id
+              item.dt = item.customize.dt
+              item.mediaAuthor = item.customize.mediaAuthor
+              item.authorId = item.customize.authorId
+              item.albumName = item.customize.albumName
+            });
+            console.log('-----------2:',res.playList)
+            let panelSong = res.playList[res.playState.curIndex]
+            wx.setStorageSync('songInfo', panelSong)
+            wx.setStorageSync('canplay', res.playList)
+            wx.setStorageSync('allList', res.playList)
+            wx.setStorageSync('nativeList', res.playList)
+  
+            let playing = res.playState.status == 1 ? true : false
+            wx.setStorageSync('playing', playing)
+            let  time = res.playState.currentPosition / res.playState.duration * 100
+            let isCollect = wx.getStorageSync('ALBUMISCOLLECT')
+            app.log('-----------songInfo:',panelSong)
+            app.log('-----------percent:',time)
+            app.log('-----------playing:',playing)
+            app.log('-----------existed:',isCollect)
+            that.setData({
+              songInfo: panelSong,
+              canplay:  res.playList,
+              existed: options.collect == 'false' ? false : true,
+              abumInfoName: panelSong.title,
+              playing: playing
+            })
+            app.globalData.songInfo = panelSong
+            app.globalData.playing = playing
+            app.globalData.percent = time
+            app.globalData.playing = playing
+            app.globalData.currentPosition = res.playState.currentPosition
+            app.playing(that)
+          }else{
+            app.globalData.songInfo = ''
+            wx.setStorageSync('songInfo', '')
+          }
+          if(that.globalData.playing){
+            app.playing( app.globalData.currentPosition ,that)
+  
+          }
+       
+        }else{
+          console.log('不支持app----getPlayInfoSync-----res')
+  
+        }
     }
 
 
@@ -311,25 +381,41 @@ Page({
     //先刷新token
     that.refreshToken()
     const playing = wx.getStorageSync('playing')
+    console.log('playing----', playing)
     console.log('songInfo----', wx.getStorageSync('songInfo'))
     console.log('songInfo--===--', app.globalData.songInfo)
-    console.log('playing----', playing)
+    console.log('playtime----', app.globalData.currentPosition)
+    console.log('percent----', app.globalData.percent)
+    let beginTime = that.formatMusicTime(app.globalData.currentPosition)
 
-    if (wx.getStorageSync('songInfo').src || app.globalData.songInfo.src) {
-      if (!playing) {
-        that.setData({
-          playtime: app.globalData.playtime,
-          percent: app.globalData.percent || 0,
-        })
-      }
-    } else {
+    console.log('11111111111111111111',beginTime)
+    that.setData({
+      playing:playing,
+      playtime: beginTime,
+      percent: app.globalData.percent || 0,
+     songInfo:wx.getStorageSync('songInfo')?wx.getStorageSync('songInfo'):app.globalData.songInfo
+    })
+    // if (wx.getStorageSync('songInfo').src || app.globalData.songInfo.src) {
+    //   if (!playing) {
+    //     console.log('222222222222222222222')
 
-      that.setData({
-        playtime: app.globalData.playtime,
-        percent: 0,
-      })
+    //     that.setData({
+    //       playtime: app.globalData.playtime,
+    //       percent: app.globalData.percent || 0,
+    //       songInfo:wx.getStorageSync('songInfo')?wx.getStorageSync('songInfo'):app.globalData.songInfo
+    //     })
+    //   }
+    // } else {
+    //   console.log('33333333333333333333')
 
-    }
+    //   that.setData({
+    //     playtime: app.globalData.playtime,
+    //     percent: 0,
+    //     songInfo:wx.getStorageSync('songInfo')?wx.getStorageSync('songInfo'):app.globalData.songInfo
+
+    //   })
+
+    // }
 
     utils.EventListener(app, that)
 
@@ -337,6 +423,16 @@ Page({
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
   },
+
+       // 播放时间格式化
+       formatMusicTime(time) {
+        let m = parseInt(time / 60);
+        let s = parseInt(time % 60);
+        m = m < 10 ? '0' + m : m;
+        s = s < 10 ? '0' + s : s;
+        return m + ':' + s
+      },
+  
 
   play() {
     let that = this
@@ -348,7 +444,7 @@ Page({
   albumClick(e) {
     // console.log('专辑点击:',e)
     let id = e.currentTarget.dataset.song.albumId
-    const title = this.data.abumInfoName
+    const title = e.currentTarget.dataset.song.albumName
 
     // console.log('专辑id:',id)
     // const src = e.currentTarget.dataset.song.src
@@ -870,32 +966,45 @@ Page({
   // 滚到底部
   listBehind: tool.throttle(async function (res) {
     console.log('滚到底部----------sort:', this.data.sort)
+    console.log('滚到底部----------albumLength:', app.globalData.albumLength)
+    console.log('滚到底部----------end:', this.data.end)
+    // if(app.globalData.albumLength-this.data.end >15){
+      this.getAllList(this.data.songInfo.albumId, 'up')
 
-    this.getAllList(this.data.songInfo.albumId, 'up')
+    // }else{
+
+    // }
+
 
   }, 1000),
 
   // 获取所有的播放列表
   getAllList(albumid, lazy = false) {
     var that = this
+    console.log('专辑id:',albumid)
+
     return new Promise((resolve, reject) => {
 
-      // console.log('专辑id:',albumid)
       wx.showLoading({
         title: '加载中...',
       })
+      console.log('param-------------albumLength:', app.globalData.albumLength)
+      console.log('param-------------start:', that.data.start)
+      console.log('param-------------end:', that.data.end)
+
       let param = {
         'limit': that.data.pageSize,
-        'offset': wx.getStorageSync('allList').length,
+        'offset': parseInt(that.data.end),
         'sort': 'asc'
       }
       console.log('param-------------:', param)
-      // console.log('start:',this.data.start)
       let _list = []
       utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
         console.log('专辑列表所有数据:', res)
         wx.hideLoading()
         if (res.data.items.length > 0 && res.statusCode == 200) {
+         
+
           //非vip
           for (let item of res.data.items) {
             _list.push({
@@ -912,8 +1021,15 @@ Page({
               mediaType: item.album.kind,
               mediaAuthor: item.announcer.nickname,
               authorId: item.announcer.id,
-              albumId: item.album_id
+              albumId: item.album_id,
+              albumName:that.data.abumInfoName
+
             })
+          }
+          for (let i = 0; i < _list.length; i++) {
+            _list[i].num = parseInt(that.data.end) + i +parseInt(1)
+            console.log('num:',_list[i].num)
+            
           }
           console.log('lazy-------------:', lazy)
           // 上拉和下拉的情况
@@ -923,6 +1039,15 @@ Page({
             _list = _list.concat(that.data.canplay)
           }
           console.log('_list-------------:', _list)
+          _list.forEach((item,index) => {
+            if(item.num >app.globalData.albumLength){
+              console.log('item--index',item,index)
+
+              _list.splice(index, 1)
+            }
+            
+          });
+        
 
           if (_list.length == res.data.total) {
             wx.showToast({
@@ -931,14 +1056,16 @@ Page({
             })
 
           }
-          for (let i = 0; i < _list.length; i++) {
-            _list[i].num = parseInt(that.data.start) + i + 1
-          }
+       
+          console.log('end:',  that.data.end)
+          console.log('专辑列表所有数据items:', res.data.items.length)
 
+          that.data.end =parseInt(that.data.end)+res.data.items.length
+          // console.log('专辑列表所有数据start:',  that.data.start)
           that.setData({
             total: res.data.total,
             canplay: _list,
-
+           
 
           })
           wx.setStorageSync('canplay', this.data.canplay)
