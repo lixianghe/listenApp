@@ -152,11 +152,26 @@ Page({
     this.getLaterSearchWord()
   },
   search(e) {
+
     this.setData({
       keyWord: e.detail.value
     })
+    if(this.data.keyWord.length==0){
+this.setData({
+  pageState:1,
+  info:[],
+})
+this.getLaterSearchWord()
+
+console.log('---------：')
+
+    }else{
+      
+    }
 
     console.log('搜索：', this.data.keyWord)
+    console.log('搜索--length：', this.data.keyWord.length)
+
 
   },
   searchClick() {
@@ -291,7 +306,7 @@ Page({
             // item.coverImgUrl = item.coverUrl                          // 歌曲的封面
             title: item.title,
             id: item.id,
-           
+            isVip: item.is_vip_free,
             coverImgUrl: app.impressImg(item.cover.large.url,212,212),  
 
           })
@@ -343,7 +358,7 @@ Page({
             title: item.nickname,
             id: item.uid,
             coverImgUrl:item.small_pic,  
-
+            isVip: item.is_vip_free,
             // coverImgUrl: app.impressImg(item.small_pic,212,212),  
 
           })
@@ -392,6 +407,7 @@ Page({
           this.data.info.push({
             title: item.title,
             id: item.album_id,
+            isVip: item.is_vip_free,
             coverImgUrl: app.impressImg(item.image.url,212,212),  
           })
         }
@@ -422,7 +438,7 @@ Page({
     console.log('跳转:', e)
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
-    const title = e.currentTarget.dataset.title
+    const title = e.currentTarget.dataset.title.replace(new RegExp('&',"gm"),'')
     wx.setStorageSync('img', src)
     if (this.data.currentTap == 0 || this.data.currentTap == 2) {
       wx.navigateTo({

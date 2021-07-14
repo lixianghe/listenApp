@@ -83,7 +83,7 @@ Page({
     console.log('-------latelylisten:', e)
     let id = e.currentTarget.dataset.id
     const src = e.currentTarget.dataset.src
-    const title = e.currentTarget.dataset.title
+    const title = e.currentTarget.dataset.title.replace(new RegExp('&',"gm"),'')
     wx.setStorageSync('img', src)
     // const routeType = e.currentTarget.dataset.contentype
     if (id) {
@@ -320,7 +320,8 @@ getSongifCollect(albumid){
             isPaid:item.is_paid,
             isAuthorized:item.is_authorized,
             mediaType: item.announcer.nickname,
-            mediaAuthor: item.album.title,
+            mediaAuthor: item.announcer.nickname,
+
             authorId: item.announcer.id,
             albumId: item.album_id
           })

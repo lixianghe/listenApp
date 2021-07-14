@@ -55,7 +55,6 @@ Page({
     const src = e.currentTarget.dataset.src
     const title = e.currentTarget.dataset.title
     wx.setStorageSync('img', src)
-    const routeType = e.currentTarget.dataset.contentype
  
     wx.navigateTo({
       url: '../albumInfo/albumInfo?id='+id+'&title='+title+'&routeType=album'
@@ -154,7 +153,7 @@ Page({
             isHome:false,
             
             count:utils.calculateCount( res.data.items[i].play_count),
-            isVip:wx.getStorageInfoSync('USERINFO').is_vip,
+            isVip: res.data.items[i].is_vip_free,
             // perceent:(res.data.items[i].track.played_secs/res.data.items[i].track.duration)*100
 
           })

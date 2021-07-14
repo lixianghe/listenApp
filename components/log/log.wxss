@@ -1,6 +1,6 @@
 /* components/log/log.wxss */
 .log-mini{
-  display:none!important;
+  /* display:none!important; */
   position: absolute;
   right:0;
   bottom:0vh;

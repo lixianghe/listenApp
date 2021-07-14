@@ -126,6 +126,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+ .vip {
+  /* background-color: #fa6500; */
+  border-radius: 0.89vh;
+  font-size: 4vh;
+  display: inline-block;
+  margin-right: 1.81vh;
+  width: 8vh;
+  text-align: center;
+  height: 5vh;
+  line-height: 5vh;
+}
 .miniView {
   transform: translateX(0);
   position: absolute;

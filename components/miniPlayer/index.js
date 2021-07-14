@@ -271,13 +271,14 @@ Component({
     },
     // 下一首
     next() {
+      // 设置播放图片名字和时长
+      const that = this
       if (wx.getStorageSync('songInfo')) {
         setTimeout(() => {
           this.triggerEvent('current', this.data.currentId)
         }, 300)
       }
-      // 设置播放图片名字和时长
-      const that = this
+      
 
       app.cutplay(that, +1)
     },

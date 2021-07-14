@@ -320,7 +320,7 @@ Page({
             src: item.play_info.play_64.url,
             feeType: item.is_vip_free,
             mediaType: item.announcer.nickname,
-            mediaAuthor: item.album.title,
+            mediaAuthor: item.announcer.nickname,
             authorId: item.announcer.id,
             albumId: item.album_id, 
             albumName:item.album.title

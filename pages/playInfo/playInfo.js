@@ -79,6 +79,7 @@ Page({
     
     that.data.abumInfoName= wx.getStorageSync('songInfo').title
     console.log('abumInfoName-------------------:', that.data.abumInfoName)
+    console.log('专辑列表数:',app.globalData.albumLength)
 
     if (options.type == 3) {
       //续播  
@@ -144,7 +145,8 @@ Page({
 
     } else if(options.type == 1) {
       //非续播------ 获取歌曲列表
-      const canplay = wx.getStorageSync('allList')
+      const canplay = wx.getStorageSync('nativeList')
+     
       console.log('非续播----canplay:', canplay.length)
       that.data.start = options.start
       that.data.currentIndex = options.currentNub
@@ -221,7 +223,10 @@ Page({
         })
         wx.setStorageSync('songInfo', songInfo)
         console.log('option----------------', options)
+        
         if (options.noPlay != 'true') {
+          console.log('专辑列表数:',app.globalData.albumLength)
+
           app.playing(that)
         }
 
@@ -286,6 +291,7 @@ Page({
         }
     }
 
+    console.log('专辑列表数:',app.globalData.albumLength)
 
   },
 
@@ -656,44 +662,81 @@ Page({
       let isvipfree = item.isVipFree
       let isPaid = item.isPaid
       let authored = item.isAuthorized
+      let mdeiasrc = item.src
       console.log('item:', item)
       console.log('isfree:', isfree)
       console.log('isvipfree:', isvipfree)
       console.log('isVip:', app.globalData.isVip)
+      if (!app.globalData.isVip && !isfree && isPaid &&  !mdeiasrc || app.globalData.isVip && !isfree && !authored && !isvipfree && !mdeiasrc) {
+        // this.data.currentIndex--
+        console.log('bbbbbbbbbbbb:')
 
-      if (app.globalData.isVip && !isfree && isPaid || !app.globalData.isVip && !isfree && isPaid || app.globalData.isVip && !isfree && !authored && !isvipfree) {
-        if (app.globalData.isVip) {
-
-          let mediaId = this.data.canplay[this.data.currentIndex].id
-          app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
-
-          this.vipMediaPlay(mediaId)
-        } else {
-          //收费曲目
-          wx.showModal({
-            title: '无权限',
-            content: '暂无权限收听,请从喜马拉雅APP购买',
-            success(res) {
-              if (res.confirm) {
-                console.log('用户点击确定')
-              } else if (res.cancel) {
-                console.log('用户点击取消')
-              }
+        //收费曲目
+        wx.showModal({
+          title: '无权限',
+          content: '暂无权限收听,请从喜马拉雅APP购买',
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
             }
-          })
-        }
-
-
-      } else if (isfree && isvipfree) {
+          }
+        })
+      } else if ( (isfree && isvipfree) || (app.globalData.isVip && isvipfree) ) {
         let mediaId = this.data.canplay[this.data.currentIndex].id
         app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
+        console.log('nextfee--------------', app.globalData.songInfo)
 
-        // this.vipMediaPlay(mediaId)
+        if (!app.globalData.isVip && !app.globalData.songInfo.feeType && app.globalData.songInfo.isPaid &&  !item.src || app.globalData.isVip && !app.globalData.songInfo.feeType && !app.globalData.songInfo.isAuthorized && !app.globalData.songInfo.isVipFree&&  !item.src) {
+          wx.showToast({
+            title: '暂无权限收听,请从喜马拉雅APP购买',
+            icon: 'none'
+          })
+          return false
+        }
+         this.vipMediaPlay(mediaId)
         app.cutplay(that, -1)
+
       } else {
+        console.log('上一首')
         app.cutplay(that, -1)
 
       }
+
+      // if (app.globalData.isVip && !isfree && isPaid || !app.globalData.isVip && !isfree && isPaid || app.globalData.isVip && !isfree && !authored && !isvipfree) {
+      //   if (app.globalData.isVip) {
+
+      //     let mediaId = this.data.canplay[this.data.currentIndex].id
+      //     app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
+
+      //     this.vipMediaPlay(mediaId)
+      //   } else {
+      //     //收费曲目
+      //     wx.showModal({
+      //       title: '无权限',
+      //       content: '暂无权限收听,请从喜马拉雅APP购买',
+      //       success(res) {
+      //         if (res.confirm) {
+      //           console.log('用户点击确定')
+      //         } else if (res.cancel) {
+      //           console.log('用户点击取消')
+      //         }
+      //       }
+      //     })
+      //   }
+
+
+      // } else if (isfree && isvipfree) {
+      //   let mediaId = this.data.canplay[this.data.currentIndex].id
+      //   app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
+
+      //   // this.vipMediaPlay(mediaId)
+      //   app.cutplay(that, -1)
+      // } else {
+      //   app.cutplay(that, -1)
+
+      // }
 
     }
 
@@ -720,13 +763,14 @@ Page({
       let isvipfree = item.isVipFree
       let isPaid = item.isPaid
       let authored = item.isAuthorized
+      let mdeiasrc = item.src
       console.log('isfree:', isfree)
       console.log('isvipfree:', isvipfree)
       console.log('isVip:', app.globalData.isVip)
 
-      if (!app.globalData.isVip && !isfree && isPaid &&  !item.src || app.globalData.isVip && !isfree && !authored && !isvipfree && !item.src) {
+      if (!app.globalData.isVip && !isfree && isPaid &&  !mdeiasrc || app.globalData.isVip && !isfree && !authored && !isvipfree && !mdeiasrc) {
         // this.data.currentIndex--
-        console.log('aaaaaaaaaaaaaaa:')
+        console.log('bbbbbbbbbbbb:')
 
         //收费曲目
         wx.showModal({
@@ -745,14 +789,14 @@ Page({
         app.globalData.songInfo = this.data.canplay[this.data.currentIndex]
         console.log('nextfee--------------', app.globalData.songInfo)
 
-        if (!app.globalData.isVip && !app.globalData.songInfo.feeType && app.globalData.songInfo.isPaid || app.globalData.isVip && !app.globalData.songInfo.feeType && !app.globalData.songInfo.isAuthorized && !app.globalData.songInfo.isVipFree) {
+        if (!app.globalData.isVip && !app.globalData.songInfo.feeType && app.globalData.songInfo.isPaid &&  !item.src || app.globalData.isVip && !app.globalData.songInfo.feeType && !app.globalData.songInfo.isAuthorized && !app.globalData.songInfo.isVipFree&&  !item.src) {
           wx.showToast({
             title: '暂无权限收听,请从喜马拉雅APP购买',
             icon: 'none'
           })
           return false
         }
-        // this.vipMediaPlay(mediaId)
+         this.vipMediaPlay(mediaId)
         app.cutplay(that, 1)
 
       } else {
@@ -1002,7 +1046,11 @@ Page({
       utils.GET(param, utils.albumAllmedias + albumid + '/tracks', res => {
         console.log('专辑列表所有数据:', res)
         wx.hideLoading()
+
         if (res.data.items.length > 0 && res.statusCode == 200) {
+          if(that.data.canplay.length == app.globalData.albumLength){
+            return
+          }
          
 
           //非vip
@@ -1049,13 +1097,13 @@ Page({
           });
         
 
-          if (_list.length == res.data.total) {
-            wx.showToast({
-              title: '到底了',
-              icon: 'none'
-            })
+          // if (_list.length == res.data.total) {
+          //   wx.showToast({
+          //     title: '到底了',
+          //     icon: 'none'
+          //   })
 
-          }
+          // }
        
           console.log('end:',  that.data.end)
           console.log('专辑列表所有数据items:', res.data.items.length)
@@ -1068,20 +1116,21 @@ Page({
            
 
           })
-          wx.setStorageSync('canplay', this.data.canplay)
-          wx.setStorageSync('allList', this.data.canplay)
+          wx.setStorageSync('canplay', that.data.canplay)
+          wx.setStorageSync('allList', that.data.canplay)
+          wx.setStorageSync('nativeList', that.data.canplay)
           resolve()
 
         } else {
           console.log('------length------:', that.data.total)
           console.log('------------:', res.data.total)
-          if (that.data.total == res.data.total) {
-            wx.showToast({
-              title: '到底了',
-              icon: 'none'
-            })
+          // if (that.data.total == res.data.total) {
+          //   wx.showToast({
+          //     title: '到底了',
+          //     icon: 'none'
+          //   })
 
-          }
+          // }
 
         }
       })

@@ -69,8 +69,11 @@
         bindtap="linkAbumInfo" class="{{screen}}albumCard" data-disablefocus="true"
         style="width: {{33.7 * times}}px; overflow-y:hidden; ">
         <image class="image" src="{{item.coverImgUrl}}" data-focusindex="5"
-          style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;"></image>
+          style="width: {{33.7 * times}}px; height: {{33.7 * times}}px; border-radius: {{2 * times}}px;">
+          </image>
+
         <view class="albumTit" style=" margin-top: {{1 * times}}px; font-size: {{5.2 * times}}px;">
+          <text class="vip" wx:if="{{item.isVip}}" style="background-color:{{mainColor}}">VIP</text>
           <text>{{ item.title }}</text>
         </view>
       </view>

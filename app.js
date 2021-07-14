@@ -115,10 +115,10 @@ App({
     });
     wx.setStorageSync('playing', false)
     // 测试getPlayInfoSync
-    this.log('app11111111111111111111111:')
+    console.log('app11111111111111111111111:')
     if (wx.canIUse('getPlayInfoSync')) {
       let res = wx.getPlayInfoSync()
-      this.log('app----getPlayInfoSync-----res:',  res)
+      console.log('app----getPlayInfoSync-----res:',  res)
         if(res.playList && res.playList.length > 0 && res.playState.curIndex>-1){
           res.playList.forEach(item => {
             item.customize = JSON.parse(item.options)
@@ -129,7 +129,7 @@ App({
             item.authorId = item.customize.authorId
             item.albumName = item.customize.albumName
           });
-          this.log('-----------2:',res.playList)
+          console.log('-----------2:',res.playList)
           let panelSong = res.playList[res.playState.curIndex]
           wx.setStorageSync('songInfo', panelSong)
           wx.setStorageSync('canplay', res.playList)
@@ -242,8 +242,8 @@ App({
         imgCompresDomain = ret;
         this.globalData.canUseImgCompress = canUseImgCompress;
         this.globalData.imgCompresDomain = imgCompresDomain;
-        this.log('initImgPress-----555----:',this.globalData.canUseImgCompress)
-        this.log('initImgPress-----5555----:',this.globalData.imgCompresDomain)
+        // this.log('initImgPress-----555----:',this.globalData.canUseImgCompress)
+        // this.log('initImgPress-----5555----:',this.globalData.imgCompresDomain)
       }
     }else{
     // this.log('-不支持----initImgPress----:')
@@ -337,10 +337,11 @@ App({
     let isvipfree = song.isVipFree
     let isPaid = song.isPaid 
     let authored = song.isAuthorized 
+    let mdeiasrc = song.src
     console.log('vip',this.globalData.isVip)
     // !app.globalData.isVip && !isfree && isPaid &&  !item.src || app.globalData.isVip && !isfree && !authored && !isvipfree && !item.src
 
-    if(!this.globalData.isVip && !isfree && isPaid &&  !song.src || this.globalData.isVip &&!isfree && !authored && !isvipfree&&  !song.src){
+    if(!this.globalData.isVip && !isfree && isPaid &&  !mdeiasrc || this.globalData.isVip &&!isfree && !authored && !isvipfree&&  !mdeiasrc){
       wx.showToast({
         title: '暂无权限收听,请从喜马拉雅APP购买',
         icon: 'none'
@@ -364,14 +365,15 @@ App({
       isVipFree:song.isVipFree,
       isfree:song.feeType,
       isPaid:song.isPaid,
-      authored:song.isAuthorized 
+      authored:song.isAuthorized,
+      mdeiasrc:song.src
     }
     
 
     console.log('----------------------',params)
 
 
-    if(!this.globalData.isVip && !params.isfree && params.isPaid || this.globalData.isVip && !params.isfree && !params.authored && !params.isvipfree){  //收费曲目
+    if(!this.globalData.isVip && !params.isfree && params.isPaid && !mdeiasrc|| this.globalData.isVip && !params.isfree && !params.authored && !params.isvipfree && !mdeiasrc){  //收费曲目
   wx.showModal({
     title: '无权限',
     content: '暂无权限收听,请从喜马拉雅APP购买',
@@ -384,10 +386,15 @@ App({
     }
   })
     }else if(params.isVipFree && params.isfree ){
-
-      await getVipMedia(params, that)
-    }else{
       await getMedia(params, that)
+     
+    }else{
+      if(params.mdeiasrc){
+        await getMedia(params, that)
+      }else{
+        await getVipMedia(params, that)
+
+      }
     }
     
     setTimeout(() => {
@@ -453,27 +460,8 @@ App({
     this.globalData.playBeginAt = new Date().getTime();
      this.upLoadPlayinfo()
   },
-  //   playing: function (seek, that) {
-  //   if (that == undefined) {
-  //     that = seek
-  //   }
-  //       const songInfo = wx.getStorageSync('songInfo')
-  //       const pages = getCurrentPages()
-  //       let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
-  //       if (!songInfo.dataUrl) return
-  //       // 播放错误时，调起播放的标识符
-  //       let fl = true
-  //       if (miniPlayer) miniPlayer.setData({ playing: true })
-  //       pages[pages.length - 1].setData({
-  //           playing: true
-  //       })
-  //       wx.setStorageSync('playing',true)
-  //       tool.initAudioManager(this, that, songInfo, fl)
-  //       this.carHandle(songInfo, seek)
-  //   this.globalData.playBeginAt = new Date().getTime();
-  //   this.upLoadPlayinfo()
-  //       
-  //     },
+ 
+
   // 车载情况下的播放
   carHandle(songInfo, seek) {
      console.log('------carHandle--songInfo.src:',songInfo)
@@ -483,9 +471,9 @@ App({
       this.audioManager.title = songInfo.title
       this.audioManager.coverImgUrl = songInfo.coverImgUrl
       if (seek != undefined && typeof (seek) === 'number') {
-        wx.seekBackgroundAudio({
-          position: seek
-        })
+        // wx.seekBackgroundAudio({
+        //   position: seek
+        // })
       }
      }else{
   console.log('收费曲目')

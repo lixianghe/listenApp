@@ -708,17 +708,7 @@ function initAudioManager(app, that,songInfo) {
     console.log('---------curPlayList:', curPlayList)
     // let status = wx.getStorageSync('playing')? 1 : 0
     app.audioManager.playInfo = {
-      playList: curPlayList,
-      // playState: {
-      //   curIndex: this.data.playIdx, //当前播放列表索引
-      //   duration: this.data.musicTime.duration, //总时长
-      //   currentPosition: this.data.musicTime.currentPosition, //当前播放时间
-      //   status: status, //当前播放状态 0暂停状态 1播放状态 2没有音乐播放
-
-      // },
-      // context: this.data.media.customize
-
-     
+      playList: curPlayList    
     }
    
   }
@@ -727,33 +717,6 @@ function initAudioManager(app, that,songInfo) {
   
     EventListener(app,that)
 }
-// function initAudioManager(app, that, songInfo, fl) {
-//     console.log('11111111111111111111111111111111111111111111111111util------initAudioManager:',that)
-//   console.log('util------initAudioManager:',songInfo)
-//     if (fl) {
-//       let playList = []
-//       songInfo.abumInfoName = wx.getStorageSync('abumInfoName') || 1
-//       songInfo.currentPageNo = wx.getStorageSync('currentPageNo') 
-//       let canplaying = songInfo.abumInfoName ? wx.getStorageSync('canplaying') || [] : [songInfo]
-//       if(canplaying.length) playList = canplaying.map(item=>{
-//         item.options = JSON.stringify(item)
-//         return item
-//         // return{
-//         //   title:item.title || '',
-//         //   coverImgUrl:item.coverImgUrl || '',
-//         //   dataUrl:item.dataUrl || '',
-//         //   options:JSON.stringify(item),
-//         // }
-//       })
-//       if(JSON.stringify(app.cardPplayList) != JSON.stringify(playList)){
-//         app.cardPplayList = playList
-//         app.audioManager.playInfo = {
-//             playList,
-//             context: JSON.stringify(songInfo)
-//         }
-//       }
-//     }
-//   }
 
 // 监听播放，上一首，下一首
 function EventListener(app, that){

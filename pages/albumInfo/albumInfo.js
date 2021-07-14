@@ -222,6 +222,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
         utils.GET(param,utils.albumAllmedias+albumid+'/tracks',res=>{
             console.log('专辑列表所有数据:',res)
             app.globalData.albumLength = res.data.total
+            console.log('专辑列表数:',app.globalData.albumLength)
+
             wx.hideLoading()
            if(res.data.items.length > 0 && res.statusCode == 200){
                //非vip
@@ -451,10 +453,9 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
    let isvipfree = e.currentTarget.dataset.song.isVipFree
    let isPaid = e.currentTarget.dataset.song.isPaid 
    let authored = e.currentTarget.dataset.song.isAuthorized 
+   let mdeiasrc = e.currentTarget.dataset.song.src 
    console.log('isVip:',app.globalData.isVip)
-   
-
-   if(!app.globalData.isVip && !isfree && isPaid || app.globalData.isVip &&!isfree && !authored && !isvipfree){
+   if(!app.globalData.isVip && !isfree && isPaid && !mdeiasrc || app.globalData.isVip &&!isfree && !authored && !isvipfree && !mdeiasrc){
     console.log('收费曲目')
      //收费曲目
      wx.showModal({
@@ -480,6 +481,8 @@ if(wx.getStorageSync('songInfo').albumId == this.data.optionId){
     wx.setStorageSync('abumInfoName', this.data.abumInfoName)
     wx.setStorageSync('canplay', this.data.canplay)
     wx.setStorageSync('allList', this.data.canplay)
+    wx.setStorageSync('nativeList', this.data.canplay)
+
     this.setData({ currentId: songInfo.id })
     this.toInfo(sameSong)
    }
