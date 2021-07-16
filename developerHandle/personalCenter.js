@@ -440,6 +440,9 @@ module.exports = {
   exitLogin() {
     wx.removeStorageSync('USERINFO')
     wx.removeStorageSync('OPENID')
+    wx.removeStorageSync('albumLength')
+
+    
     console.log('exitLogin-------token',wx.getStorageSync('TOKEN'))
     wx.removeStorageSync('TOKEN')
     app.goAuthGetToken().then((res) => {

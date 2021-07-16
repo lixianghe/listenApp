@@ -119,10 +119,9 @@ header['content-type'] = 'application/json'
 }
 // GET请求
 function PLAYINFOGET(param,url, callback) {
-  // console.log('get')
-  // console.log('参数', param)
-  console.log('版本号:',this.version)
-   console.log('请求URL', this.baseUrl + url)
+  //  console.log('PLAYINFOGET:',param,url)
+  // console.log('版本号:',this.version)
+  //  console.log('请求URL', this.baseUrl + url)
   let publicParams = {
     access_token:  wx.getStorageSync('TOKEN').access_token,
     app_key: this.APP_KEY,
@@ -653,70 +652,47 @@ function toggleplay(that, app) {
 
 
 //初始化 BackgroundAudioManager
-function initAudioManager(app, that,songInfo) {
-  console.log('1111111------util------initAudioManager:',that)
-  console.log('util------initAudioManager:',songInfo)
+ function initAudioManager(app, that, songInfo) {
+   let list = wx.getStorageSync("nativeList");
+   var playList = [];
+   for (let media of list) {
+     playList.push({
+       title: media.title,
+       coverImgUrl: media.coverImgUrl,
+       dataUrl: media.src,
+       customize: {
+         albumId: media.albumId,
+         id: media.id,
+         dt: media.dt,
+         freeType: media.freeType,
+         mediaAuthor: media.mediaAuthor,
+         authorId: media.authorId,
+         albumName: media.albumName,
+       },
+     });
+   }
+   if (wx.canIUse("getPlayInfoSync")) {
+     let curPlayList =[];
+     for (var i = 0; i < playList.length; i++) {
+      if (playList[i].dataUrl){
 
-  let list = wx.getStorageSync('nativeList')
-  console.log('list:',list)
-  var playList = [];
-  for (let media of list) {{
-    if(media.src){
-      playList.push({
-        title : media.title,
-        coverImgUrl :media.coverImgUrl,
-        dataUrl :media.src,
-        customize:  ({
-          albumId: media.albumId,
-          id: media.id,
-          dt:media.dt,
-          freeType:media.freeType,
-          mediaAuthor:media.mediaAuthor,
-          authorId:media.authorId,
-          albumName:media.albumName
-          
-        })
-      })
-
-    }
-
-
-  }}
-  console.log('playList:',playList)
-  if (wx.canIUse('getPlayInfoSync')) {
-    try {
-      var curPlayList = []
-      console.log('-=-=-==', playList)
-      for (var i = 0; i < playList.length; i++) {
-        var obj = {}
-        obj.title =playList[i].title
-        obj.singer = ''
-        obj.coverImgUrl = playList[i].coverImgUrl
-        obj.dataUrl = playList[i].dataUrl
-        obj.options =  JSON.stringify(playList[i].customize)
-        
-        if (obj.dataUrl) {
-          curPlayList.push(obj)
-        } else {
-
-        }
-
+        curPlayList.push({
+          title: playList[i].title,
+          singer: "",
+          coverImgUrl: playList[i].coverImgUrl,
+          dataUrl: playList[i].dataUrl ? playList[i].dataUrl : "",
+          options: JSON.stringify(playList[i].customize),
+        });
       }
-    } catch (error) {
-      console.log('报错', error)
-    }
-    console.log('---------curPlayList:', curPlayList)
-    // let status = wx.getStorageSync('playing')? 1 : 0
-    app.audioManager.playInfo = {
-      playList: curPlayList    
-    }
-   
-  }
-
- 
   
-    EventListener(app,that)
-}
+     }
+    
+     app.audioManager.playInfo = {
+       playList: curPlayList,
+     };
+   }
+   EventListener(app, that);
+ }
 
 // 监听播放，上一首，下一首
 function EventListener(app, that){
@@ -724,24 +700,29 @@ function EventListener(app, that){
 
   //播放事件
   app.audioManager.onPlay(() => {
-    console.log('------onPlay---------')
+    console.log('------onPlay---------111')
     wx.hideLoading()
     const pages = getCurrentPages()
     // that.setData({ playing: true });
+    console.log('------onPlay---------222')
+
     pages[pages.length - 1].setData({ playing: true })
     let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
     if (miniPlayer) {
       miniPlayer.setData({ playing: true })
     }
+    console.log('------onPlay---------333')
+
     wx.setStorageSync('playing', true)
 
     // 控制首页专辑的播放gif
-    // let pages = getCurrentPages()
+   
     let index = pages.filter(n => n.route == 'pages/index/index')[0]
     if (!index) return
     let abumInfoId = wx.getStorageSync('abumInfoId')
     let story = index.selectComponent(`#story${abumInfoId}`)
     if (story) story.setData({ playing: true })
+    console.log('------onPlay---------444')
 
   })
   //暂停事件
@@ -749,7 +730,7 @@ function EventListener(app, that){
     console.log('触发播放暂停事件');
 
     const pages = getCurrentPages()
-    // that.setData({ playing: false });
+    that.setData({ playing: false });
     pages[pages.length - 1].setData({ playing: false })
     wx.setStorageSync('playing', false)
     let miniPlayer = pages[pages.length - 1].selectComponent('#miniPlayer')
@@ -795,7 +776,7 @@ function EventListener(app, that){
   //停止事件
   app.audioManager.onStop(() => {
     console.log('触发停止事件');
-    that.setData({ playing: false });
+     that.setData({ playing: false });
     wx.setStorageSync('playing', false)
     wx.hideLoading()
   })

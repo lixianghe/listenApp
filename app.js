@@ -75,8 +75,9 @@ App({
   audioManager: null,
   currentIndex: null,
   onLaunch: function () {
-    this.log('app---------onLaunch---版本号:',this.globalData.version)
+    // this.log('app---------onLaunch---版本号:',this.globalData.version)
     this.globalData.isVip = wx.getStorageSync('USERINFO').is_vip?wx.getStorageSync('USERINFO').is_vip:false
+    this.globalData.albumLength = wx.getStorageSync('albumLength')
     //区分平台
     this.isBMW()
      this.goAuthGetToken()
@@ -164,7 +165,7 @@ App({
 
       }
       // that.globalData.songInfo = wx.getStorageSync('songInfo')
-       this.log('app-------------songInfo:',that.globalData.songInfo)
+       console.log('app-------------songInfo:',that.globalData.songInfo)
     
     
   
