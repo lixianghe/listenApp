@@ -8,21 +8,21 @@
           <text>{{userInfo.nickname}}</text>
         </view>
 
-        <view class="adminBtnIn" bindtap="logoutTap" data-state="out">退出登录</view>
+        <view data-setfocus="true" data-defaultfocus='true' data-focusindex="1" class="adminBtnIn" bindtap="logoutTap" data-state="out">退出登录</view>
       </view>
 
       <view class="adminCenter" wx:if="{{!isLogin}}">
         <view class="adminCenterZwdl">暂未登录</view>
         <view class="adminCenterDetail">请登录后查看详情</view>
-        <button class="adminBtnOut" bindtap="loginIn" data-state="login" style="background-color: {{mainColor}};z-index:9999;"
+        <button data-setfocus="true" data-defaultfocus='true' data-focusindex="1" class="adminBtnOut" bindtap="loginIn"  style="background-color: {{mainColor}};z-index:9999;"
           wx:if="{{showWxLogin}}">立即登录</button>
-        <button  wx:if="{{!showWxLogin}}"  open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="adminBtnOut" style="background-color: {{mainColor}}"
+        <button data-setfocus="true" data-defaultfocus='true' data-focusindex="1"  wx:if="{{!showWxLogin}}"  open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="adminBtnOut" style="background-color: {{mainColor}}"
           >授权登录</button>
       </view>
     </view>
 
     <!-- 其他入口部分 -->
-    <view class="cardListen" wx:for="{{data}}" wx:key="index" bindtap="{{item.method}}">
+    <view data-focusindex='1' class="cardListen" wx:for="{{data}}" wx:key="index" bindtap="{{item.method}}">
       <image src="{{ item.icon }}"></image>
       <view class="cardTit">{{ item.title }}</view>
     </view>
@@ -33,12 +33,12 @@
     <view class="to-login-wrap" style="background-color: {{backgroundColor}};">
       <view class="to-login-hd">您确定要退出登录吗？</view>
       <view class="to-login-ft">
-        <button bindtap="confirm" class="btn btn-to-login">确定</button>
-        <button bindtap="cancel" class="btn btn-cancel">取消</button>
+        <button data-focusindex='1' bindtap="confirm" class="btn btn-to-login">确定</button>
+        <button data-focusindex='1' bindtap="cancel" class="btn btn-cancel">取消</button>
       </view>
     </view>
 </view>
 
-  <mini-player   existed="{{existed}}" songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
+  <mini-player focusIndex="{{focusIndex}}"  existed="{{existed}}" songInfo="{{songInfo}}" id="miniPlayer"></mini-player>
 </view>
 <log></log>

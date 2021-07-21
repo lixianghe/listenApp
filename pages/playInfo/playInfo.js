@@ -68,14 +68,8 @@ Page({
     // 根据分辨率设置样式
     that.setStyle()
     console.log('playInfo-------------------onload:', options)
-    that.data.currentNub = options.currentNub?options.currentNub:0
-
-    // that.data.end = options.end
-    let nub = parseInt(that.data.currentNub)
-    console.log('playInfo---------onload---nub:', parseInt(nub/15))
-
-    that.data.end= parseInt(nub/15)==0?15:parseInt(nub/15)*15+15
-    console.log('playInfo---------onload---end:', that.data.end)
+    // that.data.currentNub = options.currentNub?options.currentNub:wx.getStorageSync('nativeList').length-15
+   
     
     that.data.abumInfoName= wx.getStorageSync('songInfo').title
     console.log('abumInfoName-------------------:', that.data.abumInfoName)
@@ -378,33 +372,27 @@ Page({
       percent: app.globalData.percent || 0,
      songInfo:wx.getStorageSync('songInfo')?wx.getStorageSync('songInfo'):app.globalData.songInfo
     })
-    // if (wx.getStorageSync('songInfo').src || app.globalData.songInfo.src) {
-    //   if (!playing) {
-    //     console.log('222222222222222222222')
-
-    //     that.setData({
-    //       playtime: app.globalData.playtime,
-    //       percent: app.globalData.percent || 0,
-    //       songInfo:wx.getStorageSync('songInfo')?wx.getStorageSync('songInfo'):app.globalData.songInfo
-    //     })
-    //   }
-    // } else {
-    //   console.log('33333333333333333333')
-
-    //   that.setData({
-    //     playtime: app.globalData.playtime,
-    //     percent: 0,
-    //     songInfo:wx.getStorageSync('songInfo')?wx.getStorageSync('songInfo'):app.globalData.songInfo
-
-    //   })
-
-    // }
+ 
 
     utils.EventListener(app, that)
 
     // 监听歌曲播放状态，比如进度，时间
     tool.playAlrc(that, app);
     that.queryProcessBarWidth()
+    //返回设置下标
+    let canplay = wx.getStorageSync('nativeList')
+    for (let i = 0; i < canplay.length; i++) {
+      canplay[i].num =  i + 1
+    }
+    wx.setStorageSync('allList', canplay)
+    console.log('onshow---canplay:', canplay)
+    that.data.currentNub = wx.getStorageSync('nativeList').length-15
+
+    let nub = parseInt(that.data.currentNub)
+    console.log('playInfo---------onload---nub:', parseInt(nub/15))
+
+    that.data.end= parseInt(nub/15)==0?15:parseInt(nub/15)*15+15
+    console.log('playInfo---------onload---end:', that.data.end)
   },
 
        // 播放时间格式化
@@ -1056,7 +1044,7 @@ Page({
                 total: res.data.total,
                 canplay: _list,
               })
-              wx.setStorageSync('canplay', that.data.canplay)
+               wx.setStorageSync('canplay', that.data.canplay)
               wx.setStorageSync('allList', that.data.canplay)
               wx.setStorageSync('nativeList', that.data.canplay)
               resolve()

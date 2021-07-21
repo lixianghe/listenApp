@@ -14,11 +14,11 @@
 <view wx:if="{{canplay.length}}" class="page {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;">
   <view style="padding: {{leftPadding}}" class="left">
     <view class="btns" style="width: {{btnsWidth}};background-color: {{backgroundColor}}">
-      <button hover-class="playAllHover" class="playAll" bindtap="playAll" style="background-color: {{mainColor}}">
+      <button data-setfocus="true" data-defaultfocus='true' data-focusindex="1" hover-class="playAllHover" class="playAll" bindtap="playAll" style="background-color: {{mainColor}}">
         <image src="{{playAllPic}}" />
         <text>播放全部</text>
       </button>
-      <button class="select" style="background: rgba(255,255,255, 0.1)" bindtap="changeProp" wx:if="{{selectWordBtn && routeType === 'album'}}">
+      <button  data-focusindex="1"  class="select" style="background: rgba(255,255,255, 0.1)" bindtap="changeProp" wx:if="{{selectWordBtn && routeType === 'album'}}">
         
         <text>共{{total}}首</text>
         <image src="/images/selectWorks.png" />
@@ -34,9 +34,9 @@
       bindscrolltolower="listBehind"
     >
     <!-- <view class="songList"> -->
-    <view class="songList" animation="{{loadAnimate}}" bindtouchstart="touchStart" bindtouchend="touchEnd" bindtouchmove="touchMove">
+    <view  class="songList" animation="{{loadAnimate}}" bindtouchstart="touchStart" bindtouchend="touchEnd" bindtouchmove="touchMove">
       <view wx-if="{{showLoadTop}}" class="loading">加载中...</view>
-      <view bindtap="goPlayInfo" style="color: {{item.id === currentId ? mainColor : '#fff'}};display: flex" data-song='{{item}}' data-no='{{index}}' wx:key="index" wx:for="{{canplay}}">
+      <view data-focusindex="1"  bindtap="goPlayInfo" style="color: {{item.id === currentId ? mainColor : '#fff'}};display: flex" data-song='{{item}}' data-no='{{index}}' wx:key="index" wx:for="{{canplay}}">
         <image class="playGif" wx:if="{{item.id === currentId && playing}}" src="/images/playing.gif" />
         
         <text wx:if="{{sort == 'asc' && (item.id !== currentId || !playing)}}">{{start + index + 1 }}</text>
@@ -65,7 +65,7 @@
     <view class="image" style="width: {{imageWidth}};height: {{imageWidth}};background: url({{src}}) no-repeat top left / 100% 100%">
       <image wx:if="{{isVip}}"  src="/images/album_tag_premium.png" class="album-icon" style="width: 18vh;height: 7vh; position: absolute;top: 0; left: 0; color: white; font-size: 5vh; text-align: center"></image>
 
-    <view class="like" wx:if="{{routeType === 'album'}}"style="background: rgba(0, 0, 0, 0.6) url({{existed ? likeIcon1 : likeIcon2}}) no-repeat center center / 17vh 13vh;"bindtap="likeAbum">
+    <view data-focusindex="2" class="like" wx:if="{{routeType === 'album'}}"style="background: rgba(0, 0, 0, 0.6) url({{existed ? likeIcon1 : likeIcon2}}) no-repeat center center / 17vh 13vh;"bindtap="likeAbum">
    </view>
      
       <view class="like" wx:else >
@@ -79,7 +79,7 @@
 <view class="page skeleton {{screen}} {{colorStyle}}" style="background-color: {{backgroundColor}}; height: 100%;" wx:else>
   <view style="padding: {{leftPadding}}" class="left">
     <view class="btns" style="width: {{btnsWidth}};background-color: {{backgroundColor}};">
-      <button hover-class="playAllHover" class="playAll" bindtap="playAll" style="background-color: {{mainColor}}">
+      <button  hover-class="playAllHover" class="playAll" bindtap="playAll" style="background-color: {{mainColor}}">
         <image src="/images/playAll.png" />
         <text>播放全部</text>
       </button>
@@ -103,7 +103,7 @@
 </view>
 
 <selectWorks id="selectWorks" bindchangeWords="changeWords" selected="{{selected}}" pageSize="{{pageSize}}"> </selectWorks>
-<mini-player bindshowExisted ="showExisted" existed="{{existed}}" id="miniPlayer" songInfo="{{songInfo}}" bindcurrent="changeCurrent" bindsetPlaying="setPlaying"></mini-player>
+<mini-player bindshowExisted ="showExisted" focusIndex="{{focusIndex}}" existed="{{existed}}" id="miniPlayer" songInfo="{{songInfo}}" bindcurrent="changeCurrent" bindsetPlaying="setPlaying"></mini-player>
 <bgConfirm id="bgConfirm" msg="{{msg}}" confirm="确定" cancel=""></bgConfirm>
 
 <view wx:if="{{showModal}}" class="model" bindtap="close"></view>

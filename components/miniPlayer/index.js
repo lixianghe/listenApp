@@ -23,6 +23,10 @@ Component({
     songInfo: {
       type: Object,
       default: {}
+    },
+    focusIndex:{
+      type:String,
+      default:null
     }
   },
   data: {

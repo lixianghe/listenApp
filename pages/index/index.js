@@ -9,6 +9,7 @@ Page({
       'title': '已经见底啦~~',
       'src': '/images/album_img_default.png'
     },
+    focusIndex:5,
     allPlayIndex:-1,
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
@@ -338,7 +339,7 @@ Page({
         if (app.globalData.isVip && vipIdArr.length) {
           that.returnVipMediaUrl(_list, vipIdArr).then((resList) => {
             console.log(resList);
-            wx.setStorageSync('canplay', resList)
+         wx.setStorageSync('canplay', resList)
         wx.setStorageSync('allList', resList)
         wx.setStorageSync('nativeList', resList)
         //minibar  播放

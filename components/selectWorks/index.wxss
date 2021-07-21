@@ -68,6 +68,15 @@
   box-sizing: content-box;
   /* background-color: #313131; */
 } 
+
+.closeWords[focus-select=true]{
+  border: 1px solid #dc5e4e;
+
+}
+.worksItem[focus-select=true]{
+  border: 1px solid #dc5e4e;
+
+}
 .selectedWork {
   border: 0.35vh solid #ff6700;
   background-color: rgba(255,103,0,0.3);

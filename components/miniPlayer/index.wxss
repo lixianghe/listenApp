@@ -60,7 +60,7 @@
   width: 100%;
   margin: 0;
   opacity: 0;
-  z-index: 10
+  /* z-index: 10 */
 }
 
 /* 按钮样式 */
@@ -106,4 +106,14 @@
   position: absolute;
   left: 0;
   top: 1vh;
+}
+
+.playing-status .btns .image[focus-select=true]{
+  border: 2px solid #dc5e4e;
+
+}
+
+.playing-status .btns .view[focus-select=true]{
+  border: 2px solid #dc5e4e;
+
 }

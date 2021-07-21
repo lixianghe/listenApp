@@ -4,6 +4,7 @@ import btnConfig from '../../utils/pageOtpions/pageOtpions'
 Page({
   mixins: [require('../../developerHandle/personalCenter')],
   data: {
+    focusIndex:2,
     colorStyle: app.sysInfo.colorStyle,
     backgroundColor: app.sysInfo.backgroundColor,
     screen: app.globalData.screen,

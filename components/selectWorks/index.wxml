@@ -17,10 +17,11 @@
       <!-- {{order ? '正序' : '倒序'}}排列
       <image class="orderIcon" src="/images/{{order ? 'icon_down' : 'icon_up'}}.png"></image> -->
     </view> 
-    <image class="closeWords" src="/images/close-words.png" bindtap="closeWords"></image>
+    <image data-focusindex="2" class="closeWords" src="/images/close-words.png" bindtap="closeWords"></image>
     <view class="worksList">
       <view 
         class="worksItem {{ index == selected  ? 'selectedWork': 'normalWork' }}" 
+        data-focusindex="2"
         wx:for="{{data}}" 
         wx:key="index" 
         data-index="{{index}}"

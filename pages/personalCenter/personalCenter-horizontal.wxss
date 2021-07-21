@@ -54,6 +54,8 @@
   margin-left: 50%;
   transform: translateX(-50%);
   border-radius: 6.2vh;
+ 
+
   /* padding: 3rpx 4rpx; */
 }
 .adminBtnIn {
@@ -67,6 +69,7 @@
   margin-left: 50%;
   transform: translateX(-50%);
   border-radius: 5.5vh;
+
   /* padding: 3rpx 4rpx; */
 }
 .viptime {
@@ -151,3 +154,20 @@
 .btn.btn-cancel {
   background: #464646;
 }
+.btn btn-to-login[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+.btn btn-cancel[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+
+.adminBtnIn[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+.adminBtnOut[focus-select=true]{
+  border: 2px solid red;
+} 
+.cardListen[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+

@@ -9,6 +9,7 @@ Page({
   // 开发者注入模板标签数据
 
   data: {
+    focusIndex:3,
     total:0,
     info:[],
     emptyObj:{'title':'已经见底啦~~','src':'/images/album_img_default.png'},

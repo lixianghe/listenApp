@@ -129,7 +129,7 @@ module.exports = {
       title: '加载中...',
     })
     let param = {
-      timeline: 0
+      offset: 500
     }
     utils.LIKEGET(param, utils.getUserCollectAlbums, res => {
       wx.hideLoading()

@@ -15,6 +15,7 @@ let albumInfoMixin = require('../../developerHandle/albumInfo')
 Page({
   mixins: [albumInfoMixin],
   data: {
+    focusIndex:3,
     maxOffset: 0,
     offset: 0,
     maxOffset: 0,
@@ -204,7 +205,9 @@ Page({
       let vipIdArr = [];
       let _list = [];
       utils.GET(param, utils.albumAllmedias + albumid + "/tracks", (res) => {
+        console.log('-----:',res)
         app.globalData.albumLength = res.data.total;
+        that.data.total = res.data.total
         wx.setStorageSync("albumLength", res.data.total);
         wx.hideLoading();
         if (res.data.items.length > 0 && res.statusCode == 200) {
@@ -241,10 +244,15 @@ Page({
                 _list = resList.concat(that.data.canplay);
               }
               that.setData({
-                total: res.data.total,
                 canplay: _list,
                 start: that.data.start,
               });
+              //是同一张专辑
+              if(wx.getStorageSync('songInfo').albumId == that.data.canplay[0].albumId){
+                wx.setStorageSync('canplay', that.data.canplay)
+                wx.setStorageSync('allList', that.data.canplay)
+                wx.setStorageSync('nativeList', that.data.canplay)
+              }
               resolve();
             });
           } else {
@@ -255,10 +263,15 @@ Page({
               _list = _list.concat(that.data.canplay);
             }
             that.setData({
-              total: res.data.total,
               canplay: _list,
               start: that.data.start,
             });
+                //是同一张专辑
+                if(wx.getStorageSync('songInfo').albumId == that.data.canplay[0].albumId){
+                  wx.setStorageSync('canplay', that.data.canplay)
+                  wx.setStorageSync('allList', that.data.canplay)
+                  wx.setStorageSync('nativeList', that.data.canplay)
+                }
             resolve();
           }
         } else {
@@ -521,6 +534,7 @@ Page({
   // 播放全部
   async playAll() {
     console.log("播放全部");
+    wx.setStorageSync('canplay', this.data.canplay)
     let song = this.data.canplay[0];
     console.log("播放全部:", song);
 

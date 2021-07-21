@@ -9,11 +9,11 @@
   <view class="btns">
     <view bindtouchstart="btnstart" bindtouchend="btend" data-index="{{index}}" class="view" wx:key="index" wx:for="{{miniBtns.length ? miniBtns : defaultBtns}}">
       <view wx:if="{{hoverflag && current === index}}" class="modal"></view>
-      <image class="image" data-focusindex="5" bindtap="player" data-name="{{item.name}}" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
-      <image class="image" data-focusindex="5" bindtap="player" data-name="{{item.name}}" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
-      <image class="image" data-focusindex="5" bindtap="player" data-name="{{item.name}}" wx:else src="{{item.img}}" />
+      <image class="image" data-focusindex="{{focusIndex}}" bindtap="player" data-name="{{item.name}}" wx:if="{{item.name === 'toggle'}}" src="{{playing ? item.img.stopUrl : item.img.playUrl}}" />
+      <image class="image" data-focusindex="{{focusIndex}}" bindtap="player" data-name="{{item.name}}" wx:elif="{{item.name === 'like'}}" src="{{existed ? item.img.liked : item.img.noLike}}" />
+      <image class="image" data-focusindex="{{focusIndex}}" bindtap="player" data-name="{{item.name}}" wx:else src="{{item.img}}" />
     </view>
-    <view class="view" catchtap="playInfo" data-focusindex="5">                                                                           
+    <view class="view" catchtap="playInfo" data-focusindex="{{focusIndex}}">                                                                           
       <image class="pic"  wx:if="{{songInfo.coverImgUrl }}" src="{{songInfo.coverImgUrl}}" />
       <text class="text" wx:if="{{songInfo.title }}">{{songInfo.title}}</text>
     </view>

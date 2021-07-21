@@ -276,3 +276,18 @@ page image {
   left: 50%;
   transform: translateX(-50%);
 }
+.playAll[focus-select=true]{
+  border: 2px solid   red;
+} 
+
+.select[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+.page .left .songList view[focus-select=true]{
+  border: 2px solid #dc5e4e;
+
+}
+.page .right .image .like[focus-select=true]{
+  border: 2px solid #dc5e4e;
+
+}

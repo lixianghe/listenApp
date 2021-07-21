@@ -13,7 +13,7 @@
   
    </swiper>
 
- <view catchtap="like" class="left" data-focusindex="1">
+ <view catchtap="like" class="left"  data-focusindex="1">
     <image src="/images/icon_collect.png" class="left-icon"></image>
  <text class="left-text">我的收藏</text>
  </view>
@@ -66,7 +66,7 @@
   </scroll-view>
 
   <bgConfirm id="bgConfirm" msg="{{confirm}}" confirm="确定" cancel=""></bgConfirm>
-  <mini-player existed="{{existed}}"  id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
+  <mini-player existed="{{existed}}" focusIndex="{{focusIndex}}" id="miniPlayer" songInfo="{{songInfo}}"></mini-player>
 </view>
 <Nodata  code="{{retcode}}" bindrefresh="refresh"></Nodata>
 <log/>

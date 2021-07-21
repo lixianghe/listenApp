@@ -54,6 +54,8 @@
   width: 302.5rpx;
   color: #bbbbbb;
   font-size: 12.56rpx;
+  
+
 }
 .h .cancel {
   width: 51.26rpx;
@@ -110,6 +112,7 @@
   /* height: 68.6vh; */
   overflow: hidden;
   position: relative;
+ 
 }
 .halbumCard .image {
   width: 33.81vh;
@@ -252,20 +255,34 @@ button[focus-select=true]{
   color: #fff;
   flex-shrink: 0;
 }
-.recentSearch .recentItem {
+.recentItem {
   float: left;
   opacity: 0.7;
   font-weight: 500;
   text-align: left;
+  
 }
 .recentItem[focus-select=true]{
-  border-radius: 2vh;
-  vertical-align: bottom;
-  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+  border: 2px solid #dc5e4e;
 }
-.reminditem[focus-select=true]{
-  border-radius: 2vh;
-  vertical-align: bottom;
-  box-shadow: inset 4px 4px #dc5e4e, inset -4px -4px #dc5e4e;
+.h.reminditem[focus-select=true]{
+  border: 2px solid #dc5e4e;
 }
+.input[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+.h .cancel[focus-select=true]{
+  border: 2px solid   red;
+} 
+.halbumCard[focus-select=true]{
+  border: 2px solid   #dc5e4e;
+} 
 
+
+.h .mianContent .search image[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
+
+.h .remindTitle[focus-select=true]{
+  border: 2px solid #dc5e4e;
+} 
